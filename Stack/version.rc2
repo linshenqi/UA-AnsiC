@@ -1,4 +1,9 @@
-#include "../include/tb5version.h"
+#define RC_FILE_VERSION 1,0,0,0
+#define RC_PRODUCT_VERSION 1,0,0,0
+#define RC_VERSION_STRING "1.0.0.0"
+#define RC_FILE_VERSION_STRING "1.0.0.0"
+#define RC_COPYRIGHT_STRING "RCL"
+#define RC_PRODUCT_NAME "UA-AnsiC-Softing"
 //
 // RcVersion.h - resources Microsoft Visual C++ does not edit directly
 //

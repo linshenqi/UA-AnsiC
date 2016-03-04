@@ -10,7 +10,9 @@ Linux: cd Stack && make -f linux_gcc.mak
 
 Note: OpenSSL is not included, the VS-projects assume to find
 the OpenSSL header files at ../include/win32/openssl or
-or at ../include/x64/openssl dependent on the selected Platform.
+at ../include/x64/openssl dependent on the selected Platform.
+The OpenSSL import libraries are expected to be found
+at ../OpenSSL/vs_lib/VSxxxx/dll/ or ../OpenSSL/vs_lib/VSxxxx/dll64.
 
 Linux make files assume openssl to be installed from the
 distribution.
