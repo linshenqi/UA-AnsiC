@@ -1,0 +1,16 @@
+Softing OPC UA-AnsiC-Stack
+==========================
+
+
+Build the source package:
+
+Windows: Open Stack/Stack_VSxxxx in Visual Studio and build
+
+Linux: cd Stack && make -f linux_gcc.mak
+
+Note: OpenSSL is not included, the VS-projects assume to find
+the OpenSSL header files at ../include/win32/openssl or
+or at ../include/x64/openssl dependent on the selected Platform.
+
+Linux make files assume openssl to be installed from the
+distribution.
