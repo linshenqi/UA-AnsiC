@@ -1,6 +1,5 @@
 # Global rules for all GCC builds
 
-# CROSS_COMPILE = arm-arago-linux-gnueabi-
 CC = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
 AR = $(CROSS_COMPILE)ar
@@ -52,5 +51,5 @@ endif
 ifeq ($(findstring debug,$(BUILD_TARGET)),debug)
 	EXTRA_CFLAGS = -D_DEBUG -g $(MACHINE_OPT)
 else
-	EXTRA_CFLAGS = -DLOGGING_ENABLED=1 -O3 -fomit-frame-pointer $(MACHINE_OPT)
+	EXTRA_CFLAGS = -O3 $(MACHINE_OPT)
 endif

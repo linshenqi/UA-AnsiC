@@ -2,11 +2,23 @@ Softing OPC UA-AnsiC-Stack
 ==========================
 
 
+Main Features:
+
+- windows and linux layers work with 32 and 64 bit O/S.
+- pki store implementation reworked to be more flexible.
+- conformant with strict aliasing rules.
+- enumeral values are checked on receive.
+- https protocol reworked and now basically stable.
+- negotiates tls1 to tls1_2, supports DHE protocols.
+- tested with gcc's sanitizer asan, tsan and ubsan.
+
 Build the source package:
 
 Windows: Open Stack/Stack_VSxxxx in Visual Studio and build
 
 Linux: cd Stack && make -f linux_gcc.mak
+This builds the BUILD_TARGET=release by default.
+You can add BUILD_TARGET=debug to build debug binaries.
 
 Note: OpenSSL is not included, the VS-projects assume to find
 the OpenSSL header files at ../include/win32/openssl or

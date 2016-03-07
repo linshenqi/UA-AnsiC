@@ -368,7 +368,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureChannel, "CheckSequenceNumber");
        shall be less than 1 024. */
     if(!((a_uSequenceNumber == a_pSecureChannel->uLastSequenceNumberRcvd + 1) ||
          ((a_uSequenceNumber < 1024) &&
-          (a_pSecureChannel->uLastSequenceNumberRcvd > 4294966271))))
+          (a_pSecureChannel->uLastSequenceNumberRcvd > 4294966271u))))
     {
         OpcUa_GotoErrorWithStatus(OpcUa_BadSequenceNumberInvalid);
     }

@@ -868,15 +868,13 @@ OpcUa_StatusCode OpcUa_TcpListener_SendAcknowledgeMessage(
     OpcUa_TcpListener_Connection*   a_pTcpConnection)
 {
     OpcUa_OutputStream*     pOutputStream    = OpcUa_Null;
-    OpcUa_String            altEndpoint      = OPCUA_STRING_STATICINITIALIZER;
+    OpcUa_UInt32            uProtocolVersion = 0;
 
 OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "SendAcknowledgeMessage");
 
     OpcUa_ReturnErrorIfArgumentNull(a_pListener);
     OpcUa_ReturnErrorIfArgumentNull(a_pListener->Handle);
     OpcUa_ReturnErrorIfArgumentNull(a_pTcpConnection);
-
-    OpcUa_String_Initialize(&altEndpoint);
 
     uStatus = OpcUa_TcpStream_CreateOutput( a_pTcpConnection->Socket,
                                             OpcUa_TcpStream_MessageType_Acknowledge,
@@ -890,7 +888,7 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "SendAcknowledgeMessage");
     /* encode acknowledge fields */
 
     /* The latest version of the OPC UA TCP protocol supported by the Server */
-    uStatus = OpcUa_UInt32_BinaryEncode(0, pOutputStream);
+    uStatus = OpcUa_UInt32_BinaryEncode(uProtocolVersion, pOutputStream);
     OpcUa_GotoErrorIfBad(uStatus);
 
     /* revised receivebuffer */

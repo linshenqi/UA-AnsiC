@@ -57,7 +57,7 @@ OpcUa_DateTime OpcUa_P_DateTime_UtcNow()
     long long unixtime = 0;
     OpcUa_DateTime dateTime;
 
-    if (gettimeofday(&now, NULL) == 0)
+    if(gettimeofday(&now, NULL) == 0)
     {
         unixtime = now.tv_sec;
         unixtime += SECS_BETWEEN_EPOCHS;
@@ -87,6 +87,13 @@ OpcUa_StatusCode OpcUa_P_DateTime_GetStringFromDateTime(    OpcUa_DateTime a_Dat
     unixtime /= SECS_TO_100NS;
     unixtime -= SECS_BETWEEN_EPOCHS;
     tTime = unixtime;
+
+    /* check for overflow */
+    if(tTime != unixtime)
+    {
+        return OpcUa_Bad;
+    }
+
     if(gmtime_r(&tTime, &sTime) == NULL)
     {
         return OpcUa_Bad;
