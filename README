@@ -12,6 +12,9 @@ Main Features:
 - negotiates tls1 to tls1_2, supports DHE protocols.
 - tested with gcc's sanitizer asan, tsan and ubsan.
 
+Note: there is a sample AnsiCServer but it is included as-is
+and not fully supported.
+
 Build the source package:
 
 Windows: Open Stack/Stack_VSxxxx in Visual Studio and build

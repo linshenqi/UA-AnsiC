@@ -205,7 +205,7 @@ OpcUa_ServiceType CloseSession =
  *===========================================================================*/
 OpcUa_ServiceType  dummy_CreatSubscription =
 	{	OpcUaId_CreateSubscriptionRequest,
-		&OpcUa_CreateSubscriptionResponse_EncodeableType,
+		OpcUa_Null, /*&OpcUa_CreateSubscriptionResponse_EncodeableType,*/
 		(OpcUa_PfnBeginInvokeService*)OpcUa_Server_BeginCreateSubscription,
 		(OpcUa_PfnInvokeService*)OpcUa_ServerApi_CreateSubscription};
 
