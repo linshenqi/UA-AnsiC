@@ -200,17 +200,27 @@ OpcUa_ServiceType CloseSession =
     (OpcUa_PfnInvokeService*)my_CloseSession
 };
 
+/*============================================================================
+ * The service dispatch information CreateSubscription service.
+ *===========================================================================*/
+OpcUa_ServiceType  dummy_CreatSubscription =
+	{	OpcUaId_CreateSubscriptionRequest,
+		&OpcUa_CreateSubscriptionResponse_EncodeableType,
+		(OpcUa_PfnBeginInvokeService*)OpcUa_Server_BeginCreateSubscription,
+		(OpcUa_PfnInvokeService*)OpcUa_ServerApi_CreateSubscription};
+
 /** @brief All supported services. */
 OpcUa_ServiceType*  UaTestServer_SupportedServices[] = 
 { 
     &OTServer_ServiceGetEndpoints,
-	&ServiceCreatSession,
-	&ActivateSession,
-	&CloseSession,
-	&my_Browse_ServiceType,
-	&my_Read_ServiceType,
-	&my_BrowseNext_ServiceType,
-	&my_FindServers_ServiceType,
+    &ServiceCreatSession,
+    &ActivateSession,
+    &CloseSession,
+    &my_Browse_ServiceType,
+    &my_Read_ServiceType,
+    &my_BrowseNext_ServiceType,
+    &my_FindServers_ServiceType,
+    &dummy_CreatSubscription,
     OpcUa_Null
 };
 
