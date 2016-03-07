@@ -1315,17 +1315,6 @@ OpcUa_Void OpcUa_SecureListener_Delete(OpcUa_Listener** a_ppListener)
         pSecureListener->ServerPKIProvider = OpcUa_Null;
     }
 
-    /* CHZ: due to inconsistencies in parameter handling, this  code is being removed */
-#if 0
-    OpcUa_ByteString_Clear(pSecureListener->pServerCertificate);
-#endif
-    pSecureListener->pServerCertificate = OpcUa_Null;
-
-/* CHZ: due to inconsistencies in parameter handling, this  code is being removed */
-#if 0
-    OpcUa_Key_Clear(&pSecureListener->ServerPrivateKey);
-#endif
-
     pSecureListener->SanityCheck = 0;
 
     OPCUA_P_MUTEX_UNLOCK(pSecureListener->Mutex);
@@ -1476,33 +1465,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "Create");
 
     if(a_pServerPrivateKey != OpcUa_Null)
     {
-#if 0
-        pSecureListener->ServerPrivateKey.Type = a_pServerPrivateKey->Type;
-
-        if(OPCUA_CRYPTO_KEY_ISHANDLE(a_pServerPrivateKey))
-        {
-            /* this is a handle and we have no information about the size and no access to the real key data */
-            /* the only thing, we can do here, is to take the members as they are given by the upper layer */
-            pSecureListener->ServerPrivateKey.Key.Data   = a_pServerPrivateKey->Key.Data;
-            pSecureListener->ServerPrivateKey.Key.Length = a_pServerPrivateKey->Key.Length;
-        }
-        else
-        {
-            /* copy byte buffer */
-            pSecureListener->ServerPrivateKey.Key.Length = a_pServerPrivateKey->Key.Length;
-
-            pSecureListener->ServerPrivateKey.Key.Data = (OpcUa_Byte *)OpcUa_Alloc(a_pServerPrivateKey->Key.Length);
-            OpcUa_GotoErrorIfAllocFailed(pSecureListener->ServerPrivateKey.Key.Data);
-
-            uStatus = OpcUa_Memory_MemCpy(  pSecureListener->ServerPrivateKey.Key.Data,
-                                            a_pServerPrivateKey->Key.Length,
-                                            a_pServerPrivateKey->Key.Data,
-                                            a_pServerPrivateKey->Key.Length);
-            OpcUa_GotoErrorIfBad(uStatus);
-        }
-#else
         pSecureListener->ServerPrivateKey = *a_pServerPrivateKey;
-#endif
     }
 
     pSecureListener->SanityCheck                = OpcUa_SecureListener_SanityCheck;
@@ -1535,15 +1498,12 @@ OpcUa_BeginErrorHandling;
     if(pSecureListener != OpcUa_Null)
     {
         OPCUA_P_MUTEX_DELETE(&(pSecureListener->Mutex));
-        OpcUa_ByteString_Clear(pSecureListener->pServerCertificate);
-        OpcUa_Key_Clear(&pSecureListener->ServerPrivateKey);
         if (pSecureListener->ServerPKIProvider != OpcUa_Null)
         {
             OPCUA_P_PKIFACTORY_DELETEPKIPROVIDER(pSecureListener->ServerPKIProvider);
             OpcUa_Free(pSecureListener->ServerPKIProvider);
         }
         OpcUa_Free(pSecureListener);
-        pSecureListener = OpcUa_Null;
     }
 
     if(pChannelManager != OpcUa_Null)

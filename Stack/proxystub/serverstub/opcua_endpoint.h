@@ -234,6 +234,7 @@ OpcUa_StatusCode OpcUa_Endpoint_GetMessageSecureChannelSecurityPolicy(
  *
  * @param hEndpoint                 [in] The endpoint to open.
  * @param sUrl                      [in] The URL for this endpoint. (String must be zeroterminated.)
+ * @param bListenOnAllInterfaces    [in] Listen on all interfaces.
  * @param pfEndpointCallback        [in] Function getting called on various events.
  * @param pvEndpointCallbackData    [in] Pointer being passed to pfEndpointCallback.
  * @param pServerCertificate        [in] The application certificate for the server.
@@ -246,7 +247,7 @@ OPCUA_EXPORT
 OpcUa_StatusCode OpcUa_Endpoint_Open(   
     OpcUa_Endpoint                              hEndpoint,
     OpcUa_StringA                               sUrl,
-    OpcUa_Boolean                                bListenOnAllInterfaces,
+    OpcUa_Boolean                               bListenOnAllInterfaces,
     OpcUa_Endpoint_PfnEndpointCallback*         pfEndpointCallback,
     OpcUa_Void*                                 pvEndpointCallbackData,
     OpcUa_ByteString*                           pServerCertificate,
