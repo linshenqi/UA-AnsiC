@@ -82,6 +82,11 @@ OPCUA_BEGIN_EXTERN_C
  *===========================================================================*/
 #define OpcUa_BadHttpMethodNotAllowed 0x810B0000
 
+/*============================================================================
+ * File exists.
+ *===========================================================================*/
+#define OpcUa_BadFileExists 0x810C0000
+
 OPCUA_END_EXTERN_C
 
 #endif /* _OpcUa_StackStatusCodes_H_ */

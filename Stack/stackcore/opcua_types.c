@@ -4213,6 +4213,7 @@ static struct _OpcUa_EnumeratedValue g_OpcUa_NodeAttributesMask_EnumeratedValues
     { "None", 0 },
     { "AccessLevel", 1 },
     { "ArrayDimensions", 2 },
+    { "BrowseName", 4 },
     { "ContainsNoLoops", 8 },
     { "DataType", 16 },
     { "Description", 32 },
@@ -4223,6 +4224,8 @@ static struct _OpcUa_EnumeratedValue g_OpcUa_NodeAttributesMask_EnumeratedValues
     { "InverseName", 1024 },
     { "IsAbstract", 2048 },
     { "MinimumSamplingInterval", 4096 },
+    { "NodeClass", 8192 },
+    { "NodeId", 16384 },
     { "Symmetric", 32768 },
     { "UserAccessLevel", 65536 },
     { "UserExecutable", 131072 },
@@ -25739,6 +25742,7 @@ static struct _OpcUa_EnumeratedValue g_OpcUa_RedundancySupport_EnumeratedValues[
     { "Warm", 2 },
     { "Hot", 3 },
     { "Transparent", 4 },
+    { "HotAndMirrored", 5 },
     { OpcUa_Null, 0 }
 };
 
@@ -25891,6 +25895,233 @@ struct _OpcUa_EncodeableType OpcUa_RedundantServerDataType_EncodeableType =
     (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_RedundantServerDataType_GetSize,
     (OpcUa_EncodeableObject_PfnEncode*)OpcUa_RedundantServerDataType_Encode,
     (OpcUa_EncodeableObject_PfnDecode*)OpcUa_RedundantServerDataType_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_EndpointUrlListDataType
+/*============================================================================
+ * OpcUa_EndpointUrlListDataType_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_EndpointUrlListDataType_Initialize(OpcUa_EndpointUrlListDataType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_InitializeArray(String, EndpointUrlList);
+    }
+}
+
+/*============================================================================
+ * OpcUa_EndpointUrlListDataType_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_EndpointUrlListDataType_Clear(OpcUa_EndpointUrlListDataType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_ClearArray(String, EndpointUrlList);
+    }
+}
+
+/*============================================================================
+ * OpcUa_EndpointUrlListDataType_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EndpointUrlListDataType_GetSize(OpcUa_EndpointUrlListDataType* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EndpointUrlListDataType_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSizeArray(String, EndpointUrlList);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EndpointUrlListDataType_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EndpointUrlListDataType_Encode(OpcUa_EndpointUrlListDataType* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EndpointUrlListDataType_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_WriteArray(String, EndpointUrlList);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EndpointUrlListDataType_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EndpointUrlListDataType_Decode(OpcUa_EndpointUrlListDataType* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EndpointUrlListDataType_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_EndpointUrlListDataType_Initialize(a_pValue);
+
+    OpcUa_Field_ReadArray(String, EndpointUrlList);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_EndpointUrlListDataType_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EndpointUrlListDataType_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_EndpointUrlListDataType_EncodeableType =
+{
+    "EndpointUrlListDataType",
+    OpcUaId_EndpointUrlListDataType,
+    OpcUaId_EndpointUrlListDataType_Encoding_DefaultBinary,
+    OpcUaId_EndpointUrlListDataType_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_EndpointUrlListDataType),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_EndpointUrlListDataType_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_EndpointUrlListDataType_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_EndpointUrlListDataType_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_EndpointUrlListDataType_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_EndpointUrlListDataType_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_NetworkGroupDataType
+/*============================================================================
+ * OpcUa_NetworkGroupDataType_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_NetworkGroupDataType_Initialize(OpcUa_NetworkGroupDataType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(String, ServerUri);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_EndpointUrlListDataType, NetworkPaths);
+    }
+}
+
+/*============================================================================
+ * OpcUa_NetworkGroupDataType_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_NetworkGroupDataType_Clear(OpcUa_NetworkGroupDataType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(String, ServerUri);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_EndpointUrlListDataType, NetworkPaths);
+    }
+}
+
+/*============================================================================
+ * OpcUa_NetworkGroupDataType_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_NetworkGroupDataType_GetSize(OpcUa_NetworkGroupDataType* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "NetworkGroupDataType_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(String, ServerUri);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_EndpointUrlListDataType, NetworkPaths);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_NetworkGroupDataType_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_NetworkGroupDataType_Encode(OpcUa_NetworkGroupDataType* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "NetworkGroupDataType_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(String, ServerUri);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_EndpointUrlListDataType, NetworkPaths);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_NetworkGroupDataType_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_NetworkGroupDataType_Decode(OpcUa_NetworkGroupDataType* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "NetworkGroupDataType_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_NetworkGroupDataType_Initialize(a_pValue);
+
+    OpcUa_Field_Read(String, ServerUri);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_EndpointUrlListDataType, NetworkPaths);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_NetworkGroupDataType_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_NetworkGroupDataType_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_NetworkGroupDataType_EncodeableType =
+{
+    "NetworkGroupDataType",
+    OpcUaId_NetworkGroupDataType,
+    OpcUaId_NetworkGroupDataType_Encoding_DefaultBinary,
+    OpcUaId_NetworkGroupDataType_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_NetworkGroupDataType),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_NetworkGroupDataType_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_NetworkGroupDataType_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_NetworkGroupDataType_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_NetworkGroupDataType_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_NetworkGroupDataType_Decode
 };
 #endif
 
@@ -27671,6 +27902,25 @@ struct _OpcUa_EncodeableType OpcUa_EUInformation_EncodeableType =
 };
 #endif
 
+#ifndef OPCUA_EXCLUDE_AxisScaleEnumeration
+/*============================================================================
+ * OpcUa_AxisScaleEnumeration_EnumeratedType
+ *===========================================================================*/
+static struct _OpcUa_EnumeratedValue g_OpcUa_AxisScaleEnumeration_EnumeratedValues[] =
+{
+    { "Linear", 0 },
+    { "Log", 1 },
+    { "Ln", 2 },
+    { OpcUa_Null, 0 }
+};
+
+struct _OpcUa_EnumeratedType OpcUa_AxisScaleEnumeration_EnumeratedType =
+{
+    "AxisScaleEnumeration",
+    g_OpcUa_AxisScaleEnumeration_EnumeratedValues
+};
+#endif
+
 #ifndef OPCUA_EXCLUDE_ExceptionDeviationFormat
 /*============================================================================
  * OpcUa_ExceptionDeviationFormat_EnumeratedType
@@ -27810,6 +28060,253 @@ struct _OpcUa_EncodeableType OpcUa_Annotation_EncodeableType =
     (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_Annotation_GetSize,
     (OpcUa_EncodeableObject_PfnEncode*)OpcUa_Annotation_Encode,
     (OpcUa_EncodeableObject_PfnDecode*)OpcUa_Annotation_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_AxisInformation
+/*============================================================================
+ * OpcUa_AxisInformation_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_AxisInformation_Initialize(OpcUa_AxisInformation* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_InitializeEncodeable(OpcUa_EUInformation, EngineeringUnits);
+        OpcUa_Field_InitializeEncodeable(OpcUa_Range, EURange);
+        OpcUa_Field_Initialize(LocalizedText, Title);
+        OpcUa_Field_InitializeEnumerated(OpcUa_AxisScaleEnumeration, AxisScaleType);
+        OpcUa_Field_InitializeArray(Double, AxisSteps);
+    }
+}
+
+/*============================================================================
+ * OpcUa_AxisInformation_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_AxisInformation_Clear(OpcUa_AxisInformation* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_ClearEncodeable(OpcUa_EUInformation, EngineeringUnits);
+        OpcUa_Field_ClearEncodeable(OpcUa_Range, EURange);
+        OpcUa_Field_Clear(LocalizedText, Title);
+        OpcUa_Field_ClearEnumerated(OpcUa_AxisScaleEnumeration, AxisScaleType);
+        OpcUa_Field_ClearArray(Double, AxisSteps);
+    }
+}
+
+/*============================================================================
+ * OpcUa_AxisInformation_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_AxisInformation_GetSize(OpcUa_AxisInformation* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "AxisInformation_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSizeEncodeable(OpcUa_EUInformation, EngineeringUnits);
+    OpcUa_Field_GetSizeEncodeable(OpcUa_Range, EURange);
+    OpcUa_Field_GetSize(LocalizedText, Title);
+    OpcUa_Field_GetSizeEnumerated(OpcUa_AxisScaleEnumeration, AxisScaleType);
+    OpcUa_Field_GetSizeArray(Double, AxisSteps);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_AxisInformation_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_AxisInformation_Encode(OpcUa_AxisInformation* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "AxisInformation_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_WriteEncodeable(OpcUa_EUInformation, EngineeringUnits);
+    OpcUa_Field_WriteEncodeable(OpcUa_Range, EURange);
+    OpcUa_Field_Write(LocalizedText, Title);
+    OpcUa_Field_WriteEnumerated(OpcUa_AxisScaleEnumeration, AxisScaleType);
+    OpcUa_Field_WriteArray(Double, AxisSteps);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_AxisInformation_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_AxisInformation_Decode(OpcUa_AxisInformation* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "AxisInformation_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_AxisInformation_Initialize(a_pValue);
+
+    OpcUa_Field_ReadEncodeable(OpcUa_EUInformation, EngineeringUnits);
+    OpcUa_Field_ReadEncodeable(OpcUa_Range, EURange);
+    OpcUa_Field_Read(LocalizedText, Title);
+    OpcUa_Field_ReadEnumerated(OpcUa_AxisScaleEnumeration, AxisScaleType);
+    OpcUa_Field_ReadArray(Double, AxisSteps);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_AxisInformation_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_AxisInformation_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_AxisInformation_EncodeableType =
+{
+    "AxisInformation",
+    OpcUaId_AxisInformation,
+    OpcUaId_AxisInformation_Encoding_DefaultBinary,
+    OpcUaId_AxisInformation_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_AxisInformation),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_AxisInformation_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_AxisInformation_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_AxisInformation_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_AxisInformation_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_AxisInformation_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_XVType
+/*============================================================================
+ * OpcUa_XVType_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_XVType_Initialize(OpcUa_XVType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(Double, X);
+        OpcUa_Field_Initialize(Float, Value);
+    }
+}
+
+/*============================================================================
+ * OpcUa_XVType_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_XVType_Clear(OpcUa_XVType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(Double, X);
+        OpcUa_Field_Clear(Float, Value);
+    }
+}
+
+/*============================================================================
+ * OpcUa_XVType_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_XVType_GetSize(OpcUa_XVType* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "XVType_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(Double, X);
+    OpcUa_Field_GetSize(Float, Value);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_XVType_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_XVType_Encode(OpcUa_XVType* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "XVType_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(Double, X);
+    OpcUa_Field_Write(Float, Value);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_XVType_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_XVType_Decode(OpcUa_XVType* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "XVType_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_XVType_Initialize(a_pValue);
+
+    OpcUa_Field_Read(Double, X);
+    OpcUa_Field_Read(Float, Value);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_XVType_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_XVType_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_XVType_EncodeableType =
+{
+    "XVType",
+    OpcUaId_XVType,
+    OpcUaId_XVType_Encoding_DefaultBinary,
+    OpcUaId_XVType_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_XVType),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_XVType_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_XVType_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_XVType_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_XVType_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_XVType_Decode
 };
 #endif
 
@@ -28492,6 +28989,12 @@ static OpcUa_EncodeableType* g_OpcUa_KnownEncodeableTypes[] =
     #ifndef OPCUA_EXCLUDE_RedundantServerDataType
     &OpcUa_RedundantServerDataType_EncodeableType,
     #endif
+    #ifndef OPCUA_EXCLUDE_EndpointUrlListDataType
+    &OpcUa_EndpointUrlListDataType_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_NetworkGroupDataType
+    &OpcUa_NetworkGroupDataType_EncodeableType,
+    #endif
     #ifndef OPCUA_EXCLUDE_SamplingIntervalDiagnosticsDataType
     &OpcUa_SamplingIntervalDiagnosticsDataType_EncodeableType,
     #endif
@@ -28527,6 +29030,12 @@ static OpcUa_EncodeableType* g_OpcUa_KnownEncodeableTypes[] =
     #endif
     #ifndef OPCUA_EXCLUDE_Annotation
     &OpcUa_Annotation_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_AxisInformation
+    &OpcUa_AxisInformation_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_XVType
+    &OpcUa_XVType_EncodeableType,
     #endif
     #ifndef OPCUA_EXCLUDE_ProgramDiagnosticDataType
     &OpcUa_ProgramDiagnosticDataType_EncodeableType,

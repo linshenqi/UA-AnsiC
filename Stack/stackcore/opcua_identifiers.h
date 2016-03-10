@@ -71,6 +71,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_ImageGIF 2001
 #define OpcUaId_ImageJPG 2002
 #define OpcUaId_ImagePNG 2003
+#define OpcUaId_BitFieldMaskDataType 11737
+#define OpcUaId_OpenFileMode 11939
 #define OpcUaId_IdType 256
 #define OpcUaId_NodeClass 257
 #define OpcUaId_Node 258
@@ -308,6 +310,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_RedundancySupport 851
 #define OpcUaId_ServerState 852
 #define OpcUaId_RedundantServerDataType 853
+#define OpcUaId_EndpointUrlListDataType 11943
+#define OpcUaId_NetworkGroupDataType 11944
 #define OpcUaId_SamplingIntervalDiagnosticsDataType 856
 #define OpcUaId_ServerDiagnosticsSummaryDataType 859
 #define OpcUaId_ServerStatusDataType 862
@@ -320,6 +324,9 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_SemanticChangeStructureDataType 897
 #define OpcUaId_Range 884
 #define OpcUaId_EUInformation 887
+#define OpcUaId_AxisScaleEnumeration 12077
+#define OpcUaId_AxisInformation 12079
+#define OpcUaId_XVType 12080
 #define OpcUaId_ExceptionDeviationFormat 890
 #define OpcUaId_Annotation 891
 #define OpcUaId_ProgramDiagnosticDataType 894
@@ -672,6 +679,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_DeleteSubscriptionsRequest_Encoding_DefaultXml 846
 #define OpcUaId_DeleteSubscriptionsResponse_Encoding_DefaultXml 849
 #define OpcUaId_RedundantServerDataType_Encoding_DefaultXml 854
+#define OpcUaId_EndpointUrlListDataType_Encoding_DefaultXml 11949
+#define OpcUaId_NetworkGroupDataType_Encoding_DefaultXml 11950
 #define OpcUaId_SamplingIntervalDiagnosticsDataType_Encoding_DefaultXml 857
 #define OpcUaId_ServerDiagnosticsSummaryDataType_Encoding_DefaultXml 860
 #define OpcUaId_ServerStatusDataType_Encoding_DefaultXml 863
@@ -683,6 +692,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_SemanticChangeStructureDataType_Encoding_DefaultXml 898
 #define OpcUaId_Range_Encoding_DefaultXml 885
 #define OpcUaId_EUInformation_Encoding_DefaultXml 888
+#define OpcUaId_AxisInformation_Encoding_DefaultXml 12081
+#define OpcUaId_XVType_Encoding_DefaultXml 12082
 #define OpcUaId_Annotation_Encoding_DefaultXml 892
 #define OpcUaId_ProgramDiagnosticDataType_Encoding_DefaultXml 895
 #define OpcUaId_Node_Encoding_DefaultBinary 260
@@ -890,6 +901,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_DeleteSubscriptionsRequest_Encoding_DefaultBinary 847
 #define OpcUaId_DeleteSubscriptionsResponse_Encoding_DefaultBinary 850
 #define OpcUaId_RedundantServerDataType_Encoding_DefaultBinary 855
+#define OpcUaId_EndpointUrlListDataType_Encoding_DefaultBinary 11957
+#define OpcUaId_NetworkGroupDataType_Encoding_DefaultBinary 11958
 #define OpcUaId_SamplingIntervalDiagnosticsDataType_Encoding_DefaultBinary 858
 #define OpcUaId_ServerDiagnosticsSummaryDataType_Encoding_DefaultBinary 861
 #define OpcUaId_ServerStatusDataType_Encoding_DefaultBinary 864
@@ -901,6 +914,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_SemanticChangeStructureDataType_Encoding_DefaultBinary 899
 #define OpcUaId_Range_Encoding_DefaultBinary 886
 #define OpcUaId_EUInformation_Encoding_DefaultBinary 889
+#define OpcUaId_AxisInformation_Encoding_DefaultBinary 12089
+#define OpcUaId_XVType_Encoding_DefaultBinary 12090
 #define OpcUaId_Annotation_Encoding_DefaultBinary 893
 #define OpcUaId_ProgramDiagnosticDataType_Encoding_DefaultBinary 896
 
@@ -1567,6 +1582,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_RedundancySupport_EnumStrings 7611
 #define OpcUaId_ServerState_EnumStrings 7612
 #define OpcUaId_ModelChangeStructureVerbMask_EnumStrings 7613
+#define OpcUaId_AxisScaleEnumeration_EnumStrings 12078
 #define OpcUaId_ExceptionDeviationFormat_EnumStrings 7614
 #define OpcUaId_OpcUa_XmlSchema 8252
 #define OpcUaId_OpcUa_XmlSchema_NamespaceUri 8254
@@ -1771,6 +1787,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_OpcUa_XmlSchema_DeleteSubscriptionsRequest 8837
 #define OpcUaId_OpcUa_XmlSchema_DeleteSubscriptionsResponse 8840
 #define OpcUaId_OpcUa_XmlSchema_RedundantServerDataType 8843
+#define OpcUaId_OpcUa_XmlSchema_EndpointUrlListDataType 11951
+#define OpcUaId_OpcUa_XmlSchema_NetworkGroupDataType 11954
 #define OpcUaId_OpcUa_XmlSchema_SamplingIntervalDiagnosticsDataType 8846
 #define OpcUaId_OpcUa_XmlSchema_ServerDiagnosticsSummaryDataType 8849
 #define OpcUaId_OpcUa_XmlSchema_ServerStatusDataType 8852
@@ -1782,6 +1800,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_OpcUa_XmlSchema_SemanticChangeStructureDataType 8870
 #define OpcUaId_OpcUa_XmlSchema_Range 8873
 #define OpcUaId_OpcUa_XmlSchema_EUInformation 8876
+#define OpcUaId_OpcUa_XmlSchema_AxisInformation 12083
+#define OpcUaId_OpcUa_XmlSchema_XVType 12086
 #define OpcUaId_OpcUa_XmlSchema_Annotation 8879
 #define OpcUaId_OpcUa_XmlSchema_ProgramDiagnosticDataType 8882
 #define OpcUaId_OpcUa_BinarySchema 7617
@@ -1987,6 +2007,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_OpcUa_BinarySchema_DeleteSubscriptionsRequest 8202
 #define OpcUaId_OpcUa_BinarySchema_DeleteSubscriptionsResponse 8205
 #define OpcUaId_OpcUa_BinarySchema_RedundantServerDataType 8208
+#define OpcUaId_OpcUa_BinarySchema_EndpointUrlListDataType 11959
+#define OpcUaId_OpcUa_BinarySchema_NetworkGroupDataType 11962
 #define OpcUaId_OpcUa_BinarySchema_SamplingIntervalDiagnosticsDataType 8211
 #define OpcUaId_OpcUa_BinarySchema_ServerDiagnosticsSummaryDataType 8214
 #define OpcUaId_OpcUa_BinarySchema_ServerStatusDataType 8217
@@ -1998,6 +2020,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_OpcUa_BinarySchema_SemanticChangeStructureDataType 8235
 #define OpcUaId_OpcUa_BinarySchema_Range 8238
 #define OpcUaId_OpcUa_BinarySchema_EUInformation 8241
+#define OpcUaId_OpcUa_BinarySchema_AxisInformation 12091
+#define OpcUaId_OpcUa_BinarySchema_XVType 12094
 #define OpcUaId_OpcUa_BinarySchema_Annotation 8244
 #define OpcUaId_OpcUa_BinarySchema_ProgramDiagnosticDataType 8247
 

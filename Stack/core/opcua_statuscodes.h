@@ -123,6 +123,11 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BadTooManyOperations 0x80100000
 
 /*============================================================================
+ * The request could not be processed because there are too many monitored items in the subscription.
+ *===========================================================================*/
+#define OpcUa_BadTooManyMonitoredItems 0x80DB0000
+
+/*============================================================================
  * The extension object cannot be (de)serialized because the data type id is not recognized.
  *===========================================================================*/
 #define OpcUa_BadDataTypeIdUnknown 0x80110000

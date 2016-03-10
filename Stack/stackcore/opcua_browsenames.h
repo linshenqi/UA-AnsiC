@@ -155,6 +155,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BrowseName_AuditWriteUpdateEventType "AuditWriteUpdateEventType"
 #define OpcUa_BrowseName_AuthenticationMechanism "AuthenticationMechanism"
 #define OpcUa_BrowseName_AutoDelete "AutoDelete"
+#define OpcUa_BrowseName_AxisInformation "AxisInformation"
+#define OpcUa_BrowseName_AxisScaleEnumeration "AxisScaleEnumeration"
 #define OpcUa_BrowseName_BaseConditionClassType "BaseConditionClassType"
 #define OpcUa_BrowseName_BaseDataType "BaseDataType"
 #define OpcUa_BrowseName_BaseDataVariableType "BaseDataVariableType"
@@ -162,6 +164,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BrowseName_BaseModelChangeEventType "BaseModelChangeEventType"
 #define OpcUa_BrowseName_BaseObjectType "BaseObjectType"
 #define OpcUa_BrowseName_BaseVariableType "BaseVariableType"
+#define OpcUa_BrowseName_BitFieldMaskDataType "BitFieldMaskDataType"
 #define OpcUa_BrowseName_Boolean "Boolean"
 #define OpcUa_BrowseName_BranchId "BranchId"
 #define OpcUa_BrowseName_BrowseCount "BrowseCount"
@@ -316,6 +319,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BrowseName_EndpointConfiguration "EndpointConfiguration"
 #define OpcUa_BrowseName_EndpointDescription "EndpointDescription"
 #define OpcUa_BrowseName_EndpointUrl "EndpointUrl"
+#define OpcUa_BrowseName_EndpointUrlListDataType "EndpointUrlListDataType"
 #define OpcUa_BrowseName_EndTime "EndTime"
 #define OpcUa_BrowseName_EngineeringUnits "EngineeringUnits"
 #define OpcUa_BrowseName_EnumeratedTestType "EnumeratedTestType"
@@ -539,6 +543,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BrowseName_NamespaceUri "NamespaceUri"
 #define OpcUa_BrowseName_NamingRule "NamingRule"
 #define OpcUa_BrowseName_NamingRuleType "NamingRuleType"
+#define OpcUa_BrowseName_NetworkGroupDataType "NetworkGroupDataType"
 #define OpcUa_BrowseName_NewStateId "NewStateId"
 #define OpcUa_BrowseName_NewValue "NewValue"
 #define OpcUa_BrowseName_NewValues "NewValues"
@@ -583,6 +588,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BrowseName_OPCBinarySchema_TypeSystem "OPC Binary"
 #define OpcUa_BrowseName_OpcUa_BinarySchema "Opc.Ua"
 #define OpcUa_BrowseName_OpcUa_XmlSchema "Opc.Ua"
+#define OpcUa_BrowseName_OpenFileMode "OpenFileMode"
 #define OpcUa_BrowseName_OpenSecureChannelRequest "OpenSecureChannelRequest"
 #define OpcUa_BrowseName_OpenSecureChannelResponse "OpenSecureChannelResponse"
 #define OpcUa_BrowseName_OptionSetType "OptionSetType"
@@ -893,6 +899,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BrowseName_X509IdentityToken "X509IdentityToken"
 #define OpcUa_BrowseName_XmlElement "XmlElement"
 #define OpcUa_BrowseName_XmlSchema_TypeSystem "XML Schema"
+#define OpcUa_BrowseName_XVType "XVType"
 
 OPCUA_END_EXTERN_C
 

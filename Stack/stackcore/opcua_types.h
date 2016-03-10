@@ -1076,6 +1076,7 @@ typedef enum _OpcUa_NodeAttributesMask
     OpcUa_NodeAttributesMask_None                    = 0,
     OpcUa_NodeAttributesMask_AccessLevel             = 1,
     OpcUa_NodeAttributesMask_ArrayDimensions         = 2,
+    OpcUa_NodeAttributesMask_BrowseName              = 4,
     OpcUa_NodeAttributesMask_ContainsNoLoops         = 8,
     OpcUa_NodeAttributesMask_DataType                = 16,
     OpcUa_NodeAttributesMask_Description             = 32,
@@ -1086,6 +1087,8 @@ typedef enum _OpcUa_NodeAttributesMask
     OpcUa_NodeAttributesMask_InverseName             = 1024,
     OpcUa_NodeAttributesMask_IsAbstract              = 2048,
     OpcUa_NodeAttributesMask_MinimumSamplingInterval = 4096,
+    OpcUa_NodeAttributesMask_NodeClass               = 8192,
+    OpcUa_NodeAttributesMask_NodeId                  = 16384,
     OpcUa_NodeAttributesMask_Symmetric               = 32768,
     OpcUa_NodeAttributesMask_UserAccessLevel         = 65536,
     OpcUa_NodeAttributesMask_UserExecutable          = 131072,
@@ -5953,11 +5956,12 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_DeleteSubscriptionsResp
  *===========================================================================*/
 typedef enum _OpcUa_RedundancySupport
 {
-    OpcUa_RedundancySupport_None        = 0,
-    OpcUa_RedundancySupport_Cold        = 1,
-    OpcUa_RedundancySupport_Warm        = 2,
-    OpcUa_RedundancySupport_Hot         = 3,
-    OpcUa_RedundancySupport_Transparent = 4
+    OpcUa_RedundancySupport_None           = 0,
+    OpcUa_RedundancySupport_Cold           = 1,
+    OpcUa_RedundancySupport_Warm           = 2,
+    OpcUa_RedundancySupport_Hot            = 3,
+    OpcUa_RedundancySupport_Transparent    = 4,
+    OpcUa_RedundancySupport_HotAndMirrored = 5
 }
 OpcUa_RedundancySupport;
 
@@ -6015,6 +6019,55 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_RedundantServerDataType_Encode(OpcUa_Redunda
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_RedundantServerDataType_Decode(OpcUa_RedundantServerDataType* pValue, struct _OpcUa_Decoder* pDecoder);
 
 OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_RedundantServerDataType_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_EndpointUrlListDataType
+/*============================================================================
+ * The EndpointUrlListDataType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_EndpointUrlListDataType
+{
+    OpcUa_Int32   NoOfEndpointUrlList;
+    OpcUa_String* EndpointUrlList;
+}
+OpcUa_EndpointUrlListDataType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EndpointUrlListDataType_Initialize(OpcUa_EndpointUrlListDataType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EndpointUrlListDataType_Clear(OpcUa_EndpointUrlListDataType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EndpointUrlListDataType_GetSize(OpcUa_EndpointUrlListDataType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EndpointUrlListDataType_Encode(OpcUa_EndpointUrlListDataType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EndpointUrlListDataType_Decode(OpcUa_EndpointUrlListDataType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_EndpointUrlListDataType_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_NetworkGroupDataType
+/*============================================================================
+ * The NetworkGroupDataType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_NetworkGroupDataType
+{
+    OpcUa_String                   ServerUri;
+    OpcUa_Int32                    NoOfNetworkPaths;
+    OpcUa_EndpointUrlListDataType* NetworkPaths;
+}
+OpcUa_NetworkGroupDataType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_NetworkGroupDataType_Initialize(OpcUa_NetworkGroupDataType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_NetworkGroupDataType_Clear(OpcUa_NetworkGroupDataType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_NetworkGroupDataType_GetSize(OpcUa_NetworkGroupDataType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_NetworkGroupDataType_Encode(OpcUa_NetworkGroupDataType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_NetworkGroupDataType_Decode(OpcUa_NetworkGroupDataType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_NetworkGroupDataType_EncodeableType;
 #endif
 
 #ifndef OPCUA_EXCLUDE_SamplingIntervalDiagnosticsDataType
@@ -6400,6 +6453,25 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_EUInformation_Decode(OpcUa_EUInformation* pV
 OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_EUInformation_EncodeableType;
 #endif
 
+#ifndef OPCUA_EXCLUDE_AxisScaleEnumeration
+/*============================================================================
+ * The AxisScaleEnumeration enumeration.
+ *===========================================================================*/
+typedef enum _OpcUa_AxisScaleEnumeration
+{
+    OpcUa_AxisScaleEnumeration_Linear = 0,
+    OpcUa_AxisScaleEnumeration_Log    = 1,
+    OpcUa_AxisScaleEnumeration_Ln     = 2
+}
+OpcUa_AxisScaleEnumeration;
+
+#define OpcUa_AxisScaleEnumeration_Clear(xValue) OpcUa_EnumeratedType_Clear(xValue, AxisScaleEnumeration)
+
+#define OpcUa_AxisScaleEnumeration_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, AxisScaleEnumeration)
+
+OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_AxisScaleEnumeration_EnumeratedType;
+#endif
+
 #ifndef OPCUA_EXCLUDE_ExceptionDeviationFormat
 /*============================================================================
  * The ExceptionDeviationFormat enumeration.
@@ -6444,6 +6516,58 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Annotation_Encode(OpcUa_Annotation* pValue, 
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Annotation_Decode(OpcUa_Annotation* pValue, struct _OpcUa_Decoder* pDecoder);
 
 OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_Annotation_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_AxisInformation
+/*============================================================================
+ * The AxisInformation structure.
+ *===========================================================================*/
+typedef struct _OpcUa_AxisInformation
+{
+    OpcUa_EUInformation        EngineeringUnits;
+    OpcUa_Range                EURange;
+    OpcUa_LocalizedText        Title;
+    OpcUa_AxisScaleEnumeration AxisScaleType;
+    OpcUa_Int32                NoOfAxisSteps;
+    OpcUa_Double*              AxisSteps;
+}
+OpcUa_AxisInformation;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_AxisInformation_Initialize(OpcUa_AxisInformation* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_AxisInformation_Clear(OpcUa_AxisInformation* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_AxisInformation_GetSize(OpcUa_AxisInformation* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_AxisInformation_Encode(OpcUa_AxisInformation* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_AxisInformation_Decode(OpcUa_AxisInformation* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_AxisInformation_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_XVType
+/*============================================================================
+ * The XVType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_XVType
+{
+    OpcUa_Double X;
+    OpcUa_Float  Value;
+}
+OpcUa_XVType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_XVType_Initialize(OpcUa_XVType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_XVType_Clear(OpcUa_XVType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_XVType_GetSize(OpcUa_XVType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_XVType_Encode(OpcUa_XVType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_XVType_Decode(OpcUa_XVType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_XVType_EncodeableType;
 #endif
 
 #ifndef OPCUA_EXCLUDE_ProgramDiagnosticDataType
