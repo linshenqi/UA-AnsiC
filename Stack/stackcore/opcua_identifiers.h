@@ -322,7 +322,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_ServiceCounterDataType 871
 #define OpcUaId_SubscriptionDiagnosticsDataType 874
 #define OpcUaId_ModelChangeStructureDataType 877
-#define OpcUaId_ModelChangeStructureVerbMask 880
+#define OpcUaId_ModelChangeStructureVerbMask 11941
 #define OpcUaId_SemanticChangeStructureDataType 897
 #define OpcUaId_Range 884
 #define OpcUaId_EUInformation 887
@@ -1534,7 +1534,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUaId_SessionDiagnosticsVariableType_CurrentMonitoredItemsCount 2208
 #define OpcUaId_SessionDiagnosticsVariableType_CurrentPublishRequestsInQueue 2209
 #define OpcUaId_SessionDiagnosticsVariableType_TotalRequestCount 8900
-#define OpcUaId_SessionDiagnosticsVariableType_UnauthorizedRequestCount 8901
+#define OpcUaId_SessionDiagnosticsVariableType_UnauthorizedRequestCount 11892
 #define OpcUaId_SessionDiagnosticsVariableType_ReadCount 2217
 #define OpcUaId_SessionDiagnosticsVariableType_HistoryReadCount 2218
 #define OpcUaId_SessionDiagnosticsVariableType_WriteCount 2219
