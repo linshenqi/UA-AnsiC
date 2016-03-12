@@ -4,11 +4,11 @@ include $(ROOT)/linux_gcc_rules.mak
 
 LIB_PATH = $(ROOT)/lib/$(BIN_PATH)/$(CC)/$(BUILD_TARGET)
 
-TB_LIBS = tb5stack
+UA_LIBS = uastack
 LIB_EXTENSION = a
 
-LIB_FILES = $(patsubst %,$(LIB_PATH)/lib%.$(LIB_EXTENSION),$(TB_LIBS))
-LIB_FLAGS = $(patsubst %,-l%,$(TB_LIBS)) $(LIB_RPATH)
+LIB_FILES = $(patsubst %,$(LIB_PATH)/lib%.$(LIB_EXTENSION),$(UA_LIBS))
+LIB_FLAGS = $(patsubst %,-l%,$(UA_LIBS))
 
 TARGET = $(ROOT)/bin/$(BIN_PATH)/$(CC)/$(BUILD_TARGET)/AnsiCServer
 

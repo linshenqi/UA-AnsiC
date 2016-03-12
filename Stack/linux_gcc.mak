@@ -2,7 +2,7 @@ ROOT = ..
 
 include $(ROOT)/linux_gcc_rules.mak
 
-TARGET = $(ROOT)/lib/$(BIN_PATH)/$(CC)/$(BUILD_TARGET)/libtb5stack.a
+TARGET = $(ROOT)/lib/$(BIN_PATH)/$(CC)/$(BUILD_TARGET)/libuastack.a
 
 DIRS = core stackcore securechannel transport/tcp transport/https \
        proxystub/clientproxy proxystub/serverstub platforms/linux
