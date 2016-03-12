@@ -29,17 +29,10 @@ sample server.
 Dependencies are not supported, it will always be a full build.
 
 Linux: Open a terminal window.
+Make sure you have the libssl-dev package installed from your
+distribution.
 Then cd to the root folder and execute: make -f linux_gcc.mak
 This builds the BUILD_TARGET=release by default.
 You can add BUILD_TARGET=debug to build debug binaries.
 Dependencies and incremental builds are supported.
 To force a full build use: make -f linux_gcc.mak clean all
-
-Note: OpenSSL is not included, the VS-projects assume to find
-the OpenSSL header files at ../include/win32/openssl or
-at ../include/x64/openssl dependent on the selected Platform.
-The OpenSSL import libraries are expected to be found
-at ../OpenSSL/vs_lib/VSxxxx/dll/ or ../OpenSSL/vs_lib/VSxxxx/dll64.
-
-Linux make files assume openssl to be installed from the
-distribution.
