@@ -48,7 +48,7 @@ goto done
 :error
 echo fatal error: cannot continue.
 echo this batch has to be called from a
-echo 32bit visual studio command shell
+echo 64bit visual studio command shell
 echo openssl sources must be at %OPENSSL_SOURCEDIR%
 echo perl has to be in the path
 
