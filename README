@@ -36,3 +36,38 @@ This builds the BUILD_TARGET=release by default.
 You can add BUILD_TARGET=debug to build debug binaries.
 Dependencies and incremental builds are supported.
 To force a full build use: make -f linux_gcc.mak clean all
+
+API changes from the 1.02.335 version:
+
+- OpcUa_ProxyStubConfiguration: The data type has been extended.
+  bProxyStub_Trace_Enabled set to OpcUa_True to enable traces.
+  iSerializer_MaxRecursionDepth if unsure, set to -1.
+- OpcUa_Xxx_CopyTo: This set of functions is not supported.
+- OpcUa_Guid_Copy: This function is deprecated now and should
+  not be used any more, because the source and destination
+  parameters were exchanged in the past, and thus it is not clear
+  what this function can be expected to do.
+- OpcUa_Endpoint_Open: The function signature has changed.
+  sTransportProfileUri was removed because it is redundant.
+  bListenOnAllInterfaces was added.  If unsure, use OpcUa_True.
+  pPrivateKey->Key.Data must be non-zero, even if no security.
+- OpcUa_Endpoint_Callback: The function signature has changed.
+  phRawRequestContext and uRequestedLifetime have been removed.
+- OpcUa_Endpoint_Event: Some enum values are not supported.
+- OpcUa_Channel_SecurityToken: This data type is not supported.
+  Use OpcUa_Channel_GetUsedServerCertificate instead.
+- OpcUa_Channel_Connect: The function signature has changed.
+  sTransportProfileUri has been removed because it is redundant.
+  ppSecurityToken is not supported and has been removed.
+- OpcUa_Channel_ConnetionStateChanged: The function singature
+  has changed.
+  pSecurityToken is not supported and has been removed.
+- OpcUa_Channel_Event: Some enum values are not supported.
+- OpcUa_CertificateStoreConfiguration: has to be replaced by
+  OpcUa_P_OpenSSL_CertificateStore_Config.
+  In the most simple configuation just set the following:
+    pki.PkiType=OpcUa_OpenSSL_PKI;
+    pki.CertificateTrustListLocation="PKI/certs";
+    pki.Flags=0;
+  Use OPCUA_P_PKI_OPENSSL_XXX flags for PKI type OpenSSL
+  Use OPCUA_P_PKI_WIN32_XXX flags for PKI type Win32
