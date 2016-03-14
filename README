@@ -47,6 +47,10 @@ API changes from the 1.02.335 version:
   not be used any more, because the source and destination
   parameters were exchanged in the past, and thus it is not clear
   what this function can be expected to do.
+- OpcUa_EncodeabeTypeTable_AddTypes: The function signature has
+  changed.
+  noOfEncodeableType was removed.
+  ppTypes is assumed to be null-terminated.
 - OpcUa_Endpoint_Open: The function signature has changed.
   sTransportProfileUri was removed because it is redundant.
   bListenOnAllInterfaces was added.  If unsure, use OpcUa_True.
