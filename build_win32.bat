@@ -11,7 +11,7 @@ if errorlevel 1 goto error
 perl Configure VC-WIN32 no-asm no-ec --prefix=%OPENSSL_INSTALDIR%
 if errorlevel 1 goto error
 
-sed -i "/perl/ s/\\\\/\\//g" ms/do_win64a.bat 
+sed -i "/perl/ s/\\\\/\\//g" ms/do_ms.bat 
 call ms\do_ms
 if errorlevel 1 goto error
 
