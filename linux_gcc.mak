@@ -3,7 +3,7 @@
 # parameters:
 #	BUILD_TARGET=debug|release
 #	MACHINE_TYPE=x86_64|i386
-#	KERNEL_VER=2.6|...
+#	MACHINE_OPT=
 
 all:
 	$(MAKE) -C Stack -f linux_gcc.mak all

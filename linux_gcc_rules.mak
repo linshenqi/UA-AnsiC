@@ -20,16 +20,6 @@ else
 endif
 endif
 
-ifndef KERNEL_VER
-	ifeq ($(DETECT_KERNEL_VER),1)
-		# extract the first two numbers of the kernel version
-		KERNEL_VER = $(shell uname -r | sed -e "s/\([0-9]*\)\.\([0-9]*\)\..*/\1.\2/g")
-	else
-		# use this as default
-		KERNEL_VER = 2.6
-	endif
-endif
-
 ifndef MACHINE_OPT
 ifndef CROSS_COMPILE
 	ifeq ($(MACHINE_TYPE),x86_64)
@@ -42,7 +32,7 @@ ifndef CROSS_COMPILE
 endif
 endif
 
-BIN_PATH = linux-$(KERNEL_VER)/$(MACHINE_TYPE)
+BIN_PATH = linux/$(MACHINE_TYPE)
 
 ifndef BUILD_TARGET
 	BUILD_TARGET = release
