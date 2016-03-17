@@ -1990,7 +1990,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "EndSendRequest");
                                                             0,                                   /* local port */
 #if OPCUA_HTTPSCONNECTION_USE_TLS_CREDENTIALS
                                                             pHttpConnection->pCertificate,
-                                                            pHttpConnection->pPrivateKey,
+                                                            &pHttpConnection->PrivateKey,
 #else
                                                             OpcUa_Null,
                                                             OpcUa_Null,
