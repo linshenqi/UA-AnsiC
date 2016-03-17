@@ -1204,8 +1204,8 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "GetUsedServerCertificate");
                                                                  a_ppUsedServerCertificate,
                                                                  a_pValidationResult);
     }
-#endif /* OPCUA_HAVE_HTTPS */
     else
+#endif /* OPCUA_HAVE_HTTPS */
     {
         uStatus = OpcUa_BadNotSupported;
         OpcUa_GotoError;

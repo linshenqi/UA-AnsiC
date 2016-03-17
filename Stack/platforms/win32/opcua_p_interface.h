@@ -93,7 +93,11 @@ typedef OpcUa_Void (OPCUA_DLLCALL *OpcUa_P_TraceHook)(OpcUa_CharA* sMessage);
 #define OPCUA_P_PEERINFO_MIN_SIZE                   64
 
 /** @brief Toggle SSL support in the socket manager class. */
+#ifdef OPCUA_HAVE_HTTPS
 #define OPCUA_P_SOCKETMANAGER_SUPPORT_SSL           OPCUA_CONFIG_YES
+#else
+#define OPCUA_P_SOCKETMANAGER_SUPPORT_SSL           OPCUA_CONFIG_NO
+#endif
 
 /** @brief How SSL verifies certificates. */
 #define OPCUA_P_SOCKETMANAGER_SSL_VERIFY_OPTION     (SSL_VERIFY_PEER|SSL_VERIFY_FAIL_IF_NO_PEER_CERT)
@@ -663,6 +667,7 @@ struct S_OpcUa_Port_CallTable
 
     /**@} Timer Functions */
 
+#if OPCUA_REQUIRE_OPENSSL
     /** @brief Called to clean up OpenSSL state information in client threads.
      *  @ingroup opcua_platformlayer_interface
      */
@@ -673,6 +678,7 @@ struct S_OpcUa_Port_CallTable
      */
     OpcUa_StatusCode    (OPCUA_DLLCALL* OpenSSLSeedPRNG)          ( OpcUa_Byte*                 seed,
                                                                     OpcUa_Int                   bytes);
+#endif
 
 }; /* struct S_OpcUa_Port_CallTable */
 

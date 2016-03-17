@@ -62,7 +62,9 @@ void* pthread_start(void* args)
     /* run stack thread! */
     p_P_ThreadArgs->pfnInternalThreadMain(pArgument);
 
+#if OPCUA_REQUIRE_OPENSSL
     OpcUa_P_OpenSSL_Thread_Cleanup();
+#endif
 
     pthread_exit(NULL);
 

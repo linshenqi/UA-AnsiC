@@ -141,8 +141,10 @@ OpcUa_Port_CallTable g_OpcUa_Port_CallTable =
     OpcUa_P_Timer_CleanupTimers,
 
     /* OpenSSL */
+#if OPCUA_REQUIRE_OPENSSL
     OpcUa_P_OpenSSL_Thread_Cleanup,
     OpcUa_P_OpenSSL_SeedPRNG
+#endif
 };
 
 /*============================================================================

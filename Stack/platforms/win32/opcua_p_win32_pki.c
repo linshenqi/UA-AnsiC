@@ -35,17 +35,17 @@
 #include <windows.h>
 #include <Wincrypt.h>
 
-/* Todo: Check whether needed (maybe for conversion) */
-#include <openssl/pem.h>
-#include <openssl/x509_vfy.h>
-#include <openssl/err.h>
-#include <openssl/pkcs12.h>
-
 /* UA platform definitions */
 #include <opcua_p_internal.h>
 #include <opcua_p_memory.h>
 
 #if OPCUA_SUPPORT_PKI_WIN32
+
+/* Todo: Check whether needed (maybe for conversion) */
+#include <openssl/pem.h>
+#include <openssl/x509_vfy.h>
+#include <openssl/err.h>
+#include <openssl/pkcs12.h>
 
 /* own headers */
 #include <opcua_p_win32_pki.h>

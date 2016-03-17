@@ -54,8 +54,8 @@ typedef struct _OpcUa_P_InternalTimer
 /*============================================================================
  * Create A Timer
  *===========================================================================*/
-OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Timer_Create(    OpcUa_Timer*            phTimer, 
-                                                        OpcUa_UInt32            msecInterval, 
+OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Timer_Create(    OpcUa_Timer*            phTimer,
+                                                        OpcUa_UInt32            msecInterval,
                                                         OpcUa_P_Timer_Callback* fpTimerCallback,
                                                         OpcUa_P_Timer_Callback* fpKillCallback,
                                                         OpcUa_Void*             pvCallbackData);
@@ -79,12 +79,11 @@ OpcUa_Void OPCUA_DLLCALL OpcUa_P_Timer_CleanupTimers(void);
 /*============================================================================
  * Select wrapper used in singlethreaded configuration.
  *===========================================================================*/
-int OpcUa_P_Socket_TimeredSelect( OpcUa_RawSocket  MaxFds, 
-                                  fd_set*          pFdSetRead, 
-                                  fd_set*          pFdSetWrite, 
-                                  fd_set*          pFdSetException,
-                                  struct timespec* pTimeout,
-                                  sigset_t*        pOldMask);
+OpcUa_StatusCode OpcUa_P_Socket_TimeredSelect(          OpcUa_RawSocket         MaxFds,
+                                                        OpcUa_P_Socket_Array*   pFdSetRead,
+                                                        OpcUa_P_Socket_Array*   pFdSetWrite,
+                                                        OpcUa_P_Socket_Array*   pFdSetException,
+                                                        OpcUa_TimeVal*          pTimeout);
 #endif /* OPCUA_MULTITHREADED */
 
 OPCUA_END_EXTERN_C

@@ -521,11 +521,13 @@ OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetVersion()
  *===========================================================================*/
 OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString()
 {
+#if OPCUA_USE_SYNCHRONISATION
     if(OpcUa_ProxyStub_g_hGlobalsMutex == OpcUa_Null)
     {
         return (OpcUa_StringA)"ProxyStub not initialized!";
     }
     else
+#endif /* OPCUA_USE_SYNCHRONISATION */
     {
         if(OpcUa_IsBad(OpcUa_ProxyStub_UpdateConfigString()))
         {

@@ -510,7 +510,9 @@ OpcUa_InitializeStatus(OpcUa_Module_Socket, "CreateSockets");
 
     pInternalSocketManager->uintMaxSockets = a_uMaxSockets;
 
+#if OPCUA_USE_SYNCHRONISATION
     OpcUa_P_Mutex_Unlock(pInternalSocketManager->pMutex);
+#endif /* OPCUA_USE_SYNCHRONISATION */
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;

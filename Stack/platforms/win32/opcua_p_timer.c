@@ -80,6 +80,7 @@ OpcUa_UInt32 OpcUa_P_Timer_ProcessTimers(OpcUa_Void)
     OpcUa_P_Mutex_Lock(g_OpcUa_P_Timer_pTimers_Mutex);
 #endif /* OPCUA_USE_SYNCHRONISATION */
 
+#if OPCUA_MULTITHREADED
     if(g_bStopTimerThread)
     {
 #if OPCUA_USE_SYNCHRONISATION
@@ -87,6 +88,7 @@ OpcUa_UInt32 OpcUa_P_Timer_ProcessTimers(OpcUa_Void)
 #endif /* OPCUA_USE_SYNCHRONISATION */
         return 0;
     }
+#endif /* OPCUA_MULTITHREADED */
 
     uProStart       = OpcUa_P_GetTickCount();
     for(uIndex = 0; uIndex < OPCUA_P_TIMER_NO_OF_TIMERS; uIndex++)
@@ -214,7 +216,7 @@ OpcUa_Void OPCUA_DLLCALL OpcUa_P_Timer_CleanupTimers(OpcUa_Void)
  * Initialize A Timer
  *===========================================================================*/
 static OpcUa_StatusCode OpcUa_P_Timer_Initialize(   OpcUa_P_InternalTimer*  a_pInternalTimer,
-                                                    OpcUa_UInt32            a_msecInterval, 
+                                                    OpcUa_UInt32            a_msecInterval,
                                                     OpcUa_P_Timer_Callback* a_fpTimerCallback,
                                                     OpcUa_P_Timer_Callback* a_fpKillCallback,
                                                     OpcUa_Void*             a_pvCallbackData)
@@ -267,13 +269,13 @@ OpcUa_Void OpcUa_P_Timer_Thread(OpcUa_Void* a_pvArguments)
  * Timeout expired callback function
  *===========================================================================*/
 
-OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketTimerCallback( OpcUa_Void*     pData, 
-                                                            OpcUa_Timer*    pTimer, 
+OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketTimerCallback( OpcUa_Void*     pData,
+                                                            OpcUa_Timer     pTimer,
                                                             OpcUa_UInt32    msecElapsed)
 {
-    OpcUa_ReferenceParameter(pData); 
-    OpcUa_ReferenceParameter(pTimer); 
-    OpcUa_ReferenceParameter(msecElapsed); 
+    OpcUa_ReferenceParameter(pData);
+    OpcUa_ReferenceParameter(pTimer);
+    OpcUa_ReferenceParameter(msecElapsed);
 
     return(OpcUa_Good);
 }
@@ -282,13 +284,13 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketTimerCallback( OpcUa_Void*     pDat
  * Timeout deleted callback function
  *===========================================================================*/
 
-OpcUa_StatusCode OPCUA_DLLCALL  OpcUa_P_SocketKillTimerCallback(OpcUa_Void*     pData, 
-                                                                OpcUa_Timer*    pTimer, 
+OpcUa_StatusCode OPCUA_DLLCALL  OpcUa_P_SocketKillTimerCallback(OpcUa_Void*     pData,
+                                                                OpcUa_Timer     pTimer,
                                                                 OpcUa_UInt32    msecElapsed)
 {
-    OpcUa_ReferenceParameter(pData); 
-    OpcUa_ReferenceParameter(pTimer); 
-    OpcUa_ReferenceParameter(msecElapsed); 
+    OpcUa_ReferenceParameter(pData);
+    OpcUa_ReferenceParameter(pTimer);
+    OpcUa_ReferenceParameter(msecElapsed);
 
     return(OpcUa_Good);
 }
@@ -298,10 +300,10 @@ OpcUa_StatusCode OPCUA_DLLCALL  OpcUa_P_SocketKillTimerCallback(OpcUa_Void*     
  * Select wrapper used in singlethreaded configuration.
  *===========================================================================*/
 /* Standard select wrapper, which uses timers instead of timeout. */
-OpcUa_StatusCode OpcUa_P_Socket_TimeredSelect(  OpcUa_RawSocket         a_MaxFds, 
-                                                OpcUa_P_Socket_Array*   a_pFdSetRead, 
-                                                OpcUa_P_Socket_Array*   a_pFdSetWrite, 
-                                                OpcUa_P_Socket_Array*   a_pFdSetException, 
+OpcUa_StatusCode OpcUa_P_Socket_TimeredSelect(  OpcUa_RawSocket         a_MaxFds,
+                                                OpcUa_P_Socket_Array*   a_pFdSetRead,
+                                                OpcUa_P_Socket_Array*   a_pFdSetWrite,
+                                                OpcUa_P_Socket_Array*   a_pFdSetException,
                                                 OpcUa_TimeVal*          a_pTimeout)
 {
     OpcUa_UInt32        uTimeout    = 0;
@@ -310,17 +312,15 @@ OpcUa_StatusCode OpcUa_P_Socket_TimeredSelect(  OpcUa_RawSocket         a_MaxFds
 
 OpcUa_InitializeStatus(OpcUa_Module_Socket, "P_Select");
 
-    OpcUa_GotoErrorIfArgumentNull(a_pFdSetException);
-
     /* map given timeval to UInt32 */
     uTimeout = a_pTimeout->uintMicroSeconds / 1000;
     uTimeout = uTimeout + (a_pTimeout->uintSeconds * 1000);
 
     /* Set a timer as timeout for the following select. */
     uStatus = OpcUa_P_Timer_Create( &pTimer,
-                                    uTimeout, 
+                                    uTimeout,
                                     OpcUa_P_SocketTimerCallback,    /* ignores event; just for debug */
-                                    OpcUa_P_SocketKillTimerCallback,/* ignores event; just for debug */ 
+                                    OpcUa_P_SocketKillTimerCallback,/* ignores event; just for debug */
                                     OpcUa_Null);
 
     if(pTimer == OpcUa_Null)
@@ -333,11 +333,11 @@ OpcUa_InitializeStatus(OpcUa_Module_Socket, "P_Select");
 
         /* map nearest timeout to TimeVal */
         a_pTimeout->uintSeconds      = uNearest / 1000;
-        a_pTimeout->uintMicroSeconds = ((uNearest % 1000) * 1000); 
+        a_pTimeout->uintMicroSeconds = ((uNearest % 1000) * 1000);
 
-        uStatus = OpcUa_P_RawSocket_Select( a_MaxFds, 
-                                            a_pFdSetRead, 
-                                            a_pFdSetWrite, 
+        uStatus = OpcUa_P_RawSocket_Select( a_MaxFds,
+                                            a_pFdSetRead,
+                                            a_pFdSetWrite,
                                             a_pFdSetException,
                                             a_pTimeout);
 
@@ -354,8 +354,8 @@ OpcUa_FinishErrorHandling;;
 /*============================================================================
  * Create A Timer
  *===========================================================================*/
-OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Timer_Create(    OpcUa_Timer*            a_phTimer, 
-                                                        OpcUa_UInt32            a_msecInterval, 
+OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Timer_Create(    OpcUa_Timer*            a_phTimer,
+                                                        OpcUa_UInt32            a_msecInterval,
                                                         OpcUa_P_Timer_Callback* a_fpTimerCallback,
                                                         OpcUa_P_Timer_Callback* a_fpKillCallback,
                                                         OpcUa_Void*             a_pvCallbackData)
@@ -421,7 +421,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Timer_Create(    OpcUa_Timer*            
     *a_phTimer = pInternalTimer;
 
 #if OPCUA_USE_SYNCHRONISATION
-    OpcUa_P_Mutex_Unlock(g_OpcUa_P_Timer_pTimers_Mutex);        
+    OpcUa_P_Mutex_Unlock(g_OpcUa_P_Timer_pTimers_Mutex);
 #endif /* OPCUA_USE_SYNCHRONISATION */
 
     return OpcUa_Good;

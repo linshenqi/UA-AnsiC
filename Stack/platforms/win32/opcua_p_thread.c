@@ -252,7 +252,9 @@ void* win32thread_start(void* args)
     /* run stack thread! */
     pThreadArgs->pfnInternalThreadMain(pArguments);
 
+#if OPCUA_REQUIRE_OPENSSL
     OpcUa_P_OpenSSL_Thread_Cleanup();
+#endif
 
     ExitThread(0);
 
