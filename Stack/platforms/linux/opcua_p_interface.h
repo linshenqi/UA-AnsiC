@@ -645,7 +645,6 @@ struct S_OpcUa_Port_CallTable
 
     /**@} Timer Functions */
 
-#if OPCUA_REQUIRE_OPENSSL
     /** @brief Called to clean up OpenSSL state information in client threads.
      *  @ingroup opcua_platformlayer_interface
      */
@@ -656,7 +655,6 @@ struct S_OpcUa_Port_CallTable
      */
     OpcUa_StatusCode    (OPCUA_DLLCALL* OpenSSLSeedPRNG)          ( OpcUa_Byte*                 seed,
                                                                     OpcUa_Int                   bytes);
-#endif
 
 }; /* struct S_OpcUa_Port_CallTable */
 
