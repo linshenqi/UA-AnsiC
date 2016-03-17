@@ -1,6 +1,7 @@
 ROOT = ..
+ODIR = win32
 OPENSSLDIR = $(ROOT)\openssl
-TARGET_DIR = $(ROOT)\lib\win32
+TARGET_DIR = $(ROOT)\lib\$(ODIR)
 
 TARGET = $(TARGET_DIR)\uastack.lib
 
@@ -11,104 +12,129 @@ CFLAGS = /MT /Ox /W3 /Gs0 /GF /Gy /nologo /Zl /Zi /Fd$(TARGET).pdb \
          /Iproxystub\clientproxy /Iproxystub\serverstub /Iplatforms\win32 /I$(OPENSSLINC)
 
 OBJECTS = \
-	core\opcua_timer.obj \
-	core\opcua_core.obj \
-	core\opcua_trace.obj \
-	core\opcua_utilities.obj \
-	core\opcua_proxystub.obj \
-	core\opcua_list.obj \
-	core\opcua_threadpool.obj \
-	core\opcua_buffer.obj \
-	core\opcua_string.obj \
-	core\opcua_guid.obj \
-	core\opcua_memorystream.obj \
-	core\opcua_thread.obj \
-	core\opcua_datetime.obj \
-	core\opcua_memory.obj \
-	stackcore\opcua_types.obj \
-	stackcore\opcua_messagecontext.obj \
-	stackcore\opcua_encoder.obj \
-	stackcore\opcua_stringtable.obj \
-	stackcore\opcua_crypto.obj \
-	stackcore\opcua_binarydecoder.obj \
-	stackcore\opcua_binaryencoder.obj \
-	stackcore\opcua_enumeratedtype.obj \
-	stackcore\opcua_builtintypes.obj \
-	stackcore\opcua_securechannel.obj \
-	stackcore\opcua_encodeableobject.obj \
-	stackcore\opcua_pki.obj \
-	stackcore\opcua_listener.obj \
-	stackcore\opcua_stream.obj \
-	stackcore\opcua_extensionobject.obj \
-	stackcore\opcua_connection.obj \
-	stackcore\opcua_decoder.obj \
-	securechannel\opcua_secureconnection.obj \
-	securechannel\opcua_securelistener_policymanager.obj \
-	securechannel\opcua_securelistener_channelmanager.obj \
-	securechannel\opcua_securelistener.obj \
-	securechannel\opcua_soapsecurechannel.obj \
-	securechannel\opcua_tcpsecurechannel.obj \
-	securechannel\opcua_securestream.obj \
-	proxystub\clientproxy\opcua_channel.obj \
-	proxystub\clientproxy\opcua_asynccallstate.obj \
-	proxystub\clientproxy\opcua_clientapi.obj \
-	proxystub\serverstub\opcua_serverapi.obj \
-	proxystub\serverstub\opcua_servicetable.obj \
-	proxystub\serverstub\opcua_endpoint.obj \
-	transport\tcp\opcua_tcplistener_connectionmanager.obj \
-	transport\tcp\opcua_tcpconnection.obj \
-	transport\tcp\opcua_tcplistener.obj \
-	transport\tcp\opcua_tcpstream.obj \
-	transport\https\opcua_httpslistener_connectionmanager.obj \
-	transport\https\opcua_https_internal.obj \
-	transport\https\opcua_httpsconnection.obj \
-	transport\https\opcua_httpsstream.obj \
-	transport\https\opcua_httpslistener.obj \
-	platforms\win32\opcua_p_mutex.obj \
-	platforms\win32\opcua_p_openssl_pki_nosecurity.obj \
-	platforms\win32\opcua_p_win32_pki.obj \
-	platforms\win32\opcua_p_binary.obj \
-	platforms\win32\opcua_p_socket_interface.obj \
-	platforms\win32\opcua_p_memory.obj \
-	platforms\win32\opcua_p_wincrypt_random.obj \
-	platforms\win32\opcua_p_openssl_random.obj \
-	platforms\win32\opcua_p_openssl_rsa.obj \
-	platforms\win32\opcua_p_pkifactory.obj \
-	platforms\win32\opcua_p_internal.obj \
-	platforms\win32\opcua_p_openssl_x509.obj \
-	platforms\win32\opcua_p_openssl_hmac_sha.obj \
-	platforms\win32\opcua_p_socket_ssl.obj \
-	platforms\win32\opcua_p_openssl_sha.obj \
-	platforms\win32\opcua_p_openssl.obj \
-	platforms\win32\opcua_p_openssl_aes.obj \
-	platforms\win32\opcua_p_socket_internal.obj \
-	platforms\win32\opcua_p_utilities.obj \
-	platforms\win32\opcua_p_thread.obj \
-	platforms\win32\opcua_p_datetime.obj \
-	platforms\win32\opcua_p_cryptofactory.obj \
-	platforms\win32\opcua_p_trace.obj \
-	platforms\win32\opcua_p_openssl_3des.obj \
-	platforms\win32\opcua_p_openssl_nosecurity.obj \
-	platforms\win32\opcua_p_timer.obj \
-	platforms\win32\opcua_p_openssl_pki.obj \
-	platforms\win32\opcua_p_string.obj \
-	platforms\win32\opcua_p_guid.obj \
-	platforms\win32\opcua_p_socket.obj \
-	platforms\win32\opcua_p_interface.obj \
-	platforms\win32\opcua_p_semaphore.obj \
+	$(ODIR)\opcua_buffer.obj \
+	$(ODIR)\opcua_core.obj \
+	$(ODIR)\opcua_datetime.obj \
+	$(ODIR)\opcua_guid.obj \
+	$(ODIR)\opcua_list.obj \
+	$(ODIR)\opcua_memory.obj \
+	$(ODIR)\opcua_memorystream.obj \
+	$(ODIR)\opcua_proxystub.obj \
+	$(ODIR)\opcua_string.obj \
+	$(ODIR)\opcua_thread.obj \
+	$(ODIR)\opcua_threadpool.obj \
+	$(ODIR)\opcua_timer.obj \
+	$(ODIR)\opcua_trace.obj \
+	$(ODIR)\opcua_utilities.obj \
+	$(ODIR)\opcua_binarydecoder.obj \
+	$(ODIR)\opcua_binaryencoder.obj \
+	$(ODIR)\opcua_builtintypes.obj \
+	$(ODIR)\opcua_connection.obj \
+	$(ODIR)\opcua_crypto.obj \
+	$(ODIR)\opcua_decoder.obj \
+	$(ODIR)\opcua_encodeableobject.obj \
+	$(ODIR)\opcua_encoder.obj \
+	$(ODIR)\opcua_enumeratedtype.obj \
+	$(ODIR)\opcua_extensionobject.obj \
+	$(ODIR)\opcua_listener.obj \
+	$(ODIR)\opcua_messagecontext.obj \
+	$(ODIR)\opcua_pki.obj \
+	$(ODIR)\opcua_securechannel.obj \
+	$(ODIR)\opcua_stream.obj \
+	$(ODIR)\opcua_stringtable.obj \
+	$(ODIR)\opcua_types.obj \
+	$(ODIR)\opcua_secureconnection.obj \
+	$(ODIR)\opcua_securelistener.obj \
+	$(ODIR)\opcua_securelistener_channelmanager.obj \
+	$(ODIR)\opcua_securelistener_policymanager.obj \
+	$(ODIR)\opcua_securestream.obj \
+	$(ODIR)\opcua_soapsecurechannel.obj \
+	$(ODIR)\opcua_tcpsecurechannel.obj \
+	$(ODIR)\opcua_asynccallstate.obj \
+	$(ODIR)\opcua_channel.obj \
+	$(ODIR)\opcua_clientapi.obj \
+	$(ODIR)\opcua_endpoint.obj \
+	$(ODIR)\opcua_serverapi.obj \
+	$(ODIR)\opcua_servicetable.obj \
+	$(ODIR)\opcua_tcpconnection.obj \
+	$(ODIR)\opcua_tcplistener.obj \
+	$(ODIR)\opcua_tcplistener_connectionmanager.obj \
+	$(ODIR)\opcua_tcpstream.obj \
+	$(ODIR)\opcua_httpsconnection.obj \
+	$(ODIR)\opcua_https_internal.obj \
+	$(ODIR)\opcua_httpslistener.obj \
+	$(ODIR)\opcua_httpslistener_connectionmanager.obj \
+	$(ODIR)\opcua_httpsstream.obj \
+	$(ODIR)\opcua_p_binary.obj \
+	$(ODIR)\opcua_p_cryptofactory.obj \
+	$(ODIR)\opcua_p_datetime.obj \
+	$(ODIR)\opcua_p_guid.obj \
+	$(ODIR)\opcua_p_interface.obj \
+	$(ODIR)\opcua_p_internal.obj \
+	$(ODIR)\opcua_p_memory.obj \
+	$(ODIR)\opcua_p_mutex.obj \
+	$(ODIR)\opcua_p_openssl.obj \
+	$(ODIR)\opcua_p_openssl_3des.obj \
+	$(ODIR)\opcua_p_openssl_aes.obj \
+	$(ODIR)\opcua_p_openssl_hmac_sha.obj \
+	$(ODIR)\opcua_p_openssl_nosecurity.obj \
+	$(ODIR)\opcua_p_openssl_pki.obj \
+	$(ODIR)\opcua_p_openssl_pki_nosecurity.obj \
+	$(ODIR)\opcua_p_openssl_random.obj \
+	$(ODIR)\opcua_p_openssl_rsa.obj \
+	$(ODIR)\opcua_p_openssl_sha.obj \
+	$(ODIR)\opcua_p_openssl_x509.obj \
+	$(ODIR)\opcua_p_pkifactory.obj \
+	$(ODIR)\opcua_p_semaphore.obj \
+	$(ODIR)\opcua_p_socket.obj \
+	$(ODIR)\opcua_p_socket_interface.obj \
+	$(ODIR)\opcua_p_socket_internal.obj \
+	$(ODIR)\opcua_p_socket_ssl.obj \
+	$(ODIR)\opcua_p_string.obj \
+	$(ODIR)\opcua_p_thread.obj \
+	$(ODIR)\opcua_p_timer.obj \
+	$(ODIR)\opcua_p_trace.obj \
+	$(ODIR)\opcua_p_utilities.obj \
+	$(ODIR)\opcua_p_win32_pki.obj \
+	$(ODIR)\opcua_p_wincrypt_random.obj \
 
 all: $(TARGET)
 
 clean:
 	-del $(TARGET) $(TARGET).pdb 2>nul
-	del $(OBJECTS) 2>nul
+	-del $(OBJECTS) 2>nul
+	-rmdir $(ODIR) 2>nul
 
 $(TARGET_DIR):
 	-mkdir $(ROOT)\lib
-	mkdir $(ROOT)\lib\win32
+	mkdir $(ROOT)\lib\$(ODIR)
 
-$(TARGET): $(TARGET_DIR) $(OBJECTS)
+$(ODIR):
+	mkdir $(ODIR)
+
+$(TARGET): $(TARGET_DIR) $(ODIR) $(OBJECTS)
 	lib /nologo /out:$(TARGET) $(OBJECTS)
 
-.c.obj:
-	$(CC) $(CFLAGS) /Fo$*.obj /c $<
+{core}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+{stackcore}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+{securechannel}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+{proxystub\clientproxy}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+{proxystub\serverstub}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+{transport\tcp}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+{transport\https}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+{platforms\win32}.c{$(ODIR)}.obj:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
