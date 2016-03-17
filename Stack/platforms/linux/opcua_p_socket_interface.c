@@ -105,6 +105,8 @@
 
     return;
 }
+#else
+static OpcUa_SocketManager OpcUa_Socket_g_SocketManager = OpcUa_Null;
 #endif /* OPCUA_MULTITHREADED */
 
 
@@ -244,6 +246,13 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketManager_ServeLoop( OpcUa_SocketMana
 {
 OpcUa_InitializeStatus(OpcUa_Module_Socket, "ServeLoop");
 
+#if !OPCUA_MULTITHREADED
+    if(a_pSocketManager == OpcUa_Null)
+    {
+        a_pSocketManager = OpcUa_Socket_g_SocketManager;
+    }
+#endif
+
     uStatus =  OpcUa_P_SocketManager_ServeLoopInternal( a_pSocketManager,
                                                         a_msecTimeout,
                                                         a_bRunOnce);
@@ -269,8 +278,6 @@ OpcUa_InitializeStatus(OpcUa_Module_Socket, "SocketManager_Create");
         return OpcUa_BadInvalidArgument;
     }
 
-    a_nSockets += 1; /* add signal socket to requested sockets */
-
     if(a_nSockets > OPCUA_P_SOCKETMANAGER_NUMBEROFSOCKETS)
     {
         return OpcUa_BadInvalidArgument;
@@ -281,6 +288,15 @@ OpcUa_InitializeStatus(OpcUa_Module_Socket, "SocketManager_Create");
     {
         a_nSockets = OPCUA_P_SOCKETMANAGER_NUMBEROFSOCKETS;
     }
+
+    a_nSockets += 1; /* add signal socket to requested sockets */
+
+#if !OPCUA_MULTITHREADED
+    if(a_pSocketManager == OpcUa_Null && OpcUa_Socket_g_SocketManager == OpcUa_Null)
+    {
+        a_pSocketManager = &OpcUa_Socket_g_SocketManager;
+    }
+#endif
 
     if(a_pSocketManager == OpcUa_Null)
     {
@@ -399,7 +415,14 @@ OpcUa_Void OPCUA_DLLCALL OpcUa_P_SocketManager_Delete(OpcUa_SocketManager* a_pSo
     OpcUa_InternalSocketManager* pInternalSocketManager = OpcUa_Null;
     OpcUa_UInt32                 uintIndex              = 0;
 
-    if(a_pSocketManager == OpcUa_Null)
+#if !OPCUA_MULTITHREADED
+    if(a_pSocketManager == OpcUa_Null && OpcUa_Socket_g_SocketManager != OpcUa_Null)
+    {
+        a_pSocketManager = &OpcUa_Socket_g_SocketManager;
+    }
+#endif
+
+    if(a_pSocketManager == OpcUa_Null || *a_pSocketManager == OpcUa_Null)
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SocketManager_Delete: Invalid Socket Manager!\n");
         return;
@@ -478,7 +501,6 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Socket_InitializeNetwork(OpcUa_Void)
 OpcUa_InitializeStatus(OpcUa_Module_Socket, "InitializeNetwork");
 
     uStatus = OpcUa_P_RawSocket_InitializeNetwork();
-
     OpcUa_GotoErrorIfBad(uStatus);
 
 OpcUa_ReturnStatusCode;
@@ -521,6 +543,13 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketManager_CreateServer(  OpcUa_Socket
     OpcUa_StringA                   sRemoteAdress           = OpcUa_Null;
 
 OpcUa_InitializeStatus(OpcUa_Module_Socket, "CreateServer");
+
+#if !OPCUA_MULTITHREADED
+    if(a_pSocketManager == OpcUa_Null)
+    {
+        a_pSocketManager = OpcUa_Socket_g_SocketManager;
+    }
+#endif
 
     OpcUa_ReturnErrorIfArgumentNull(a_pSocketManager);
     OpcUa_ReturnErrorIfArgumentNull(a_pSocket);
@@ -587,6 +616,13 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketManager_CreateClient(  OpcUa_Socket
     OpcUa_StringA                sRemoteAdress          = OpcUa_Null;
 
 OpcUa_InitializeStatus(OpcUa_Module_Socket, "CreateClient");
+
+#if !OPCUA_MULTITHREADED
+    if(a_hSocketManager == OpcUa_Null)
+    {
+        a_hSocketManager = OpcUa_Socket_g_SocketManager;
+    }
+#endif
 
     OpcUa_ReturnErrorIfArgumentNull(a_hSocketManager);
     OpcUa_ReturnErrorIfArgumentNull(a_pSocket);
