@@ -75,3 +75,25 @@ API changes from the 1.02.335 version:
     pki.Flags=0;
   Use OPCUA_P_PKI_OPENSSL_XXX flags for PKI type OpenSSL
   Use OPCUA_P_PKI_WIN32_XXX flags for PKI type Win32
+- OpcUa_Crypto_CreateCertificate: The function signature has
+  changed.
+  Instead of validFrom and validTo use validToInSec.
+  validToInSec is the time in seconds how long the generated
+  certificate will be valid.
+  pIssuerCertificate has been removed as only self-signed
+  certificate are supported.
+  pCertificate holds a OpcUa_ByteString with the generated
+  certificate, instead of a raw X509 pointer.
+- OpcUa_Crypto_GenerateAsymmetricKeypair has been changed to
+  allocate the memory for PublicKey and PrivateKey.
+- OpcUa_PKIProvider_SavePrivateKeyToFile is not supported.
+- OpcUa_P_OpenSSL_X509_SaveToFile was an internal function
+  and has been removed.
+- OPCUA_USE_STATIC_PLATFORM_INTERFACE is not supported.
+- OPCUA_MULTITHREADED: CONFIG_NO is supported,
+  but you must call OpcUa_SocketManager_Create(OpcUa_Null,0,0)
+  before OpcUa_Endpoint_Open, and you must call
+  OpcUa_SocketManager_Delete(OpcUa_Null) between
+  OpcUa_Endpoint_Close and Opcua_Endpoint_Delete.
+- OpcUa_Endpoint_GetPeerInfoBySecureChannelId is not supported,
+  use OpcUa_Endpoint_GetPeerInfo instead.
