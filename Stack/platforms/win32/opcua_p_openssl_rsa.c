@@ -164,6 +164,10 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "RSA_LoadPrivateKeyFromFile");
                                                 0,                  /* password callback    */
                                                 a_password);        /* default passphrase or arbitrary handle */
             OpcUa_GotoErrorIfNull(pEvpKey, OpcUa_Bad);
+            pRsaPrivateKey = EVP_PKEY_get1_RSA(pEvpKey);
+            OpcUa_GotoErrorIfNull(pRsaPrivateKey, OpcUa_Bad);
+            EVP_PKEY_free(pEvpKey);
+            pEvpKey = NULL;
             break;
         }
     case OpcUa_Crypto_Encoding_PKCS12:
@@ -173,36 +177,39 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "RSA_LoadPrivateKeyFromFile");
             /* read from file. */
             PKCS12* pPkcs12 = d2i_PKCS12_bio(pPrivateKeyFile, NULL);
 
-            if (pPkcs12 == 0)
+            if(pPkcs12 == NULL)
             {
-                OpcUa_GotoErrorWithStatus(OpcUa_BadEncodingError);
+                OpcUa_GotoErrorWithStatus(OpcUa_Bad);
             }
 
             /* parse the certificate. */
             iResult = PKCS12_parse(pPkcs12, a_password, &pEvpKey, NULL, NULL);
+            PKCS12_free(pPkcs12);
 
-            if (iResult == 0)
+            if(iResult <= 0)
             {
-                OpcUa_GotoErrorWithStatus(OpcUa_BadEncodingError);
+                OpcUa_GotoErrorWithStatus(OpcUa_Bad);
             }
 
-            /* free certificate. */
-            PKCS12_free(pPkcs12);
-            pPkcs12 = NULL;
+            /* convert to intermediary openssl struct */
+            pRsaPrivateKey = EVP_PKEY_get1_RSA(pEvpKey);
+            OpcUa_GotoErrorIfNull(pRsaPrivateKey, OpcUa_Bad);
+            EVP_PKEY_free(pEvpKey);
+            pEvpKey = NULL;
             break;
         }
     case OpcUa_Crypto_Encoding_DER:
+        {
+            pRsaPrivateKey = d2i_RSAPrivateKey_bio(pPrivateKeyFile, OpcUa_Null);
+            OpcUa_GotoErrorIfNull(pRsaPrivateKey, OpcUa_Bad);
+            break;
+        }
     default:
         {
             uStatus = OpcUa_BadNotSupported;
             OpcUa_GotoError;
         }
     }
-
-    /* convert to intermediary openssl struct */
-    pRsaPrivateKey = EVP_PKEY_get1_RSA(pEvpKey);
-    EVP_PKEY_free(pEvpKey);
-    OpcUa_GotoErrorIfNull(pRsaPrivateKey, OpcUa_Bad);
 
     /* get required length */
     a_pPrivateKey->Length = i2d_RSAPrivateKey(pRsaPrivateKey, OpcUa_Null);
