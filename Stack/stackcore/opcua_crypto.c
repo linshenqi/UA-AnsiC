@@ -112,7 +112,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_DeriveChannelKeysets(
                                             a_pClientKeyset,
                                             a_pServerKeyset);
 }
-                                                    
+
 
 /*============================================================================
  * OpcUa_Crypto_GetPrivateKeyFromCert
@@ -189,24 +189,24 @@ OpcUa_StatusCode OpcUa_Crypto_CreateCertificate(
     OpcUa_Crypto_Extension*             a_pExtensions,
     OpcUa_UInt                          a_extensionsCount,
     OpcUa_UInt                          a_signatureHashAlgorithm, /* EVP_sha1(),... */
-    OpcUa_Key                           a_pIssuerPrivateKey, /* EVP_PKEY* - type defines also signature algorithm */                      
-    OpcUa_Certificate**                 a_ppCertificate)     /* this has to be changed to OpcUa_Certificate** */
+    OpcUa_Key                           a_pIssuerPrivateKey, /* EVP_PKEY* - type defines also signature algorithm */
+    OpcUa_ByteString*                   a_pCertificate)      /* DER encoded byte string */
 {
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_Crypto);
     OpcUa_ReturnErrorIfArgumentNull(a_pProvider);
     OpcUa_ReturnErrorIfNull(a_pProvider->CreateCertificate, OpcUa_BadNotSupported);
 
-    return a_pProvider->CreateCertificate(a_pProvider, 
-                                          a_serialNumber, 
-                                          a_validToInSec, 
-                                          a_pNameEntries, 
+    return a_pProvider->CreateCertificate(a_pProvider,
+                                          a_serialNumber,
+                                          a_validToInSec,
+                                          a_pNameEntries,
                                           a_nameEntriesCount,
                                           a_pSubjectPublicKey,
                                           a_pExtensions,
                                           a_extensionsCount,
                                           a_signatureHashAlgorithm,
                                           a_pIssuerPrivateKey,
-                                          a_ppCertificate);
+                                          a_pCertificate);
 }
 
 
@@ -216,9 +216,9 @@ OpcUa_StatusCode OpcUa_Crypto_CreateCertificate(
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricEncrypt(
     struct _OpcUa_CryptoProvider*   a_pProvider,
     OpcUa_Byte*                     a_pPlainText,
-    OpcUa_UInt32                    a_plainTextLen, 
+    OpcUa_UInt32                    a_plainTextLen,
     OpcUa_Key*                      a_publicKey,
-    OpcUa_Byte*                     a_pCipherText, 
+    OpcUa_Byte*                     a_pCipherText,
     OpcUa_UInt32*                   a_pCipherTextLen)
 {
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_Crypto);
@@ -226,11 +226,11 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricEncrypt(
     OpcUa_ReturnErrorIfNull(a_pProvider->AsymmetricEncrypt, OpcUa_BadNotSupported);
 
     return a_pProvider->AsymmetricEncrypt(
-        a_pProvider, 
-        a_pPlainText, 
-        a_plainTextLen, 
-        a_publicKey, 
-        a_pCipherText, 
+        a_pProvider,
+        a_pPlainText,
+        a_plainTextLen,
+        a_publicKey,
+        a_pCipherText,
         a_pCipherTextLen);
 }
 
@@ -240,9 +240,9 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricEncrypt(
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricDecrypt(
     struct _OpcUa_CryptoProvider*   a_pProvider,
     OpcUa_Byte*                     a_pCipherText,
-    OpcUa_UInt32                    a_cipherTextLen, 
+    OpcUa_UInt32                    a_cipherTextLen,
     OpcUa_Key*                      a_privateKey,
-    OpcUa_Byte*                     a_pPlainText, 
+    OpcUa_Byte*                     a_pPlainText,
     OpcUa_UInt32*                   a_pPlainTextLen)
 {
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_Crypto);
@@ -250,11 +250,11 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricDecrypt(
     OpcUa_ReturnErrorIfNull(a_pProvider->AsymmetricDecrypt, OpcUa_BadNotSupported);
 
     return a_pProvider->AsymmetricDecrypt(
-        a_pProvider, 
-        a_pCipherText, 
-        a_cipherTextLen, 
-        a_privateKey, 
-        a_pPlainText, 
+        a_pProvider,
+        a_pCipherText,
+        a_cipherTextLen,
+        a_privateKey,
+        a_pPlainText,
         a_pPlainTextLen);
 }
 
@@ -264,7 +264,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricDecrypt(
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricSign(
     struct _OpcUa_CryptoProvider*    a_pProvider,
     OpcUa_ByteString                 a_data,
-    OpcUa_Key*                       a_privateKey,    
+    OpcUa_Key*                       a_privateKey,
     OpcUa_ByteString*                a_pSignature)
 {
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_Crypto);
@@ -272,9 +272,9 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricSign(
     OpcUa_ReturnErrorIfNull(a_pProvider->AsymmetricSign, OpcUa_BadNotSupported);
 
     return a_pProvider->AsymmetricSign(
-                                        a_pProvider, 
-                                        a_data, 
-                                        a_privateKey, 
+                                        a_pProvider,
+                                        a_data,
+                                        a_privateKey,
                                         a_pSignature);
 }
 
@@ -284,7 +284,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricSign(
 OpcUa_StatusCode OpcUa_Crypto_AsymmetricVerify(
     struct _OpcUa_CryptoProvider*   a_pProvider,
     OpcUa_ByteString                a_data,
-    OpcUa_Key*                      a_publicKey,  
+    OpcUa_Key*                      a_publicKey,
     OpcUa_ByteString*               a_pSignature)
 {
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_Crypto);
@@ -292,9 +292,9 @@ OpcUa_StatusCode OpcUa_Crypto_AsymmetricVerify(
     OpcUa_ReturnErrorIfNull(a_pProvider->AsymmetricVerify, OpcUa_BadNotSupported);
 
     return a_pProvider->AsymmetricVerify(
-                                            a_pProvider, 
-                                            a_data, 
-                                            a_publicKey, 
+                                            a_pProvider,
+                                            a_data,
+                                            a_publicKey,
                                             a_pSignature);
 }
 
@@ -314,11 +314,11 @@ OpcUa_StatusCode OpcUa_Crypto_SymmetricEncrypt(
     OpcUa_ReturnErrorIfArgumentNull(a_pProvider);
     OpcUa_ReturnErrorIfNull(a_pProvider->SymmetricEncrypt, OpcUa_BadNotSupported);
 
-    return a_pProvider->SymmetricEncrypt(a_pProvider, 
-                                        a_pPlainText, 
-                                        a_plainTextLen, 
-                                        a_key, 
-                                        a_pInitalVector, 
+    return a_pProvider->SymmetricEncrypt(a_pProvider,
+                                        a_pPlainText,
+                                        a_plainTextLen,
+                                        a_key,
+                                        a_pInitalVector,
                                         a_pCipherText,
                                         a_pCipherTextLen);
 }
@@ -339,11 +339,11 @@ OpcUa_StatusCode OpcUa_Crypto_SymmetricDecrypt(
     OpcUa_ReturnErrorIfArgumentNull(a_pProvider);
     OpcUa_ReturnErrorIfNull(a_pProvider->SymmetricDecrypt, OpcUa_BadNotSupported);
 
-    return a_pProvider->SymmetricDecrypt(a_pProvider, 
-                                         a_pCipherText, 
-                                         a_cipherTextLen, 
-                                         a_key, 
-                                         a_pInitalVector, 
+    return a_pProvider->SymmetricDecrypt(a_pProvider,
+                                         a_pCipherText,
+                                         a_cipherTextLen,
+                                         a_key,
+                                         a_pInitalVector,
                                          a_pPlainText,
                                          a_pPlainTextLen);
 }
@@ -361,7 +361,7 @@ OpcUa_StatusCode OpcUa_Crypto_SymmetricSign(
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_Crypto);
     OpcUa_ReturnErrorIfArgumentNull(a_pProvider);
     OpcUa_ReturnErrorIfNull(a_pProvider->SymmetricSign, OpcUa_BadNotSupported);
-    
+
     return a_pProvider->SymmetricSign(a_pProvider, a_pData, a_dataLen, a_key, a_pSignature);
 }
 
@@ -378,12 +378,12 @@ OpcUa_StatusCode OpcUa_Crypto_SymmetricVerify(
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_Crypto);
     OpcUa_ReturnErrorIfArgumentNull(a_pProvider);
     OpcUa_ReturnErrorIfNull(a_pProvider->SymmetricVerify, OpcUa_BadNotSupported);
-    
+
     return a_pProvider->SymmetricVerify(
-        a_pProvider, 
-        a_pData, 
-        a_dataLen, 
-        a_key, 
+        a_pProvider,
+        a_pData,
+        a_dataLen,
+        a_key,
         a_pSignature);
 }
 

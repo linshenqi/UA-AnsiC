@@ -35,7 +35,7 @@ OPCUA_BEGIN_EXTERN_C
 /* a handle for crytographic objects created by the provider */
 typedef OpcUa_Void* OpcUa_ProviderHandle;
 
-#define OpcUa_Crypto_Rsa_Name                       L"RSA"                          
+#define OpcUa_Crypto_Rsa_Name                       L"RSA"
 #define OpcUa_Crypto_Rsa_Id                         19
 
 /* @brief Key Types; If Handle, Data points to an opaque key handle and Length must be interpreted as boolean. */
@@ -133,7 +133,7 @@ struct _OpcUa_SecurityKeyset;
 struct OpcUa_Crypto_Key_;
 struct OpcUa_Crypto_Signature_;
 
-/** 
+/**
   @brief The Signature.
   */
 struct OpcUa_Crypto_Signature_
@@ -147,7 +147,7 @@ OPCUA_EXPORT OpcUa_Void OpcUa_Signature_Initialize(OpcUa_Signature* pSignature);
 OPCUA_EXPORT OpcUa_Void OpcUa_Signature_Clear(OpcUa_Signature* pSignature);
 
 
-/** 
+/**
   @brief The CryptoKey.
   */
 struct OpcUa_Crypto_Key_;
@@ -164,11 +164,11 @@ typedef struct OpcUa_Crypto_Key_ OpcUa_Key;
 OPCUA_EXPORT OpcUa_Void OpcUa_Key_Initialize(OpcUa_Key* pKey);
 OPCUA_EXPORT OpcUa_Void OpcUa_Key_Clear(OpcUa_Key* pKey);
 
-/** 
+/**
   @brief The SecurityKeyset.
   */
 struct _OpcUa_SecurityKeyset
-{   
+{
     /** @brief The signing key. */
     OpcUa_Key      SigningKey;
 
@@ -183,7 +183,7 @@ typedef struct _OpcUa_SecurityKeyset OpcUa_SecurityKeyset;
 OpcUa_Void OpcUa_SecurityKeyset_Initialize(OpcUa_SecurityKeyset* pSecurityKeyset);
 OpcUa_Void OpcUa_SecurityKeyset_Clear(OpcUa_SecurityKeyset* pSecurityKeyset);
 
-/** 
+/**
   @brief Name entry structure for an X509 certificate. Used to build the X.509 Subject/Issuer name.
 */
 struct OpcUa_Crypto_NameEntry_
@@ -194,7 +194,7 @@ struct OpcUa_Crypto_NameEntry_
 
 typedef struct OpcUa_Crypto_NameEntry_ OpcUa_Crypto_NameEntry;
 
-/** 
+/**
   @brief Extension structure for an X509 certificate. Used to add V3 extensions for a X.509 certificate.
 */
 struct OpcUa_Crypto_Extension_
@@ -204,7 +204,7 @@ struct OpcUa_Crypto_Extension_
 };
 
 typedef struct OpcUa_Crypto_Extension_ OpcUa_Crypto_Extension;
-typedef OpcUa_Void* OpcUa_Certificate;
+typedef OpcUa_ByteString OpcUa_Certificate;
 
 /************************************************************************************/
 /* CryptoProvider Interface Definition                                              */
@@ -214,7 +214,7 @@ typedef OpcUa_Void* OpcUa_Certificate;
 struct _OpcUa_CryptoProvider;
 
 /**
-  @brief 
+  @brief
  */
 typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGenerateAsymmetricKeypair)(
     struct _OpcUa_CryptoProvider*   pProvider,
@@ -234,7 +234,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GenerateAsymmetricKeypair(
     OpcUa_Key*                      pPrivateKey);
 
 /**
-  @brief 
+  @brief
  */
 typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetAsymmetricKeyLength)(
     struct _OpcUa_CryptoProvider*   pProvider,
@@ -253,10 +253,10 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetAsymmetricKeyLength(
   @brief Adds random data to the destination buffer.
 
   Function Pointer!
- 
+
   @param pProvider        [in]  The crypto provider handle.
   @param keyLen           [in]  The desired length of the random key.
-  
+
   @param pKey             [out] The generated random key.
  */
 typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGenerateKey)(
@@ -268,10 +268,10 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGenerateKey)(
   @brief Adds random data to the destination buffer.
 
   Abstract!
- 
+
   @param pProvider        [in]  The crypto provider handle.
   @param keyLen           [in]  The desired length of the random key.
-  
+
   @param pKey             [out] The generated random key.
  */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GenerateKey(
@@ -279,7 +279,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GenerateKey(
     OpcUa_Int32                      keyLen,
     OpcUa_Key*                       pKey);
 
-/** 
+/**
   @brief Generates a session key using secret input data.
 
   Function Pointer!
@@ -291,16 +291,16 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GenerateKey(
 
   @param pKey             [out] The derived random key.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnDeriveKey)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnDeriveKey)(
     struct _OpcUa_CryptoProvider* pProvider,
     OpcUa_ByteString              secret, /* clientnonce | servernonce, servernonce | clientnonce */
     OpcUa_ByteString              seed,
     OpcUa_Int32                   keyLen, /* output len */
     OpcUa_Key*                    pKey);
 
-/** 
+/**
   @brief Generates a session key using secret input data.
- 
+
   Abstract!
 
   @param pProvider        [in]  The crypto provider handle.
@@ -312,15 +312,15 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnDeriveKey)(
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_DeriveKey(
     struct _OpcUa_CryptoProvider* pProvider,
-    OpcUa_ByteString              secret, 
+    OpcUa_ByteString              secret,
     OpcUa_ByteString              seed,
     OpcUa_Int32                   keyLen, /* output len */
     OpcUa_Key*                    pKey);
 
 
-/** 
+/**
   @brief Derives a set of symmetric keys (encryption, signature, initialization vector) from a given input.
- 
+
   Abstract!
 
   @param pCryptoProvider  [in]  The crypto provider handle.
@@ -331,7 +331,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_DeriveKey(
   @param pClientKeyset    [out] The derived client-side keyset.
   @param pServerKeyset    [out] The derived server-side keyset.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnDeriveChannelKeysets)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnDeriveChannelKeysets)(
         struct _OpcUa_CryptoProvider*           pCryptoProvider,
         OpcUa_ByteString                        clientNonce,
         OpcUa_ByteString                        serverNonce,
@@ -339,9 +339,9 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnDeriveChannelKeysets)(
         OpcUa_SecurityKeyset*                   pClientKeyset,
         OpcUa_SecurityKeyset*                   pServerKeyset);
 
-/** 
+/**
   @brief Derives a set of symmetric keys (encryption, signature, initialization vector) from a given input.
- 
+
   Abstract!
 
   @param pCryptoProvider  [in]  The crypto provider handle.
@@ -360,7 +360,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_DeriveChannelKeysets(
         OpcUa_SecurityKeyset*                   pClientKeyset,
         OpcUa_SecurityKeyset*                   pServerKeyset);
 
-/** 
+/**
   @brief Gets the public key from a given certificate.
 
   Function Pointer!
@@ -368,24 +368,24 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_DeriveChannelKeysets(
   @param pProvider               [in]  A pointer to a crypto provider.
   @param certificate             [in]  The passed in certificate.
   @param password                [in]  Password for certificate. Only used when certificate is password protected. (Optional)
-  
+
   @param pPrivateKey             [out] The read out private key of the certificate.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetPrivateKeyFromCert)(   
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetPrivateKeyFromCert)(
     struct _OpcUa_CryptoProvider*       pProvider,
     OpcUa_StringA                       certificateFileName,
     OpcUa_StringA                       password,             /* this could be optional */
     OpcUa_Key*                          pPrivateKey);
 
-/** 
+/**
   @brief Gets the public key from a given certificate.
- 
+
   Abstract!
 
   @param pProvider               [in]  A pointer to a crypto provider.
   @param certificate             [in]  The passed in certificate.
   @param password                [in]  Password for certificate. Only used when certificate is password protected. (Optional)
-  
+
   @param pPrivateKey             [out] The read out private key of the certificate.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetPrivateKeyFromCert(
@@ -394,32 +394,32 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetPrivateKeyFromCert(
     OpcUa_StringA                       password,             /* this could be optional */
     OpcUa_Key*                          pPrivateKey);
 
-/** 
+/**
   @brief Gets the private key from a given certificate.
- 
+
   Function Pointer!
 
   @param pProvider                [in]  A pointer to a crypto provider.
   @param pCertificate             [in]  A pointer to a DER encoded ByteString representation of the certificate.
   @param password                 [in]  Password for certificate. Only used when certificate is password protected. (Optional)
-  
+
   @param pPublicKey               [out] The read out public key of the certificate.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetPublicKeyFromCert)(   
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetPublicKeyFromCert)(
     struct _OpcUa_CryptoProvider*       pProvider,
     OpcUa_ByteString*                   pCertificate,
     OpcUa_StringA                       password,             /* this could be optional */
     OpcUa_Key*                          pPublicKey);
 
-/** 
+/**
   @brief Gets the private key from a given certificate.
- 
+
   Abstract!
 
   @param pProvider                [in]  A pointer to a crypto provider.
   @param pCertificate             [in]  A pointer to a DER encoded ByteString representation of the certificate.
   @param password                 [in]  Password for certificate. Only used when certificate is password protected. (Optional)
-  
+
   @param pPublicKey               [out] The read out public key of the certificate.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetPublicKeyFromCert(
@@ -428,29 +428,29 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetPublicKeyFromCert(
     OpcUa_StringA                       password,             /* this could be optional */
     OpcUa_Key*                          pPublicKey);
 
-/** 
+/**
   @brief Gets the signature from a given certificate.
- 
+
   Function Pointer!
 
   @param pProvider                [in]  A pointer to a crypto provider.
   @param certificate              [in]  The passed in certificate.
-  
+
   @param pSignature               [out] The read out signature of the certificate.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetSignatureFromCert)(   
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetSignatureFromCert)(
     struct _OpcUa_CryptoProvider*       pProvider,
     OpcUa_ByteString*                   pCertificate,
     OpcUa_Signature*                    pSignature);
 
-/** 
+/**
   @brief Gets the private key from a given certificate.
- 
+
   Abstract!
 
   @param pProvider                [in]  A pointer to a crypto provider.
   @param certificate              [in]  The passed in certificate.
-  
+
   @param pSignature               [out] The read out signature of the certificate.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetSignatureFromCert(
@@ -458,29 +458,29 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetSignatureFromCert(
     OpcUa_ByteString*                   pCertificate,
     OpcUa_Signature*                    pSignature);
 
-/** 
+/**
   @brief Gets the signature from a given certificate.
- 
+
   Function Pointer!
 
   @param pProvider                  [in]  A pointer to a crypto provider.
   @param pCertificate               [in]  The passed in certificate.
-  
+
   @param pCertificateThumbprint     [out] The thumbprint of the certificate.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetCertificateThumbprint)(   
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnGetCertificateThumbprint)(
     struct _OpcUa_CryptoProvider*       pProvider,
     OpcUa_ByteString*                   pCertificate,
     OpcUa_ByteString*                   pCertificateThumbprint);
 
-/** 
+/**
   @brief Gets the private key from a given certificate.
- 
+
   Abstract!
 
   @param pProvider                  [in]  A pointer to a crypto provider.
   @param pCertificate               [in]  The passed in certificate.
-  
+
   @param pCertificateThumbprint     [out] The thumbprint of the certificate.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetCertificateThumbprint(
@@ -488,14 +488,14 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetCertificateThumbprint(
     OpcUa_ByteString*                   pCertificate,
     OpcUa_ByteString*                   pCertificateThumbprint);
 
-/** 
+/**
   @brief Creates a new X509 selfsigned certificate object.
 
   Function Pointer!
 
   @param pProvider                [in]  The crypto provider handle.
   @param serialNumber             [in]  The serial number of the desired certificate (Should be read out of the cetificate store).
-  @param validToInSec             [in]  The validation end time information.  
+  @param validToInSec             [in]  The validation end time information.
   @param pNameEntries             [in]  Name entries for the certificate.
   @param nameEntriesCount         [in]  The count of name entries located at the address in pNameEntries.
   @param pSubjectPublicKey        [in]  The subject's public key.
@@ -503,10 +503,10 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_GetCertificateThumbprint(
   @param extensionsCount          [in]  The count of extension at the address in pExtensions.
   @param signatureHashAlgorithm   [in]  The hash algorithm for calculating the signature.
   @param pIssuerPrivateKey        [in]  The private key of the certificate authority.
-  
-  @param ppCertificate           [out] The new self-signed certificate.
+
+  @param pCertificate             [out] The new self-signed certificate.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnCreateCertificate)(   
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnCreateCertificate)(
     struct _OpcUa_CryptoProvider*       pProvider,
     OpcUa_Int32                         serialNumber,
     OpcUa_UInt32                        validToInSec,
@@ -516,17 +516,17 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnCreateCertificate)(
     OpcUa_Crypto_Extension*             pExtensions,
     OpcUa_UInt                          extensionsCount,
     OpcUa_UInt                          signatureHashAlgorithm, /* EVP_sha1(),... */
-    OpcUa_Key                           pIssuerPrivateKey,  /* EVP_PKEY* - type defines also signature algorithm */                   
-    OpcUa_Certificate**                 ppCertificate);     /* this has to be changed to OpcUa_Certificate** */
+    OpcUa_Key                           pIssuerPrivateKey,  /* EVP_PKEY* - type defines also signature algorithm */
+    OpcUa_ByteString*                   pCertificate);      /* DER encoded byte string */
 
-/** 
+/**
   @brief Creates a new X509 selfsigned certificate object.
- 
+
   Abstract!
 
   @param pProvider                [in]  The crypto provider handle.
   @param serialNumber             [in]  The serial number of the desired certificate (Should be read out of the cetificate store).
-  @param validToInSec             [in]  The validation end time information.  
+  @param validToInSec             [in]  The validation end time information.
   @param pNameEntries             [in]  Name entries for the certificate.
   @param nameEntriesCount         [in]  The count of name entries located at the address in pNameEntries.
   @param pSubjectPublicKey        [in]  The subject's public key.
@@ -534,8 +534,8 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnCreateCertificate)(
   @param extensionsCount          [in]  The count of extension at the address in pExtensions.
   @param signatureHashAlgorithm   [in]  The hash algorithm for calculating the signature.
   @param pIssuerPrivateKey        [in]  The private key of the certificate authority.
-  
-  @param ppCertificate           [out] The new self-signed certificate.
+
+  @param pCertificate             [out] The new self-signed certificate.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_CreateCertificate(
     struct _OpcUa_CryptoProvider*       pProvider,
@@ -547,10 +547,10 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_CreateCertificate(
     OpcUa_Crypto_Extension*             pExtensions,
     OpcUa_UInt                          extensionsCount,
     OpcUa_UInt                          signatureHashAlgorithm, /* EVP_sha1(),... */
-    OpcUa_Key                           pIssuerPrivateKey,  /* EVP_PKEY* - type defines also signature algorithm */                   
-    OpcUa_Certificate**                 ppCertificate);     /* this has to be changed to OpcUa_Certificate** */
+    OpcUa_Key                           pIssuerPrivateKey,  /* EVP_PKEY* - type defines also signature algorithm */
+    OpcUa_ByteString*                   pCertificate);      /* DER encoded byte string */
 
-/** 
+/**
   @brief Encrypts data using (RSA)<NAME> with the public key of the appropriate key pair.
 
   Function Pointer!
@@ -565,17 +565,17 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_CreateCertificate(
   @param pCipherText       [out] The encrypted text.
   @param pCipherTextLen    [out] The length of the encrypted text.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricEncrypt)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricEncrypt)(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_Byte*                     pPlainText,
-    OpcUa_UInt32                    plainTextLen, 
+    OpcUa_UInt32                    plainTextLen,
     OpcUa_Key*                      publicKey,
-    OpcUa_Byte*                     pCipherText, 
+    OpcUa_Byte*                     pCipherText,
     OpcUa_UInt32*                   pCipherTextLen);
 
-/** 
+/**
   @brief Encrypts data using (RSA)<NAME> with the public key of the appropriate key pair.
- 
+
   Abstract!
 
   synchronous!
@@ -591,12 +591,12 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricEncrypt)(
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricEncrypt(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_Byte*                     pPlainText,
-    OpcUa_UInt32                    plainTextLen, 
+    OpcUa_UInt32                    plainTextLen,
     OpcUa_Key*                      publicKey,
-    OpcUa_Byte*                     pCipherText, 
+    OpcUa_Byte*                     pCipherText,
     OpcUa_UInt32*                   pCipherTextLen);
 
-/** 
+/**
   @brief Decrypts encrypted data using <NAME>(RSA) with the private key of the appropriate key pair.
 
    Abstract!
@@ -612,14 +612,14 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricEncrypt(
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricDecrypt(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_Byte*                     pCipherText,
-    OpcUa_UInt32                    cipherTextLen, 
+    OpcUa_UInt32                    cipherTextLen,
     OpcUa_Key*                      privateKey,
-    OpcUa_Byte*                     pPlainText, 
+    OpcUa_Byte*                     pPlainText,
     OpcUa_UInt32*                   pPlainTextLen);
 
-/** 
+/**
   @brief Decrypts encrypted data using <NAME>(RSA) with the private key of the appropriate key pair.
- 
+
   Function Pointer!
 
   synchonous!
@@ -633,15 +633,15 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricDecrypt(
   @param pPlainText         [out] The decrypted text.
   @param pPlainTextLen      [out] The length of the decrypted text.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricDecrypt)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricDecrypt)(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_Byte*                     pCipherText,
-    OpcUa_UInt32                    cipherTextLen, 
+    OpcUa_UInt32                    cipherTextLen,
     OpcUa_Key*                      privateKey,
-    OpcUa_Byte*                     pPlainText, 
+    OpcUa_Byte*                     pPlainText,
     OpcUa_UInt32*                   pPlainTextLen);
 
-/** 
+/**
   @brief Signs data using <NAME>(RSA) with the private key of the appropriate key pair.
 
   Function Pointer!
@@ -652,13 +652,13 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricDecrypt)(
 
   @param pSignature        [out] The signature of the data.
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricSign)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricSign)(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_ByteString                data,
     OpcUa_Key*                      privateKey,
     OpcUa_ByteString*               pSignature);
 
-/** 
+/**
   @brief Signs data using <NAME>(RSA) with the private key of the appropriate key pair.
 
   Abstract!
@@ -675,7 +675,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricSign(
     OpcUa_Key*                      privateKey,
     OpcUa_ByteString*               pSignature);
 
-/** 
+/**
   @brief Verifies signed data using <NAME>(RSA) with the public key of the appropriate key pair.
 
   Function Pointer!
@@ -685,15 +685,15 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricSign(
   @param publicKey                  [in]  The public key used to verify the signature.
   @param pSignature                 [in]  The signature of the data that should be verified.
  */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricVerify)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnAsymmetricVerify)(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_ByteString                data,
     OpcUa_Key*                      publicKey,
     OpcUa_ByteString*               pSignature);
 
-/** 
+/**
   @brief Verifies signed data using <NAME>(RSA) with the public key of the appropriate key pair.
- 
+
   Abstract!
 
   @param pProvider                  [in]  The crypto provider handle.
@@ -707,9 +707,9 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricVerify(
     OpcUa_Key*                      publicKey,
     OpcUa_ByteString*               pSignature);
 
-/** 
+/**
   @brief Encrypts data using Advanced Encryption Standard (AES) with the Cipher Block Chaining (CBC) mode.
- 
+
    Function Pointer!
 
    keylen = blocksize => fixed sizes of 128 = 10 rounds, 192 = 12 rounds, 256 = 14 rounds
@@ -724,7 +724,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_AsymmetricVerify(
   @param pCipherText            [out] The encrypted text.
   @param pCipherTextLen         [out] The length of the encrypted text
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricEncrypt)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricEncrypt)(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_Byte*                     pPlainText,
     OpcUa_UInt32                    plainTextLen,
@@ -733,9 +733,9 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricEncrypt)(
     OpcUa_Byte*                     pCipherText,
     OpcUa_UInt32*                   pCipherTextLen);
 
-/** 
+/**
   @brief Encrypts data using Advanced Encryption Standard (AES) with the Cipher Block Chaining (CBC) mode.
- 
+
    Abstract!
 
    keylen = blocksize => fixed sizes of 128 = 10 rounds, 192 = 12 rounds, 256 = 14 rounds
@@ -759,9 +759,9 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_SymmetricEncrypt(
     OpcUa_Byte*                     pCipherText,
     OpcUa_UInt32*                   pCipherTextLen);
 
-/** 
+/**
   @brief Decrypts encrypted data using Advanced Encryption Standard (AES) with the Cipher Block Chaining (CBC) mode.
- 
+
   Function Pointer!
 
   synchronous!
@@ -775,7 +775,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_SymmetricEncrypt(
   @param pPlainText             [out] The decrypted text.
   @param pPlainTextLen          [out] The length of the decrypted text
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricDecrypt)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricDecrypt)(
     struct _OpcUa_CryptoProvider*   pProvider,
     OpcUa_Byte*                     pCipherText,
     OpcUa_UInt32                    cipherTextLen,
@@ -784,9 +784,9 @@ typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricDecrypt)(
     OpcUa_Byte*                     pPlainText,
     OpcUa_UInt32*                   pPlainTextLen);
 
-/** 
+/**
   @brief Decrypts encrypted data using Advanced Encryption Standard (AES) with the Cipher Block Chaining (CBC) mode.
- 
+
   Abstract!
 
   synchronous!
@@ -809,11 +809,11 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_SymmetricDecrypt(
     OpcUa_Byte*                     pPlainText,
     OpcUa_UInt32*                   pPlainTextLen);
 
-/** 
+/**
   @brief Generates s 20 Bytes Message Authentication Code (MAC) of the given input buffer and a secret key.
 
   Function Pointer!
-  
+
   synchronous!
 
   @param pProvider        [in]  The crypto provider handle.
@@ -823,18 +823,18 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_SymmetricDecrypt(
 
   @param pSignature       [out] The resulting signature (MAC).
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricSign)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricSign)(
     struct _OpcUa_CryptoProvider* pProvider,
     OpcUa_Byte*                   pData,
     OpcUa_UInt32                  dataLen,
     OpcUa_Key*                    key,
     OpcUa_ByteString*             pSignature);
 
-/** 
+/**
   @brief Generates s 20 Bytes Message Authentication Code (MAC) of the given input buffer and a secret key.
 
   Abstract!
-  
+
   synchronous!
 
   @param pProvider        [in]  The crypto provider handle.
@@ -851,11 +851,11 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_SymmetricSign(
     OpcUa_Key*                     key,
     OpcUa_ByteString*             pSignature);
 
-/** 
+/**
   @brief Generates s 20 Bytes Message Authentication Code (MAC) of the given input buffer and a secret key.
 
   Function Pointer!
-  
+
   synchronous!
 
   @param pProvider                  [in]  The crypto provider handle.
@@ -865,18 +865,18 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Crypto_SymmetricSign(
   @param pSignature                 [in]  The resulting signature (MAC).
 
 */
-typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricVerify)(  
+typedef OpcUa_StatusCode (OpcUa_Crypto_PfnSymmetricVerify)(
     struct _OpcUa_CryptoProvider* pProvider,
     OpcUa_Byte*                   pData,
     OpcUa_UInt32                  dataLen,
     OpcUa_Key*                    key,
     OpcUa_ByteString*             pSignature);
 
-/** 
+/**
   @brief Generates s 20 Bytes Message Authentication Code (MAC) of the given input buffer and a secret key.
 
   Abstract!
-  
+
   synchronous!
 
   @param pProvider                  [in]  The crypto provider handle.

@@ -29,8 +29,6 @@
 #include <opcua_p_openssl.h>
 #include <opcua_p_pki.h>
 
-OpcUa_Void OpcUa_P_ByteString_Clear(OpcUa_ByteString* a_pValue);
-
 /*============================================================================
  * OpcUa_P_OpenSSL_RSA_GenerateKeys
  *===========================================================================*/
@@ -40,7 +38,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_RSA_GenerateKeys(
     OpcUa_Key*              a_pPublicKey,
     OpcUa_Key*              a_pPrivateKey)
 {
-    RSA*            pRsa;
+    RSA*            pRsa        = OpcUa_Null;
     unsigned char*  pData;
 
     OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "RSA_GenerateKeys");
@@ -51,43 +49,59 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_RSA_GenerateKeys(
 
     OpcUa_ReferenceParameter(a_pProvider);
 
+    a_pPublicKey->Key.Data      = OpcUa_Null;
+    a_pPrivateKey->Key.Data     = OpcUa_Null;
+
     if((a_bits < a_pProvider->MinimumAsymmetricKeyLength*8) || (a_bits > a_pProvider->MaximumAsymmetricKeyLength*8))
     {
         uStatus = OpcUa_BadInvalidArgument;
         OpcUa_GotoErrorIfBad(uStatus);
     }
 
-    if(a_pPublicKey->Key.Data == OpcUa_Null)
-    {
-       a_pPublicKey->Key.Length = a_bits;
-       OpcUa_ReturnStatusCode;
-    }
-
-    if(a_pPrivateKey->Key.Data == OpcUa_Null)
-    {
-       a_pPrivateKey->Key.Length = a_bits;
-       OpcUa_ReturnStatusCode;
-    }
-
     pRsa = RSA_generate_key(a_bits, RSA_F4, NULL, OpcUa_Null);
+    OpcUa_GotoErrorIfNull(pRsa, OpcUa_Bad);
+
+    /* get required length */
+    a_pPublicKey->Key.Length = i2d_RSAPublicKey(pRsa, NULL);
+    OpcUa_GotoErrorIfTrue((a_pPublicKey->Key.Length <= 0), OpcUa_Bad);
+
+    /* allocate target buffer */
+    a_pPublicKey->Key.Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pPublicKey->Key.Length);
+    OpcUa_GotoErrorIfAllocFailed(a_pPublicKey->Key.Data);
 
     pData = a_pPublicKey->Key.Data;
     a_pPublicKey->Key.Length = i2d_RSAPublicKey(pRsa, &pData);
+
+    /* get required length */
+    a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(pRsa, NULL);
+    OpcUa_GotoErrorIfTrue((a_pPrivateKey->Key.Length <= 0), OpcUa_Bad);
+
+    /* allocate target buffer */
+    a_pPrivateKey->Key.Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pPrivateKey->Key.Length);
+    OpcUa_GotoErrorIfAllocFailed(a_pPrivateKey->Key.Data);
 
     pData = a_pPrivateKey->Key.Data;
     a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(pRsa, &pData);
 
     /* clean up */
-    if(pRsa != OpcUa_Null)
-    {
-       RSA_free(pRsa);
-    }
+    RSA_free(pRsa);
 
     a_pPublicKey->Type = OpcUa_Crypto_KeyType_Rsa_Public;
     a_pPrivateKey->Type = OpcUa_Crypto_KeyType_Rsa_Private;
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
+
+    if(a_pPublicKey->Key.Data != OpcUa_Null)
+    {
+        OpcUa_P_Memory_Free(a_pPublicKey->Key.Data);
+        a_pPublicKey->Key.Data = OpcUa_Null;
+    }
+
+    if(pRsa != OpcUa_Null)
+    {
+        RSA_free(pRsa);
+    }
 
 OpcUa_FinishErrorHandling;
 }

@@ -177,7 +177,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SelfSigned_Custom_Create(
     OpcUa_UInt                  a_extensionsCount,
     OpcUa_UInt                  a_signatureHashAlgorithm, /* EVP_sha1(),... */
     OpcUa_Key                   a_pIssuerPrivateKey, /* EVP_PKEY* - type defines also signature algorithm */
-    OpcUa_Certificate**         a_ppCertificate)
+    OpcUa_ByteString*           a_pCertificate)
 {
     OpcUa_UInt          i;
 
@@ -196,6 +196,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SelfSigned_Custom_Create(
     OpcUa_ReturnErrorIfArgumentNull(a_pNameEntries);
     OpcUa_ReturnErrorIfArgumentNull(a_pExtensions);
     OpcUa_ReturnErrorIfArgumentNull(a_pIssuerPrivateKey.Key.Data);
+    OpcUa_ReturnErrorIfArgumentNull(a_pCertificate);
 
     if(a_pSubjectPublicKey.Type != OpcUa_Crypto_KeyType_Rsa_Public)
     {
@@ -230,8 +231,6 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SelfSigned_Custom_Create(
         uStatus =  OpcUa_Bad;
         OpcUa_GotoErrorIfBad(uStatus);
     }
-
-    *a_ppCertificate = (OpcUa_Certificate*)pCert;
 
     /* set version of certificate (V3 since internal representation starts versioning from 0) */
     if(X509_set_version(pCert, 2L) != 1)
@@ -376,6 +375,37 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SelfSigned_Custom_Create(
         pSubj = OpcUa_Null;
     }
 
+    /* prepare container */
+    memset(a_pCertificate, 0, sizeof(OpcUa_ByteString));
+
+    /* get required length for conversion target buffer */
+    a_pCertificate->Length = i2d_X509(pCert, NULL);
+
+    if(a_pCertificate->Length <= 0)
+    {
+        /* conversion to DER not possible */
+        uStatus = OpcUa_Bad;
+    }
+
+    /* allocate conversion target buffer */
+    a_pCertificate->Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pCertificate->Length);
+    OpcUa_GotoErrorIfAllocFailed(a_pCertificate->Data);
+
+    /* convert into DER */
+    a_pCertificate->Length = i2d_X509(pCert, &(a_pCertificate->Data));
+    if(a_pCertificate->Length <= 0)
+    {
+        /* conversion to DER not possible */
+        uStatus = OpcUa_Bad;
+    }
+    else
+    {
+        /* correct pointer incrementation by i2d_X509() */
+        a_pCertificate->Data -= a_pCertificate->Length;
+    }
+
+    X509_free(pCert);
+
 OpcUa_ReturnStatusCode;
 
 OpcUa_BeginErrorHandling;
@@ -399,62 +429,6 @@ OpcUa_BeginErrorHandling;
         X509_NAME_free(pSubj);
         pSubj = OpcUa_Null;
     }
-
-OpcUa_FinishErrorHandling;
-}
-
-/*============================================================================
- * OpcUa_P_OpenSSL_X509_SaveToFile
- *===========================================================================*/
-OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SaveToFile(
-    OpcUa_CryptoProvider*       a_pProvider,
-    OpcUa_StringA               a_fileName,
-    OpcUa_Certificate           a_certificate)
-{
-    BIO*         pCertFile  = OpcUa_Null;
-
-    OpcUa_Int    i          = 0;
-
-    OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_Save");
-
-    OpcUa_ReferenceParameter(a_pProvider);
-
-    OpcUa_ReturnErrorIfArgumentNull(a_certificate);
-
-    if(OpcUa_P_String_strlen(a_fileName) < 1)
-    {
-        uStatus = OpcUa_BadInvalidArgument;
-        OpcUa_GotoErrorIfBad(uStatus);
-    }
-
-    pCertFile = BIO_new_file(a_fileName, "w");
-
-    if(pCertFile == OpcUa_Null)
-    {
-        uStatus = OpcUa_BadInvalidArgument;
-        OpcUa_GotoErrorIfBad(uStatus);
-    }
-
-    i = i2d_X509_bio(pCertFile, ((X509*)&a_certificate));
-
-    if(i < 1)
-    {
-        uStatus =  OpcUa_Bad;
-        OpcUa_GotoErrorIfBad(uStatus);
-    }
-
-    if(BIO_free (pCertFile) == 0)
-    {
-        uStatus =  OpcUa_Bad;
-    }
-
-OpcUa_ReturnStatusCode;
-
-OpcUa_BeginErrorHandling;
-
-    if(pCertFile)
-        if(BIO_free(pCertFile) == 0)
-            return OpcUa_Bad;
 
 OpcUa_FinishErrorHandling;
 }

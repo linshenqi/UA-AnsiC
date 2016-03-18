@@ -48,8 +48,8 @@ OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_CreateCertificate(
     OpcUa_Crypto_Extension*     a_pExtensions,
     OpcUa_UInt                  a_extensionsCount,
     OpcUa_UInt                  a_signatureHashAlgorithm,
-    OpcUa_Key                   a_pIssuerPrivateKey, 
-    OpcUa_Certificate**         a_ppCertificate)   
+    OpcUa_Key                   a_pIssuerPrivateKey,
+    OpcUa_ByteString*           a_pCertificate)
 {
     OpcUa_ReferenceParameter(a_pProvider);
     OpcUa_ReferenceParameter(a_serialNumber);
@@ -61,7 +61,7 @@ OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_CreateCertificate(
     OpcUa_ReferenceParameter(a_extensionsCount);
     OpcUa_ReferenceParameter(a_signatureHashAlgorithm);
     OpcUa_ReferenceParameter(a_pIssuerPrivateKey);
-    OpcUa_ReferenceParameter(a_ppCertificate);
+    OpcUa_ReferenceParameter(a_pCertificate);
 
     return OpcUa_BadNotSupported;
 }
@@ -72,7 +72,7 @@ OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_CreateCertificate(
 OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_GetPrivateKeyFromCert(
     OpcUa_CryptoProvider*       a_pProvider,
     OpcUa_StringA               a_certificate,
-    OpcUa_StringA               a_password,          
+    OpcUa_StringA               a_password,
     OpcUa_Key*                  a_pPrivateKey)
 {
     OpcUa_ReferenceParameter(a_pProvider);
@@ -293,9 +293,9 @@ OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_SymmetricVerify(
 OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_AsymmetricEncrypt(
     OpcUa_CryptoProvider*   a_pProvider,
     OpcUa_Byte*             a_pPlainText,
-    OpcUa_UInt32            a_plainTextLen, 
+    OpcUa_UInt32            a_plainTextLen,
     OpcUa_Key*              a_publicKey,
-    OpcUa_Byte*             a_pCipherText, 
+    OpcUa_Byte*             a_pCipherText,
     OpcUa_UInt32*           a_pCipherTextLen)
 {
     OpcUa_ReferenceParameter(a_pProvider);
@@ -314,9 +314,9 @@ OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_AsymmetricEncrypt(
 OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_AsymmetricDecrypt(
     OpcUa_CryptoProvider*   a_pProvider,
     OpcUa_Byte*             a_pCipherText,
-    OpcUa_UInt32            a_cipherTextLen, 
+    OpcUa_UInt32            a_cipherTextLen,
     OpcUa_Key*              a_privateKey,
-    OpcUa_Byte*             a_pPlainText, 
+    OpcUa_Byte*             a_pPlainText,
     OpcUa_UInt32*           a_pPlainTextLen)
 {
     OpcUa_ReferenceParameter(a_pProvider);
