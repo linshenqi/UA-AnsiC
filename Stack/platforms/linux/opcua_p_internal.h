@@ -79,6 +79,10 @@
 # error OpenSSL required; globally define OPCUA_HAVE_OPENSSL if OpenSSL is available or disable security!
 #endif
 
+#if defined(OPCUA_HAVE_HTTPS) && !OPCUA_SUPPORT_PKI
+# error PKI support is required for HTTPS; globally define OPCUA_SUPPORT_PKI 
+#endif
+
 /**********************************************************************************/
 /*/  Internally used function prototypes.                                        /*/
 /**********************************************************************************/
