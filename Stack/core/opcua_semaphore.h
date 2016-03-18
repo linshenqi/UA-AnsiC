@@ -36,7 +36,7 @@
 #else /* OPCUA_USE_SYNCHRONISATION */
 # define OPCUA_P_SEMAPHORE_CREATE(a, b, c) OpcUa_Good
 # define OPCUA_P_SEMAPHORE_DELETE(a)
-# define OPCUA_P_SEMAPHORE_WAIT
+# define OPCUA_P_SEMAPHORE_WAIT(a) OpcUa_Good
 # define OPCUA_P_SEMAPHORE_TIMEDWAIT(a, b) OpcUa_Good
 # define OPCUA_P_SEMAPHORE_POST(a, b) OpcUa_Good
 #endif /* OPCUA_USE_SYNCHRONISATION */
