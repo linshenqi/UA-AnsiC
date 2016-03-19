@@ -47,7 +47,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OPCUA_STRING_LENDONTCARE        OPCUA_STRINGLENZEROTERMINATED
 
 #if OPCUA_PREFERINLINE
-    #define OpcUa_String_FromCString(x)  (x==OpcUa_Null?OpcUa_Null:x[0]=='\0'?OpcUa_Null:x)
+    #define OpcUa_String_FromCString(x) ((OpcUa_String*)((x)==OpcUa_Null||(x)[0]=='\0'?OpcUa_Null:(x)))
 #else /* OPCUA_PREFERINLINE */
     OPCUA_EXPORT
     OpcUa_String* OpcUa_String_FromCString(OpcUa_StringA strCString);
