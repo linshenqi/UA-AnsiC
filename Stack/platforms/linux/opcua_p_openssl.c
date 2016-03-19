@@ -63,6 +63,7 @@ OpcUa_Void OpcUa_P_Key_Clear(OpcUa_Key* a_pKey)
 /*============================================================================
  * simple locking for OpenSSL
  *===========================================================================*/
+#if OPCUA_USE_SYNCHRONISATION
 static OpcUa_Mutex OpenSSL_Mutex;
 static void OpcUa_P_OpenSSL_Lock(int mode, int type, const char *file, int line)
 {
@@ -74,15 +75,18 @@ static void OpcUa_P_OpenSSL_Lock(int mode, int type, const char *file, int line)
     if (mode & CRYPTO_UNLOCK)
         OpcUa_P_Mutex_Unlock(OpenSSL_Mutex);
 }
+#endif /* OPCUA_USE_SYNCHRONISATION */
 
 /*============================================================================
  * OpcUa_P_OpenSSL_Initialize
  *===========================================================================*/
 void OpcUa_P_OpenSSL_Initialize()
 {
+#if OPCUA_USE_SYNCHRONISATION
     OpcUa_P_Mutex_Create(&OpenSSL_Mutex);
     CRYPTO_set_id_callback(OpcUa_P_Thread_GetCurrentThreadId);
     CRYPTO_set_locking_callback(OpcUa_P_OpenSSL_Lock);
+#endif /* OPCUA_USE_SYNCHRONISATION */
     OpenSSL_add_all_algorithms();
 #if OPCUA_P_SOCKETMANAGER_SUPPORT_SSL
     SSL_library_init();
@@ -99,9 +103,11 @@ void OpcUa_P_OpenSSL_Cleanup()
     CRYPTO_cleanup_all_ex_data ();
     ERR_remove_state (0);
     ERR_free_strings ();
+#if OPCUA_USE_SYNCHRONISATION
     CRYPTO_set_id_callback(OpcUa_Null);
     CRYPTO_set_locking_callback(OpcUa_Null);
     OpcUa_P_Mutex_Delete(&OpenSSL_Mutex);
+#endif /* OPCUA_USE_SYNCHRONISATION */
 }
 
 /*============================================================================
