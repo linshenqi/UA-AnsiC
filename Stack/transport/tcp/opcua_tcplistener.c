@@ -1499,8 +1499,11 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "TimeoutEventHandler");
 
     OPCUA_P_SOCKET_CLOSE(a_pSocket);
 
-    OpcUa_TcpStream_Close((OpcUa_Stream*)pInputStream);
-    OpcUa_TcpStream_Delete((OpcUa_Stream**)&pInputStream);
+    if(pInputStream != OpcUa_Null)
+    {
+        OpcUa_TcpStream_Close((OpcUa_Stream*)pInputStream);
+        OpcUa_TcpStream_Delete((OpcUa_Stream**)&pInputStream);
+    }
 
     if(pTcpListenerConnection != OpcUa_Null)
     {

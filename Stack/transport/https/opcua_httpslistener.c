@@ -1237,8 +1237,11 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpListener, "TimeoutEventHandler");
 
     OPCUA_P_SOCKET_CLOSE(a_hSocket);
 
-    OpcUa_HttpsStream_Close((OpcUa_Stream*)pInputStream);
-    OpcUa_HttpsStream_Delete((OpcUa_Stream**)&pInputStream);
+    if(pInputStream != OpcUa_Null)
+    {
+        OpcUa_HttpsStream_Close((OpcUa_Stream*)pInputStream);
+        OpcUa_HttpsStream_Delete((OpcUa_Stream**)&pInputStream);
+    }
 
     if(pHttpsListenerConnection != OpcUa_Null)
     {
