@@ -129,10 +129,10 @@ void* bsearch(const void *key, const void *base, size_t num, size_t width,
 /*============================================================================
  * Quick Sort
  *===========================================================================*/
-OpcUa_Void OPCUA_DLLCALL OpcUa_P_QSort( OpcUa_Void*       pElements, 
-                                        OpcUa_UInt32      nElementCount, 
-                                        OpcUa_UInt32      nElementSize, 
-                                        OpcUa_PfnCompare* pfnCompare, 
+OpcUa_Void OPCUA_DLLCALL OpcUa_P_QSort( OpcUa_Void*       pElements,
+                                        OpcUa_UInt32      nElementCount,
+                                        OpcUa_UInt32      nElementSize,
+                                        OpcUa_PfnCompare* pfnCompare,
                                         OpcUa_Void*       pContext)
 {
     /*qsort_s(pElements, nElementCount, nElementSize, pfnCompare, pContext);*/
@@ -143,11 +143,11 @@ OpcUa_Void OPCUA_DLLCALL OpcUa_P_QSort( OpcUa_Void*       pElements,
 /*============================================================================
  * Binary Search on sorted array
  *===========================================================================*/
-OpcUa_Void* OPCUA_DLLCALL OpcUa_P_BSearch(  OpcUa_Void*       pKey, 
-                                            OpcUa_Void*       pElements, 
-                                            OpcUa_UInt32      nElementCount, 
-                                            OpcUa_UInt32      nElementSize, 
-                                            OpcUa_PfnCompare* pfnCompare, 
+OpcUa_Void* OPCUA_DLLCALL OpcUa_P_BSearch(  OpcUa_Void*       pKey,
+                                            OpcUa_Void*       pElements,
+                                            OpcUa_UInt32      nElementCount,
+                                            OpcUa_UInt32      nElementSize,
+                                            OpcUa_PfnCompare* pfnCompare,
                                             OpcUa_Void*       pContext)
 {
     /*return bsearch_s(pKey, pElements, nElementCount, nElementSize, pfnCompare, pContext);*/
@@ -231,9 +231,9 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
     nIpStart = nIndex1;
 
     /* skip host address */
-    while(      a_psUrl[nIndex1] != ':' 
-            &&  a_psUrl[nIndex1] != '/' 
-            &&  a_psUrl[nIndex1] != 0 
+    while(      a_psUrl[nIndex1] != ':'
+            &&  a_psUrl[nIndex1] != '/'
+            &&  a_psUrl[nIndex1] != 0
             &&  nIndex1          <  (OpcUa_Int32)uUrlLength)
     {
         nIndex1++;
@@ -243,7 +243,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
     sHostName       = (OpcUa_StringA)OpcUa_P_Memory_Alloc(uHostNameLength + 1);
     if(sHostName == NULL)
     {
-        return OpcUa_BadOutOfMemory;
+        OpcUa_GotoErrorWithStatus(OpcUa_BadOutOfMemory);
     }
 
     memcpy(sHostName, &a_psUrl[nIpStart], uHostNameLength);
@@ -251,48 +251,42 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
 
     pHostEnt = gethostbyname(sHostName);
 
-#ifdef _WIN32_WCE
     if(pHostEnt == NULL)
     {
         unsigned long ulInetAddr = inet_addr(sHostName);
 
-        pHostEnt = gethostbyaddr(   (const char*)&ulInetAddr, 
-                                    sizeof(ulInetAddr), 
-                                    AF_INET);
+        if(ulInetAddr != INADDR_NONE)
+        {
+            /* sHostName is already numeric */
+            *a_psIpAdress = sHostName;
+            OpcUa_ReturnStatusCode;
+        }
     }
-#endif /*_WIN32_WCE*/
 
     OpcUa_P_Memory_Free(sHostName);
 
     if(pHostEnt == NULL)
     {
         /* hostname could not be resolved */
-        return OpcUa_BadHostUnknown;
+        OpcUa_GotoErrorWithStatus(OpcUa_BadHostUnknown);
+    }
+
+    *a_psIpAdress = OpcUa_P_Memory_Alloc(16);
+    if(*a_psIpAdress == NULL)
+    {
+        OpcUa_GotoErrorWithStatus(OpcUa_BadOutOfMemory);
     }
 
 #if OPCUA_USE_SAFE_FUNCTIONS
-    nIpStart = 0;
-    *a_psIpAdress = OpcUa_P_Memory_Alloc(16);
-    memset(*a_psIpAdress, 0, 16);
-    nIpStart += sprintf_s(&(*a_psIpAdress)[0],         16,"%u", (unsigned char)(*((*pHostEnt).h_addr_list))[0]);
-    (*a_psIpAdress)[nIpStart++] = '.';
-    nIpStart += sprintf_s(&(*a_psIpAdress)[nIpStart],  12,"%u", (unsigned char)(*((*pHostEnt).h_addr_list))[1]);
-    (*a_psIpAdress)[nIpStart++] = '.';
-    nIpStart += sprintf_s(&(*a_psIpAdress)[nIpStart],   8,"%u", (unsigned char)(*((*pHostEnt).h_addr_list))[2]);
-    (*a_psIpAdress)[nIpStart++] = '.';
-    nIpStart += sprintf_s(&(*a_psIpAdress)[nIpStart],   4,"%u", (unsigned char)(*((*pHostEnt).h_addr_list))[3]);
+    sprintf_s(*a_psIpAdress, 16,
 #else /* OPCUA_USE_SAFE_FUNCTIONS */
-    nIpStart = 0;
-    *a_psIpAdress = OpcUa_P_Memory_Alloc(16);
-    memset(*a_psIpAdress, 0, 16);
-    nIpStart += sprintf(&(*a_psIpAdress)[0], "%u", (unsigned char)(*((*pHostEnt).h_addr_list))[0]);
-    (*a_psIpAdress)[nIpStart++] = '.';
-    nIpStart += sprintf(&(*a_psIpAdress)[nIpStart], "%u", (unsigned char)(*((*pHostEnt).h_addr_list))[1]);
-    (*a_psIpAdress)[nIpStart++] = '.';
-    nIpStart += sprintf(&(*a_psIpAdress)[nIpStart], "%u", (unsigned char)(*((*pHostEnt).h_addr_list))[2]);
-    (*a_psIpAdress)[nIpStart++] = '.';
-    nIpStart += sprintf(&(*a_psIpAdress)[nIpStart], "%u", (unsigned char)(*((*pHostEnt).h_addr_list))[3]);
+    sprintf(*a_psIpAdress,
 #endif /* OPCUA_USE_SAFE_FUNCTIONS */
+            "%u.%u.%u.%u",
+            (unsigned char)(*((*pHostEnt).h_addr_list))[0],
+            (unsigned char)(*((*pHostEnt).h_addr_list))[1],
+            (unsigned char)(*((*pHostEnt).h_addr_list))[2],
+            (unsigned char)(*((*pHostEnt).h_addr_list))[3]);
 
     /* scan port */
     if(a_psUrl[nIndex1] == ':')
@@ -308,8 +302,8 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
         sPort = &a_psUrl[nIndex1];
 
         /* search for end of port */
-        while(      a_psUrl[nIndex1] != '/' 
-                &&  a_psUrl[nIndex1] != 0 
+        while(      a_psUrl[nIndex1] != '/'
+                &&  a_psUrl[nIndex1] != 0
                 &&  nIndex2          <  6)
         {
             nIndex1++;
@@ -331,7 +325,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
         else
         {
             *a_puPort = OPCUA_HTTP_DEFAULT_PORT;
-        }       
+        }
     }
 
 OpcUa_ReturnStatusCode;
