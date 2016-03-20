@@ -190,8 +190,6 @@ OpcUa_StatusCode OpcUa_P_ParseUrl(  OpcUa_StringA   a_psUrl,
                                     OpcUa_StringA*  a_psIpAdress,
                                     OpcUa_UInt16*   a_puPort)
 {
-    OpcUa_UInt32    uUrlLength        = 0;
-
     OpcUa_StringA   sHostName         = OpcUa_Null;
     OpcUa_UInt32    uHostNameLength   = 0;
 
@@ -210,8 +208,6 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
 
     *a_psIpAdress = OpcUa_Null;
 
-    uUrlLength = (OpcUa_UInt32)strlen(a_psUrl);
-
     /* check for // (end of protocol header) */
     pcCursor = strstr(a_psUrl, "//");
 
@@ -221,11 +217,6 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
         pcCursor += 2;
         nIndex1 = (OpcUa_Int)(pcCursor - a_psUrl);
     }
-    else
-    {
-        uStatus = OpcUa_BadSyntaxError;
-        OpcUa_ReturnStatusCode;
-    }
 
     /* skip protocol prefix and store beginning of ip adress */
     nIpStart = nIndex1;
@@ -233,8 +224,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
     /* skip host address */
     while(      a_psUrl[nIndex1] != ':'
             &&  a_psUrl[nIndex1] != '/'
-            &&  a_psUrl[nIndex1] != 0
-            &&  nIndex1          <  (OpcUa_Int32)uUrlLength)
+            &&  a_psUrl[nIndex1] != 0)
     {
         nIndex1++;
     }
