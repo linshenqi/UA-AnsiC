@@ -249,6 +249,39 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
     memcpy(sHostName, &a_psUrl[nIpStart], uHostNameLength);
     sHostName[uHostNameLength] = '\0';
 
+    /* scan port */
+    if(a_psUrl[nIndex1] == ':')
+    {
+        OpcUa_Int       nIndex2 = 0;
+        OpcUa_CharA*    sPort   = OpcUa_Null;
+        OpcUa_CharA sBuffer[MAX_PORT_LENGTH];
+
+        /* skip delimiter */
+        nIndex1++;
+
+        /* store beginning of port */
+        sPort = &a_psUrl[nIndex1];
+
+        /* search for end of port */
+        while(      a_psUrl[nIndex1] != '/'
+                &&  a_psUrl[nIndex1] != 0
+                &&  nIndex2          <  6)
+        {
+            nIndex1++;
+            nIndex2++;
+        }
+
+        /* convert port */
+        OpcUa_P_Memory_MemCpy(sBuffer, MAX_PORT_LENGTH-1, sPort, nIndex2);
+        sBuffer[nIndex2] = 0;
+        *a_puPort = (OpcUa_UInt16)OpcUa_P_CharAToInt(sBuffer);
+    }
+    else
+    {
+        /* return default port */
+        *a_puPort = OPCUA_TCP_DEFAULT_PORT;
+    }
+
     pHostEnt = gethostbyname(sHostName);
 
     if(pHostEnt == NULL)
@@ -287,46 +320,6 @@ OpcUa_InitializeStatus(OpcUa_Module_Utilities, "P_ParseUrl");
             (unsigned char)(*((*pHostEnt).h_addr_list))[1],
             (unsigned char)(*((*pHostEnt).h_addr_list))[2],
             (unsigned char)(*((*pHostEnt).h_addr_list))[3]);
-
-    /* scan port */
-    if(a_psUrl[nIndex1] == ':')
-    {
-        OpcUa_Int       nIndex2 = 0;
-        OpcUa_CharA*    sPort   = OpcUa_Null;
-        OpcUa_CharA sBuffer[MAX_PORT_LENGTH];
-
-        /* skip delimiter */
-        nIndex1++;
-
-        /* store beginning of port */
-        sPort = &a_psUrl[nIndex1];
-
-        /* search for end of port */
-        while(      a_psUrl[nIndex1] != '/'
-                &&  a_psUrl[nIndex1] != 0
-                &&  nIndex2          <  6)
-        {
-            nIndex1++;
-            nIndex2++;
-        }
-
-        /* convert port */
-        OpcUa_P_Memory_MemCpy(sBuffer, MAX_PORT_LENGTH-1, sPort, nIndex2);
-        sBuffer[nIndex2] = 0;
-        *a_puPort = (OpcUa_UInt16)OpcUa_P_CharAToInt(sBuffer);
-    }
-    else
-    {
-        /* return default port */
-        if (strncmp(a_psUrl, "http:", 5) != 0)
-        {
-            *a_puPort = OPCUA_TCP_DEFAULT_PORT;
-        }
-        else
-        {
-            *a_puPort = OPCUA_HTTP_DEFAULT_PORT;
-        }
-    }
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
