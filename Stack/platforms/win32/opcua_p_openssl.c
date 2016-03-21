@@ -115,6 +115,11 @@ void OpcUa_P_OpenSSL_Initialize()
  *===========================================================================*/
 void OpcUa_P_OpenSSL_Cleanup()
 {
+#if OPCUA_P_SOCKETMANAGER_SUPPORT_SSL
+#if OPENSSL_VERSION_NUMBER >= 0x1000200fL && !defined(OPENSSL_NO_COMP)
+    SSL_COMP_free_compression_methods();
+#endif
+#endif /* OPCUA_P_SOCKETMANAGER_SUPPORT_SSL */
     EVP_cleanup();
     CRYPTO_cleanup_all_ex_data ();
     ERR_remove_state (0);
