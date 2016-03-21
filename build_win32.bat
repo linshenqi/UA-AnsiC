@@ -1,6 +1,6 @@
 @echo off
 set ROOT=%~pd0
-set OPENSSL_SOURCEDIR=%ROOT%openssl-1.0.1?
+set OPENSSL_SOURCEDIR=%ROOT%openssl-1.0.??
 set OPENSSL_INSTALDIR=%ROOT%openssl
 set MAKEFLAGS=
 
