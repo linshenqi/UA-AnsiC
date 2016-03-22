@@ -492,15 +492,19 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_RSA_Private_Decrypt(
 
     if (pPrivateKey == OpcUa_Null)
     {
-        return OpcUa_BadInvalidArgument;
+        OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
     }
 
     keySize = RSA_size(pPrivateKey->pkey.rsa);
 
+    if(keySize == 0)
+    {
+        OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
+    }
+
     if((a_cipherTextLen%keySize) != 0)
     {
-        uStatus = OpcUa_BadInvalidArgument;
-        OpcUa_GotoError;
+        OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
     }
 
     /* check padding type */
@@ -508,11 +512,19 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_RSA_Private_Decrypt(
     {
     case RSA_PKCS1_PADDING:
         {
+            if(keySize <= 11)
+            {
+                OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
+            }
             decDataSize = keySize - 11;
             break;
         }
     case RSA_PKCS1_OAEP_PADDING:
         {
+            if(keySize <= 42)
+            {
+                OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
+            }
             decDataSize = keySize - 42;
             break;
         }
@@ -537,11 +549,14 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_RSA_Private_Decrypt(
                                                     pPrivateKey->pkey.rsa,              /* private key          */
                                                     a_padding);                         /* padding mode         */
 
-            /* goto error block, if decryption fails */
+            /* if decryption fails return the same result as if signature check fails */
             if(decryptedBytes < 0)
             {
-                uStatus = OpcUa_Bad;
-                OpcUa_GotoError;
+                /* continue decrypting the message in constant time */
+                uStatus = OpcUa_BadSignatureInvalid;
+                decryptedBytes = decDataSize;
+                /* do not leak timing information by skipping the memcpy */
+                memmove(a_pPlainText + (*a_pPlainTextLen), a_pCipherText + iCipherText, decryptedBytes);
             }
 
         }
@@ -684,12 +699,12 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_RSA_Public_Verify(
 
     if((a_pSignature->Length%keySize) != 0)
     {
-        OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+        OpcUa_GotoErrorWithStatus(OpcUa_BadSignatureInvalid);
     }
 
     if(RSA_verify(a_data.Length == 32 ? NID_sha256 : NID_sha1, a_data.Data, a_data.Length, a_pSignature->Data, a_pSignature->Length, pPublicKey->pkey.rsa) != 1)
     {
-        OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+        OpcUa_GotoErrorWithStatus(OpcUa_BadSignatureInvalid);
     }
 
     EVP_PKEY_free(pPublicKey);
