@@ -1878,6 +1878,15 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "AppendInput");
                                                             a_pEncryptionKey,
                                                             (pSecureStream->eMessageType == eOpcUa_SecureStream_Types_OpenSecureChannel) ? OpcUa_False : OpcUa_True,
                                                             a_pInitializationVector);
+            if(OpcUa_IsEqual(OpcUa_BadSignatureInvalid) && (pSecureStream->eMessageType == eOpcUa_SecureStream_Types_OpenSecureChannel))
+            {
+                /* even if the decryption fails, ensure that there is no different timing */
+                (OpcUa_Void) OpcUa_SecureStream_VerifyInputBuffer(pSecureStream,
+                                                                  &readBuffer,
+                                                                  a_pCryptoProvider,
+                                                                  a_pSigningKey,
+                                                                  OpcUa_False);
+            }
             OpcUa_GotoErrorIfBad(uStatus);
 
             uStatus = OpcUa_SecureStream_VerifyInputBuffer( pSecureStream,
