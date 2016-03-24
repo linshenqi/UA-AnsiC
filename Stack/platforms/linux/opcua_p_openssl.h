@@ -1095,27 +1095,6 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_HMAC_SHA1_Generate(
 /**
   @brief Generates s variant Bytes Message Authentication Code (MAC) of the given input buffer and a secret key.
 
-  HMAC-SHA-1: 160 Bits output
-
-  synchronous!
-
-  @param pProvider        [in]  The crypto provider handle.
-  @param pData            [in]  The data for the MAC generation.
-  @param dataLen          [in]  The length data for the MAC generation.
-  @param key              [in]  The key for the MAC generation.
-
-  @param pMac             [out] The resulting messsage authentication code (MAC).
-*/
-OpcUa_StatusCode OpcUa_P_OpenSSL_HMAC_SHA1_160_Generate(
-    OpcUa_CryptoProvider* pProvider,
-    OpcUa_Byte*           pData,
-    OpcUa_UInt32          dataLen,
-    OpcUa_Key             key,
-    OpcUa_ByteString*     pMac);
-
-/**
-  @brief Generates s variant Bytes Message Authentication Code (MAC) of the given input buffer and a secret key.
-
   HMAC-SHA-2: 224 Bits output
 
   synchronous!
@@ -1131,7 +1110,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_HMAC_SHA2_224_Generate(
     OpcUa_CryptoProvider* pProvider,
     OpcUa_Byte*           pData,
     OpcUa_UInt32          dataLen,
-    OpcUa_Key             key,
+    OpcUa_Key*            key,
     OpcUa_ByteString*     pMac);
 
 /**
@@ -1173,7 +1152,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_HMAC_SHA2_384_Generate(
     OpcUa_CryptoProvider* pProvider,
     OpcUa_Byte*           pData,
     OpcUa_UInt32          dataLen,
-    OpcUa_Key             key,
+    OpcUa_Key*            key,
     OpcUa_ByteString*     pMac);
 
 /**
@@ -1194,7 +1173,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_HMAC_SHA2_512_Generate(
     OpcUa_CryptoProvider* pProvider,
     OpcUa_Byte*           pData,
     OpcUa_UInt32          dataLen,
-    OpcUa_Key             key,
+    OpcUa_Key*            key,
     OpcUa_ByteString*     pMac);
 
 
