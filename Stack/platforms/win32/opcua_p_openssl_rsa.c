@@ -628,8 +628,10 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "RSA_Private_Sign");
     OpcUa_ReferenceParameter(a_padding);
 
     /* check parameters */
+    OpcUa_ReturnErrorIfArgumentNull(a_data.Data);
     OpcUa_ReturnErrorIfArgumentNull(a_privateKey);
     OpcUa_ReturnErrorIfArgumentNull(a_pSignature);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSignature->Data);
     pData = a_privateKey->Key.Data;
     OpcUa_ReturnErrorIfArgumentNull(pData);
     OpcUa_ReturnErrorIfTrue((a_privateKey->Type != OpcUa_Crypto_KeyType_Rsa_Private), OpcUa_BadInvalidArgument);
@@ -648,15 +650,6 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "RSA_Private_Sign");
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
-
-    if(OpcUa_IsEqual(OpcUa_BadUnexpectedError))
-    {
-#if 0
-        long lErr = ERR_get_error();
-        char *szErr = ERR_error_string(lErr, 0);
-
-#endif
-    }
 
     if(pSSLPrivateKey != OpcUa_Null)
     {
