@@ -1020,6 +1020,12 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "SslEventHandler");
             uStatus = OpcUa_BadCertificateInvalid;
         }
     }
+    else if(a_uResult == OpcUa_BadNotSupported && pHttpsConnection->pPkiConfig != OpcUa_Null
+           && ((OpcUa_P_OpenSSL_CertificateStore_Config*)pHttpsConnection->pPkiConfig)->PkiType == OpcUa_NO_PKI)
+    {
+        /* ignore errors from PkiType OpcUa_NO_PKI if no explicit server certificate is requested */
+        uStatus = OpcUa_BadContinue;
+    }
 
     if(pHttpsConnection->bsUsedServerCertificate.Data != OpcUa_Null)
     {
