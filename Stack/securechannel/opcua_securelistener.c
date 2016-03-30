@@ -2113,12 +2113,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
             /* generate ServerNonce */
             uStatus = pCryptoProvider->GenerateKey( pCryptoProvider, serverNonce.Key.Length, &serverNonce);
             OpcUa_GotoErrorIfBad(uStatus);
-
-            if(uStatus == OpcUa_BadNotSupported)
-            {
-                uStatus = OpcUa_Good;
-            }
-            OpcUa_GotoErrorIfBad(uStatus);
         }
         else
         {
