@@ -2277,6 +2277,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
                                                                    pSecureChannel,
                                                                    pSecureListener->uNextSecureChannelId++);
 
+            /* skip 0 */
+            if(pSecureListener->uNextSecureChannelId == 0)
+            {
+                pSecureListener->uNextSecureChannelId++;
+            }
+
             /* AddChannel */
 
             /* generate SecurityToken */
