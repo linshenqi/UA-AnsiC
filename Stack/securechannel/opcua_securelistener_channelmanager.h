@@ -61,10 +61,9 @@ OpcUa_Void OpcUa_SecureListener_ChannelManager_Delete(
     OpcUa_SecureListener_ChannelManager** ppChannelManager);
 
 /* @brief */
-OpcUa_StatusCode OpcUa_SecureListener_ChannelManager_IsValidChannel(
+OpcUa_StatusCode OpcUa_SecureListener_ChannelManager_IsValidChannelID(
     OpcUa_SecureListener_ChannelManager* pChannelManager,
-    OpcUa_UInt32                         uSecureChannelID,
-    OpcUa_SecureChannel**                ppSecureChannel);
+    OpcUa_UInt32                         uSecureChannelID);
 
 /* @brief */
 OpcUa_StatusCode OpcUa_SecureListener_ChannelManager_AddChannel(

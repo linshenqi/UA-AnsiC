@@ -346,21 +346,23 @@ OpcUa_Void OpcUa_SecureListener_ChannelManager_Delete(
 }
 
 /*==============================================================================*/
-/* OpcUa_SecureListener_ChannelManager_IsValidChannel                           */
+/* OpcUa_SecureListener_ChannelManager_IsValidChannelID                         */
 /*==============================================================================*/
-OpcUa_StatusCode OpcUa_SecureListener_ChannelManager_IsValidChannel(
+OpcUa_StatusCode OpcUa_SecureListener_ChannelManager_IsValidChannelID(
     OpcUa_SecureListener_ChannelManager* a_pChannelManager,
-    OpcUa_UInt32                         a_uSecureChannelID,
-    OpcUa_SecureChannel**                a_ppSecureChannel)
+    OpcUa_UInt32                         a_uSecureChannelID)
 {
     OpcUa_SecureChannel*      pTmpSecureChannel     = OpcUa_Null;
 
-OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_IsValidChannel");
-
-    *a_ppSecureChannel = OpcUa_Null;
+OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_IsValidChannelID");
 
     OpcUa_List_Enter(a_pChannelManager->SecureChannels);
     OpcUa_List_ResetCurrent(a_pChannelManager->SecureChannels);
+
+    if(a_uSecureChannelID == OPCUA_SECURECHANNEL_ID_INVALID)
+    {
+        OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+    }
 
     pTmpSecureChannel = (OpcUa_SecureChannel*)OpcUa_List_GetCurrentElement(a_pChannelManager->SecureChannels);
 
@@ -368,10 +370,8 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_IsValidChann
     {
         if(pTmpSecureChannel->SecureChannelId == a_uSecureChannelID)
         {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannel: Searched securechannel found!\n");
-            *a_ppSecureChannel = pTmpSecureChannel;
-            pTmpSecureChannel = OpcUa_Null;
-            break;
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Searched securechannel found!\n");
+            OpcUa_GotoErrorWithStatus(OpcUa_Bad);
         }
         pTmpSecureChannel = (OpcUa_SecureChannel *)OpcUa_List_GetNextElement(a_pChannelManager->SecureChannels);
     }
@@ -382,11 +382,6 @@ OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
     OpcUa_List_Leave(a_pChannelManager->SecureChannels);
-
-    OpcUa_Free(*a_ppSecureChannel);
-    *a_ppSecureChannel = OpcUa_Null;
-
-    pTmpSecureChannel = OpcUa_Null;
 
 OpcUa_FinishErrorHandling;
 }

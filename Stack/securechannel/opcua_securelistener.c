@@ -2278,7 +2278,9 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
                                                                    pSecureListener->uNextSecureChannelId++);
 
             /* skip 0 */
-            if(pSecureListener->uNextSecureChannelId == 0)
+            while(OpcUa_IsBad(OpcUa_SecureListener_ChannelManager_IsValidChannelID(
+                                                                   pSecureListener->ChannelManager,
+                                                                   pSecureListener->uNextSecureChannelId)))
             {
                 pSecureListener->uNextSecureChannelId++;
             }
