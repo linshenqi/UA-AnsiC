@@ -1792,23 +1792,16 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ValidateCertificate");
 
     if(OpcUa_IsBad(uStatus))
     {
-        if(OpcUa_IsEqual(OpcUa_BadNotSupported))
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ValidateCertificate: Could not open certificate store!\n");
+
+        if(OpcUa_IsEqual(OpcUa_Bad))
         {
-            uStatus = OpcUa_Good;
+            /* map unspecified error */
+            OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityConfig);
         }
         else
         {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ValidateCertificate: Could not open certificate store!\n");
-
-            if(OpcUa_IsEqual(OpcUa_Bad))
-            {
-                /* map unspecified error */
-                OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityConfig);
-            }
-            else
-            {
-                OpcUa_GotoError;
-            }
+            OpcUa_GotoError;
         }
     }
 
@@ -1818,20 +1811,14 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ValidateCertificate");
                                                 pCertificateStore,
                                                 &iValidationCode);
 
-    /* return general status code instead of specific code (needed for CTT) */
-    switch(uStatus)
-    {
-    case OpcUa_BadCertificateUntrusted:
-        uStatus = OpcUa_BadSecurityChecksFailed;
-    }
-
     /* mask valid errorcode */
     if(OpcUa_IsBad(uStatus))
     {
-        if(uStatus == OpcUa_BadNotSupported)
+        if(OpcUa_IsEqual(OpcUa_BadCertificateUntrusted))
         {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ValidateCertificate: not supported\n");
-            uStatus = OpcUa_Good;
+            /* return general status code instead of specific code (needed for CTT) */
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ValidateCertificate: untrusted certificate\n");
+            uStatus = OpcUa_BadSecurityChecksFailed;
         }
         else
         {
