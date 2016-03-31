@@ -361,6 +361,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_IsValidChann
 
     if(a_uSecureChannelID == OPCUA_SECURECHANNEL_ID_INVALID)
     {
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Invalid SecureChannelID found!\n");
         OpcUa_GotoErrorWithStatus(OpcUa_Bad);
     }
 
@@ -370,7 +371,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_IsValidChann
     {
         if(pTmpSecureChannel->SecureChannelId == a_uSecureChannelID)
         {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Searched securechannel found!\n");
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Duplicate SecureChannelID found!\n");
             OpcUa_GotoErrorWithStatus(OpcUa_Bad);
         }
         pTmpSecureChannel = (OpcUa_SecureChannel *)OpcUa_List_GetNextElement(a_pChannelManager->SecureChannels);
