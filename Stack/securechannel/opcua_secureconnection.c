@@ -917,7 +917,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "BeginOpenSecureChannel");
         case OpcUa_SecurityTokenRequestType_Renew:
         {
             if(pSecureConnection->State != OpcUa_SecureConnectionState_Connected &&
-                pSecureConnection->State != OpcUa_SecureConnectionState_ReconnectingTransport)
+               pSecureConnection->State != OpcUa_SecureConnectionState_ReconnectingTransport)
             {
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "BeginOpenSecureChannel: Invalid State!\n");
                 OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
