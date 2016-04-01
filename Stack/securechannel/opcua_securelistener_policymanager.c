@@ -188,7 +188,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecuri
         cmpResult = OpcUa_String_StrnCmp(   &pTmpSecurityPolicyUri->sSecurityPolicy,
                                             a_pSecurityPolicyUri,
                                             OPCUA_STRING_LENDONTCARE,
-                                            OpcUa_True);
+                                            OpcUa_False);
 
         if(cmpResult == 0)
         {
@@ -238,7 +238,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecuri
         iCmpResult = OpcUa_String_StrnCmp(  &pCurrentSecConfig->sSecurityPolicy,
                                             &a_pSecurityPolicyConfiguration->sSecurityPolicy,
                                             OPCUA_STRING_LENDONTCARE,
-                                            OpcUa_True);
+                                            OpcUa_False);
 
         if(iCmpResult == 0)
         {
