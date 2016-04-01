@@ -120,7 +120,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_TimerCallbac
                     OPCUA_SECURECHANNEL_UNLOCK(pTmpSecureChannel);
                     pTmpSecureChannel = (OpcUa_SecureChannel*)OpcUa_List_GetNextElement(pChannelManager->SecureChannels);
                 }
-                else if (pTmpSecureChannel->uRefCount == 0)
+                else if(pTmpSecureChannel->uRefCount == 0)
                 {
                     OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "OpcUa_SecureListener_ChannelManager_TimerCallback: removing SecureChannel %u after lifetime expired!\n", pTmpSecureChannel->SecureChannelId);
 
@@ -149,7 +149,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_TimerCallbac
                     OPCUA_SECURECHANNEL_UNLOCK(pTmpSecureChannel);
                     pTmpSecureChannel = (OpcUa_SecureChannel*)OpcUa_List_GetNextElement(pChannelManager->SecureChannels);
                 }
-                else if (pTmpSecureChannel->uRefCount == 0)
+                else if(pTmpSecureChannel->uRefCount == 0)
                 {
                     OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "OpcUa_SecureListener_ChannelManager_TimerCallback: removing inactive SecureChannel!\n");
 
@@ -333,7 +333,7 @@ OpcUa_Void OpcUa_SecureListener_ChannelManager_Clear(
 OpcUa_Void OpcUa_SecureListener_ChannelManager_Delete(
     OpcUa_SecureListener_ChannelManager** a_ppChannelManager)
 {
-    if (a_ppChannelManager != OpcUa_Null)
+    if(a_ppChannelManager != OpcUa_Null)
     {
         OpcUa_SecureListener_ChannelManager_Clear(*a_ppChannelManager);
 
@@ -362,7 +362,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_IsValidChann
     if(a_uSecureChannelID == OPCUA_SECURECHANNEL_ID_INVALID)
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Invalid SecureChannelID found!\n");
-        OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+        OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
     }
 
     pTmpSecureChannel = (OpcUa_SecureChannel*)OpcUa_List_GetCurrentElement(a_pChannelManager->SecureChannels);
@@ -372,7 +372,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_IsValidChann
         if(pTmpSecureChannel->SecureChannelId == a_uSecureChannelID)
         {
             OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Duplicate SecureChannelID found!\n");
-            OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+            OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
         }
         pTmpSecureChannel = (OpcUa_SecureChannel *)OpcUa_List_GetNextElement(a_pChannelManager->SecureChannels);
     }
@@ -437,11 +437,11 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ChannelManager_ReleaseChann
 
     OpcUa_List_Enter(a_pChannelManager->SecureChannels);
 
-    if (*a_ppSecureChannel == OpcUa_Null)
+    if(*a_ppSecureChannel == OpcUa_Null)
     {
         OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
     }
-    else if ((*a_ppSecureChannel)->uRefCount == 0)
+    else if((*a_ppSecureChannel)->uRefCount == 0)
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_ReleaseChannel: invalid ref count!\n");
         OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
@@ -528,6 +528,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "GetChannelBySecureChannelID
     uStatus = OpcUa_List_ResetCurrent(a_pChannelManager->SecureChannels);
     OpcUa_GotoErrorIfBad(uStatus);
 
+    if(a_uSecureChannelID == OPCUA_SECURECHANNEL_ID_INVALID)
+    {
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Invalid SecureChannelID found!\n");
+        OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
+    }
+
     pTmpSecureChannel = (OpcUa_SecureChannel*)OpcUa_List_GetCurrentElement(a_pChannelManager->SecureChannels);
 
     while(pTmpSecureChannel != OpcUa_Null)
@@ -546,7 +552,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "GetChannelBySecureChannelID
     OpcUa_List_Leave(a_pChannelManager->SecureChannels);
 
     OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "SecureListener - OpcUa_SecureListener_ChannelManager_GetChannelBySecureChannelID: Searched SecureChannel NOT found!\n");
-    uStatus = OpcUa_BadNotFound;
+    uStatus = OpcUa_BadSecureChannelIdInvalid;
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
