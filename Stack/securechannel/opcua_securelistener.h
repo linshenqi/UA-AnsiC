@@ -39,7 +39,7 @@
 
 OPCUA_BEGIN_EXTERN_C
 
-/** 
+/**
  * @brief Types of events that can occur on secure channels.
 */
 typedef enum eOpcUa_SecureListener_SecureChannelEvent
@@ -51,7 +51,7 @@ typedef enum eOpcUa_SecureListener_SecureChannelEvent
 } OpcUa_SecureListener_SecureChannelEvent;
 
 
-/** 
+/**
  * @brief Associates a supported security policy with message security modes.
  */
 struct _OpcUa_SecureListener_SecurityPolicyConfiguration
@@ -59,14 +59,14 @@ struct _OpcUa_SecureListener_SecurityPolicyConfiguration
     /** @brief The URI of a supported security policy. */
     OpcUa_String        sSecurityPolicy;
     /** @brief The message security modes allowed for the security policy. (bitmask) */
-    OpcUa_UInt16        uMessageSecurityModes;   
+    OpcUa_UInt16        uMessageSecurityModes;
     /** @brief The client certificate, if provided. */
     OpcUa_ByteString*   pbsClientCertificate;
 };
 
 typedef struct _OpcUa_SecureListener_SecurityPolicyConfiguration OpcUa_SecureListener_SecurityPolicyConfiguration;
 
-/** 
+/**
  * @brief Function, that needs to be implemented to receive notifications about secure channel events.
  *
  * @param uSecureChannelId      [in] The id assigned to the secure channel.
@@ -86,9 +86,9 @@ typedef OpcUa_StatusCode (OpcUa_SecureListener_PfnSecureChannelCallback)(
     OpcUa_UInt16                                        uMessageSecurityModes,
     OpcUa_Void*                                         pCallbackData);
 
-/** 
+/**
   @brief Creates a new secure listener object.
- 
+
   @param pInnerListener       [in]  The inner the listener is attached to.
   @param ppSecureListener     [out] The new listener.
 */
@@ -109,18 +109,18 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureListener_Create(
 
 
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureListener_GetChannelId(
-    OpcUa_Listener*                                     pListener, 
-    OpcUa_InputStream*                                  pIstrm, 
+    OpcUa_Listener*                                     pListener,
+    OpcUa_InputStream*                                  pIstrm,
     OpcUa_UInt32*                                       puChannelId);
 
 
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureListener_GetSecureChannelSecurityPolicyConfiguration(  
-    OpcUa_Listener*                                     pListener, 
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureListener_GetSecureChannelSecurityPolicyConfiguration(
+    OpcUa_Listener*                                     pListener,
     OpcUa_UInt32                                        uChannelId,
     OpcUa_SecureListener_SecurityPolicyConfiguration*   pSecurityPolicyConfiguration);
 
-OpcUa_StatusCode OpcUa_SecureListener_GetPeerInfo(  
-    OpcUa_Listener*                                     a_pListener, 
+OpcUa_StatusCode OpcUa_SecureListener_GetPeerInfo(
+    OpcUa_Listener*                                     a_pListener,
     OpcUa_UInt32                                        a_uChannelId,
     OpcUa_String*                                       a_pPeerInfo);
 
