@@ -530,7 +530,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "GetChannelBySecureChannelID
 
     if(a_uSecureChannelID == OPCUA_SECURECHANNEL_ID_INVALID)
     {
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - ChannelManager_IsValidChannelID: Invalid SecureChannelID found!\n");
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - OpcUa_SecureListener_ChannelManager_GetChannelBySecureChannelID: Invalid SecureChannelID found!\n");
         OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
     }
 
