@@ -501,6 +501,11 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureChannel, "Open");
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
+    OpcUa_SecurityKeyset_Clear(a_pReceivingKeyset);
+    OpcUa_SecurityKeyset_Clear(a_pSendingKeyset);
+    OpcUa_Free(a_pReceivingKeyset);
+    OpcUa_Free(a_pSendingKeyset);
+
     OPCUA_SECURECHANNEL_UNLOCK(a_pSecureChannel);
 
 OpcUa_FinishErrorHandling;
@@ -625,6 +630,11 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureChannel, "Renew");
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
+
+    OpcUa_SecurityKeyset_Clear(a_pNewReceivingKeyset);
+    OpcUa_SecurityKeyset_Clear(a_pNewSendingKeyset);
+    OpcUa_Free(a_pNewReceivingKeyset);
+    OpcUa_Free(a_pNewSendingKeyset);
 
     OPCUA_SECURECHANNEL_UNLOCK(a_pSecureChannel);
 
