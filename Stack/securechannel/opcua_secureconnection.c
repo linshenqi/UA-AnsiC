@@ -888,7 +888,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "BeginOpenSecureChannel");
         {
             uSecureChannelId = 0;
 
-            if (pSecureConnection->State != OpcUa_SecureConnectionState_ConnectingTransport)
+            if(pSecureConnection->State != OpcUa_SecureConnectionState_ConnectingTransport)
             {
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "BeginOpenSecureChannel: Invalid State!\n");
                 OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
@@ -916,7 +916,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "BeginOpenSecureChannel");
         }
         case OpcUa_SecurityTokenRequestType_Renew:
         {
-            if (pSecureConnection->State != OpcUa_SecureConnectionState_Connected &&
+            if(pSecureConnection->State != OpcUa_SecureConnectionState_Connected &&
                 pSecureConnection->State != OpcUa_SecureConnectionState_ReconnectingTransport)
             {
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "BeginOpenSecureChannel: Invalid State!\n");
@@ -967,7 +967,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "BeginOpenSecureChannel");
     /* must always sign and encrypt OpenSecureChannel messages when security is used. */
     eMessageSecurityMode = pSecureConnection->MessageSecurityMode;
 
-    if (eMessageSecurityMode != OpcUa_MessageSecurityMode_None)
+    if(eMessageSecurityMode != OpcUa_MessageSecurityMode_None)
     {
         eMessageSecurityMode = OpcUa_MessageSecurityMode_SignAndEncrypt;
     }
@@ -1069,7 +1069,7 @@ OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
     /* unlock the channel mutex */
-    if (bIsLocked == OpcUa_True)
+    if(bIsLocked == OpcUa_True)
     {
         OPCUA_SECURECONNECTION_UNLOCK_REQUEST(pSecureConnection);
     }
@@ -1425,7 +1425,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "AbortResponse");
     uStatus = OpcUa_SecureChannel_SetPendingInputStream(    pSecureChannel,
                                                             OpcUa_Null);
 
-    if (pSecureIstrm == OpcUa_Null)
+    if(pSecureIstrm == OpcUa_Null)
     {
         OpcUa_GotoErrorWithStatus(OpcUa_BadUnexpectedError);
     }
@@ -1541,7 +1541,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
     case OpcUa_ConnectionEvent_Connect:
         {
             /* no longer connected due to either an error or a disconnect. */
-            if (OpcUa_IsBad(a_uConnectionStatus))
+            if(OpcUa_IsBad(a_uConnectionStatus))
             {
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SecureConnection_OnNotify: Connect event: ERROR 0x%08X!\n", a_uConnectionStatus);
                 pSecureConnection->State = OpcUa_SecureConnectionState_Unknown;
@@ -1557,7 +1557,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
                 pSecureConnection->nMaxBuffersPerMessage = OpcUa_ProxyStub_g_Configuration.iSerializer_MaxMessageSize/uReceiveBufferSize + 1;
 
                 /* set state to connected if connected successfully. */
-                if (a_eEvent == OpcUa_ConnectionEvent_Connect)
+                if(a_eEvent == OpcUa_ConnectionEvent_Connect)
                 {
                     if(pSecureConnection->State == OpcUa_SecureConnectionState_ConnectingTransport)
                     {
@@ -1758,7 +1758,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
                 }
             default:
                 {
-                    if (pSecureConnection->Callback != OpcUa_Null)
+                    if(pSecureConnection->Callback != OpcUa_Null)
                     {
                         /* notify upper layer about error condition */
                         pSecureConnection->Callback(pSecureConnectionInterface,
@@ -1781,7 +1781,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
 
     OPCUA_SECURECONNECTION_UNLOCK_RESPONSE(pSecureConnection);
 
-    if (hTimerToDelete != OpcUa_Null)
+    if(hTimerToDelete != OpcUa_Null)
     {
         OpcUa_Timer_Delete(&hTimerToDelete);
     }
@@ -2074,7 +2074,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Disconnect");
 
             OPCUA_SECURECONNECTION_UNLOCK(pSecureConnection);
 
-            if (hTimerToDelete != OpcUa_Null)
+            if(hTimerToDelete != OpcUa_Null)
             {
                 OpcUa_Timer_Delete(&hTimerToDelete);
             }
@@ -2141,7 +2141,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Disconnect");
 
             OPCUA_SECURECONNECTION_UNLOCK(pSecureConnection);
 
-            if (hTimerToDelete != OpcUa_Null)
+            if(hTimerToDelete != OpcUa_Null)
             {
                 OpcUa_Timer_Delete(&hTimerToDelete);
             }
@@ -2169,7 +2169,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Disconnect");
         {
             OPCUA_SECURECONNECTION_UNLOCK(pSecureConnection);
 
-            if (hTimerToDelete != OpcUa_Null)
+            if(hTimerToDelete != OpcUa_Null)
             {
                 OpcUa_Timer_Delete(&hTimerToDelete);
             }
@@ -2203,7 +2203,7 @@ OpcUa_BeginErrorHandling;
 
     OPCUA_SECURECONNECTION_UNLOCK(pSecureConnection);
 
-    if (hTimerToDelete != OpcUa_Null)
+    if(hTimerToDelete != OpcUa_Null)
     {
         OpcUa_Timer_Delete(&hTimerToDelete);
     }
@@ -2232,7 +2232,7 @@ OpcUa_BeginErrorHandling;
     OpcUa_SecureConnection_CancelOpenRequests(  a_pSecureConnection,
                                                 OpcUa_BadDisconnect);
 
-    if (pSecureOstrm != OpcUa_Null)
+    if(pSecureOstrm != OpcUa_Null)
     {
         OpcUa_Stream_Delete(&((OpcUa_SecureStream*)pSecureOstrm->Handle)->InnerStrm);
         pSecureOstrm->Delete((OpcUa_Stream**)&pSecureOstrm);
@@ -2280,7 +2280,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "EndSendRequest");
     bIsLocked = OpcUa_True;
 
     /*** check connection state ***/
-    if (pSecureConnection->State != OpcUa_SecureConnectionState_Connected && pSecureConnection->State != OpcUa_SecureConnectionState_DisconnectingSecure)
+    if(pSecureConnection->State != OpcUa_SecureConnectionState_Connected && pSecureConnection->State != OpcUa_SecureConnectionState_DisconnectingSecure)
     {
         OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
     }
@@ -2345,7 +2345,7 @@ OpcUa_BeginErrorHandling;
         }
     }
 
-    if (bIsLocked == OpcUa_True)
+    if(bIsLocked == OpcUa_True)
     {
         OPCUA_SECURECONNECTION_UNLOCK_REQUEST(pSecureConnection);
     }
@@ -2506,7 +2506,7 @@ OpcUa_BeginErrorHandling;
     }
 
     /* release lock on failure */
-    if (bIsLocked == OpcUa_True)
+    if(bIsLocked == OpcUa_True)
     {
         OPCUA_SECURECONNECTION_UNLOCK_REQUEST(pSecureConnection);
     }
@@ -2862,11 +2862,11 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ReadResponse");
     OpcUa_GotoErrorIfBad(uStatus);
 
     /* check for fault */
-    if (pResponseType->TypeId == OpcUaId_ServiceFault)
+    if(pResponseType->TypeId == OpcUaId_ServiceFault)
     {
         *a_pIsFault = OpcUa_True;
     }
-    else if (pResponseType->TypeId != OpcUaId_OpenSecureChannelResponse)
+    else if(pResponseType->TypeId != OpcUaId_OpenSecureChannelResponse)
     {
         OpcUa_EncodeableObject_Delete(pResponseType, (OpcUa_Void**)a_ppResponse);
         OpcUa_GotoErrorWithStatus(OpcUa_BadUnknownResponse);
@@ -2940,8 +2940,8 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
         OPCUA_SECURECONNECTION_LOCK(pSecureConnection);
         bSecureChannelLocked = OpcUa_True;
 
-        if (pSecureConnection->State != OpcUa_SecureConnectionState_Connected &&
-            pSecureConnection->State != OpcUa_SecureConnectionState_ConnectingSecure)
+        if(pSecureConnection->State != OpcUa_SecureConnectionState_Connected &&
+           pSecureConnection->State != OpcUa_SecureConnectionState_ConnectingSecure)
         {
             OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelResponse: Invalid State!\n");
             OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
@@ -2956,23 +2956,23 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
         OpcUa_GotoErrorIfBad(uStatus);
 
         /* must check that the server certificate is not changed. */
-        if (pSecureConnection->MessageSecurityMode != OpcUa_MessageSecurityMode_None)
+        if(pSecureConnection->MessageSecurityMode != OpcUa_MessageSecurityMode_None)
         {
-            if (pSecureConnection->ServerCertificate != OpcUa_Null && pSecureConnection->ServerCertificate->Length > 0)
+            if(pSecureConnection->ServerCertificate != OpcUa_Null && pSecureConnection->ServerCertificate->Length > 0)
             {
-                if (SenderCertificate.Length != pSecureConnection->ServerCertificate->Length)
+                if(SenderCertificate.Length != pSecureConnection->ServerCertificate->Length)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
 
-                if (OpcUa_MemCmp(SenderCertificate.Data, pSecureConnection->ServerCertificate->Data, SenderCertificate.Length) != 0)
+                if(OpcUa_MemCmp(SenderCertificate.Data, pSecureConnection->ServerCertificate->Data, SenderCertificate.Length) != 0)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
             }
             else
             {
-                if (SenderCertificate.Length > 0)
+                if(SenderCertificate.Length > 0)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
@@ -3004,9 +3004,9 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
         }
 
         /* check that the message has been properly secured */
-        if (pSecureConnection->MessageSecurityMode != OpcUa_MessageSecurityMode_None)
+        if(pSecureConnection->MessageSecurityMode != OpcUa_MessageSecurityMode_None)
         {
-            if (eRevisedSecurityMode != OpcUa_MessageSecurityMode_SignAndEncrypt)
+            if(eRevisedSecurityMode != OpcUa_MessageSecurityMode_SignAndEncrypt)
             {
                 OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityChecksFailed);
             }
@@ -3156,7 +3156,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
             OpcUa_GotoErrorIfBad(uStatus);
 
             /*** check for a fault body ***/
-            if (bIsFault != OpcUa_False)
+            if(bIsFault != OpcUa_False)
             {
                 OpcUa_ServiceFault* pFault = (OpcUa_ServiceFault*)pResponse;
                 uStatus = pFault->ResponseHeader.ServiceResult;
@@ -3166,7 +3166,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
 
                 pResponse = OpcUa_Null;
 
-                if (!OpcUa_IsBad(uStatus))
+                if(!OpcUa_IsBad(uStatus))
                 {
                     uStatus = OpcUa_BadUnexpectedError;
                 }
@@ -3188,7 +3188,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
             OpcUa_GotoErrorIfBad(uStatus);
 
             /*** renew or create securechannel ***/
-            if(uSecureChannelId == pSecureChannel->SecureChannelId)
+            if(pSecureConnection->bRenewActive != OpcUa_False)
             {
                 /* existing securechannel */
                 pSecureConnection->bRenewActive = OpcUa_False;
@@ -3207,7 +3207,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
             }
             else
             {
-                /* old securechannel (not deleted)*/
+                /* new securechannel */
                 pSecureChannel->SecureChannelId = uSecureChannelId;
                 uStatus = pSecureChannel->Open( pSecureChannel,
                                                 (OpcUa_Handle)a_pConnection,
