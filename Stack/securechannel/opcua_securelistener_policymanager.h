@@ -42,7 +42,7 @@ OPCUA_BEGIN_EXTERN_C
 struct _OpcUa_SecureListener_PolicyManager
 {
     /* @brief A list with current SecurityPolicies (OpcUa_String) */
-    OpcUa_List*     SecurityPolicies;   
+    OpcUa_List*     SecurityPolicies;
 };
 
 typedef struct _OpcUa_SecureListener_PolicyManager OpcUa_SecureListener_PolicyManager;
@@ -69,7 +69,7 @@ OpcUa_Void OpcUa_SecureListener_PolicyManager_ClearAll(
 
 /* @brief */
 OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_IsValidSecurityPolicy(
-    OpcUa_SecureListener_PolicyManager* pPolicyManager, 
+    OpcUa_SecureListener_PolicyManager* pPolicyManager,
     OpcUa_String*                       pSecurityPolicyUri);
 
 /* @brief */
@@ -78,7 +78,7 @@ OpcUa_Void OpcUa_SecureListener_PolicyManager_ClearSecurityPolicyConfigurations(
 
 /* @brief */
 OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_IsValidSecurityPolicyConfiguration(
-    OpcUa_SecureListener_PolicyManager*                 pPolicyManager, 
+    OpcUa_SecureListener_PolicyManager*                 pPolicyManager,
     OpcUa_SecureListener_SecurityPolicyConfiguration*   pSecurityPolicyConfiguration);
 
 /* @brief */

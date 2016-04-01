@@ -52,11 +52,11 @@ typedef enum _OpcUa_SecureStream_Type
     eOpcUa_SecureStream_Types_OpenSecureChannel,
     eOpcUa_SecureStream_Types_CloseSecureChannel,
     eOpcUa_SecureStream_Types_AbortMessage
-} 
+}
 OpcUa_SecureStream_Type;
 
-/** @brief Defines for security protocol message types. 
-           MessageType(3) + IsFinal(1) + MessageSize(4) 
+/** @brief Defines for security protocol message types.
+           MessageType(3) + IsFinal(1) + MessageSize(4)
 */
 #define OPCUA_SECURESTREAM_MESSAGETYPE_OPN "OPNF0000"
 #define OPCUA_SECURESTREAM_MESSAGETYPE_MSG "MSGF0000"
@@ -80,7 +80,7 @@ typedef struct _OpcUa_SecureStream
     OpcUa_Boolean               IsLocked;
     /** @brief An array of buffers that store incoming multipart data in the stream. */
     OpcUa_Buffer*               Buffers;
-    /** @brief The current count of buffers used in the stream. Must not exceed nMaxBuffers! Also index for writing. 
+    /** @brief The current count of buffers used in the stream. Must not exceed nMaxBuffers! Also index for writing.
                nBuffers is 1-based, index is 0 based. Last buffer is adressed by nBuffers-1 ( = nCurrentReadBuffer) */
     OpcUa_UInt32                nBuffers;
     /** @brief The maximum number of buffers in the stream (aka chunks per message). */
@@ -129,56 +129,56 @@ typedef struct _OpcUa_SecureStream
     OpcUa_UInt32                uSignatureSize;
 }
 OpcUa_SecureStream;
- 
-/** 
+
+/**
   @brief Creates a new stream to read a message from the connection.
 
-  @param pTransportIstrm [in] The stream that provides access to the non-secure connection. 
+  @param pTransportIstrm [in] The stream that provides access to the non-secure connection.
                               If this pointer is NULL then an error will be returned.
 
-  @param pInputType     [out] The secure header type (SP, SO, SC, SM). 
+  @param pInputType     [out] The secure header type (SP, SO, SC, SM).
                               If this pointer is NULL then an error will be returned.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_CheckInputHeaderType(  OpcUa_InputStream*          pTransportIstrm,
                                                                         OpcUa_SecureMessageType*    pInputType          );
 
-/** 
+/**
   @brief Decodes the symmetric security header of the incoming stream.
 
-  @param pTransportIstrm    [in]   The stream that provides access to the non-secure connection. 
+  @param pTransportIstrm    [in]   The stream that provides access to the non-secure connection.
                                    If this pointer is NULL then an error will be returned.
 
-  @param pSecureChannelId   [out]  The securechannel ID of the incoming stream. 
+  @param pSecureChannelId   [out]  The securechannel ID of the incoming stream.
                                    If this pointer is NULL then an error will be returned.
-  @param pTokenId           [out]  The token ID of the incoming stream. 
+  @param pTokenId           [out]  The token ID of the incoming stream.
                                    If this pointer is NULL then an error will be returned.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_DecodeSymmetricSecurityHeader( OpcUa_InputStream*  pTransportIstrm,
                                                                                 OpcUa_UInt32*       pSecureChannelId,
                                                                                 OpcUa_UInt32*       pTokenId);
 
-/** 
+/**
   @brief Decodes the asymmetric security header of the incoming stream.
 
-  @param pTransportIstrm                [in]  The stream that provides access to the non-secure connection. 
+  @param pTransportIstrm                [in]  The stream that provides access to the non-secure connection.
                                               If this pointer is NULL then an error will be returned.
 
-  @param pSecureChannelId               [out]  The securechannel ID of the incoming stream. 
+  @param pSecureChannelId               [out]  The securechannel ID of the incoming stream.
                                                If this pointer is NULL then an error will be returned.
-  @param pSecurityPolicyUri             [out]  The security policy URI that was used to secure the incoming stream. 
+  @param pSecurityPolicyUri             [out]  The security policy URI that was used to secure the incoming stream.
                                                If this pointer is NULL then an error will be returned.
-  @param pSenderCertificate             [out]  The DER encoded bytes of the sender's X.509v3 certificate. 
+  @param pSenderCertificate             [out]  The DER encoded bytes of the sender's X.509v3 certificate.
                                                If this pointer is NULL then an error will be returned.
-  @param pReceiverCertificateThumbprint [out]  The DER encoded bytes of the receiver's certificate thumbprint. 
+  @param pReceiverCertificateThumbprint [out]  The DER encoded bytes of the receiver's certificate thumbprint.
                                                If this pointer is NULL then an error will be returned.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_DecodeAsymmetricSecurityHeader(OpcUa_InputStream*  pTransportIstrm,
                                                                                 OpcUa_UInt32*       pSecureChannelId,
-                                                                                OpcUa_String*       pSecurityPolicyUri, 
-                                                                                OpcUa_ByteString*   pSenderCertificate, 
+                                                                                OpcUa_String*       pSecurityPolicyUri,
+                                                                                OpcUa_ByteString*   pSenderCertificate,
                                                                                 OpcUa_ByteString*   pReceiverCertificateThumbprint);
 
-/** 
+/**
   @brief Decodes the sequence header of the incoming stream.
 
   @param pTransportIstrm    [in]  The stream that provides access to the non-secure connection.
@@ -193,8 +193,8 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_DecodeSequenceHeader(  OpcUa_In
                                                                         OpcUa_UInt32*       pSequenceNumber,
                                                                         OpcUa_UInt32*       pRequestId      );
 
-/** 
-  @brief Creates a new stream to read a standard message (MSG) from the connection. 
+/**
+  @brief Creates a new stream to read a standard message (MSG) from the connection.
 
   @param pCryptoProvider        [in]  The cryptoprovider used for cryptographic operations on the stream.
                                       If this pointer is NULL then an error will be returned.
@@ -207,7 +207,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_CreateInput(   OpcUa_CryptoProv
                                                                 OpcUa_UInt32                uMaxChunks,
                                                                 OpcUa_InputStream**         ppSecureIstrm);
 
-/** 
+/**
   @brief Appends a new message chunk from the transport stream to an existing secure stream.
 
   @param pTransportIstrm        [in] The stream that provides access to the non-secure connection and contains the new message chunk.
@@ -227,8 +227,8 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_AppendInput(   OpcUa_InputStrea
                                                                 OpcUa_CryptoProvider*   pCryptoProvider,
                                                                 OpcUa_SecureChannel*    pSecureChannel);
 
-/** 
-  @brief Creates a new stream to read an OpenSecureChannel message (OPN) from the connection. 
+/**
+  @brief Creates a new stream to read an OpenSecureChannel message (OPN) from the connection.
 
   @param pCryptoProvider                [in]  The cryptoprovider used for cryptographic operations on the stream.
   @param eMessageSecurityMode           [in]  The currently used message security mode of the secure channel.
@@ -240,16 +240,16 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_AppendInput(   OpcUa_InputStrea
   @param ppSecureIstrm                  [out] The new input stream.
                                               If this pointer is NULL then an error will be returned.
 */
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_CreateOpenSecureChannelInput(  OpcUa_CryptoProvider*       pCryptoProvider, 
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_CreateOpenSecureChannelInput(  OpcUa_CryptoProvider*       pCryptoProvider,
                                                                                 OpcUa_MessageSecurityMode   eMessageSecurityMode,
-                                                                                OpcUa_ByteString*           pReceiverCertificate, 
+                                                                                OpcUa_ByteString*           pReceiverCertificate,
                                                                                 OpcUa_Key*                  pReceiverPrivateKey,
                                                                                 OpcUa_ByteString*           pSenderCertificate,
                                                                                 OpcUa_ByteString*           pReceiverCertificateThumbprint,
                                                                                 OpcUa_UInt32                uMaxChunks,
                                                                                 OpcUa_InputStream**         ppSecureIstrm);
 
-/** 
+/**
     @brief Creates a new stream to write a standard message (MSG) to the connection.
 
     @param pInnerOstrm    [in]  The stream that provides access to the non-secure connection.
@@ -264,26 +264,26 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_CreateOutput(  OpcUa_OutputStre
                                                                 OpcUa_SecureChannel*        pSecureChannel,
                                                                 OpcUa_OutputStream**        ppOstrm);
 
-/** 
-  @brief Creates a new stream to write an OpenSecureChannel message (OPN) to the connection. 
+/**
+  @brief Creates a new stream to write an OpenSecureChannel message (OPN) to the connection.
 
   @param pInnerOstrm                    [in]  The stream that provides access to the non-secure connection.
-                                              If this pointer is NULL then an error will be returned.       
+                                              If this pointer is NULL then an error will be returned.
   @param pSecureChannel                 [in]  The securechannel object of this connection.
   @param uRequestId                     [in]  The request ID of the request.
   @param pSecurityPolicyUri             [in]  The security policy URI that is used to secure the outgoing stream.
-                                              If this pointer is NULL then an error will be returned.       
+                                              If this pointer is NULL then an error will be returned.
   @param eMessageSecurityMode           [in]  The currently used message security mode of the secure channel.
                                               If this parameter is OpcUa_MessageSecurityMode_Invalid then an error will be returned.
   @param pCryptoProvider                [in]  The cryptoprovider used for cryptographic operations on the stream.
-                                              If this pointer is NULL then an error will be returned.       
+                                              If this pointer is NULL then an error will be returned.
   @param pSenderCertificate             [in]  The DER encoded bytes of the sender's X.509v3 certificate.
   @param pSenderPrivateKey              [in]  The DER (PEM) encoded bytes of the receiver's or sender's private key.
   @param pReceiverCertificate           [in]  The DER encoded bytes of the receiver's X.509v3 certificate.
   @param pReceiverCertificateThumbprint [in]  The DER encoded bytes of the receiver's X.509v3 certificate thumbprint.
 
   @param ppOstrm                        [out] The new output stream.
-                                              If this pointer is NULL then an error will be returned.       
+                                              If this pointer is NULL then an error will be returned.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_CreateOpenSecureChannelOutput( OpcUa_OutputStream*         pInnerOstrm,
                                                                                 OpcUa_SecureChannel*        pSecureChannel,
@@ -297,15 +297,15 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_CreateOpenSecureChannelOutput( 
                                                                                 OpcUa_ByteString*           pReceiverCertificateThumbprint,
                                                                                 OpcUa_OutputStream**        ppOstrm);
 
-/** 
+/**
   @brief Encrypts a given outputstream.
 
   @param pOstrm                 [bi]  The outputstream (plaintext) and after the function has been processed the encrypted outputstream.
-                                      If this pointer is NULL then an error will be returned.   
+                                      If this pointer is NULL then an error will be returned.
   @param pCryptoProvider        [in]  The cryptoprovider used for cryptographic operations on the stream.
   @param pCryptoKey             [in]  Asymmetric public key or symmetric key.
                                       If this pointer is NULL then an error will be returned.
-  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric 
+  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric
                                       cryptographic algorithms to encrypt the output stream.
   @param pInitialVector         [in]  The initial vector that should be used in case of symmetric encryption.
                                       If bUseSymmetricAlgorithm is OpcUa_True then this pointer must not be NULL or an error will be returned.
@@ -316,17 +316,17 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_EncryptOutput( OpcUa_OutputStre
                                                                 OpcUa_Boolean           bUseSymmetricAlgorithm,
                                                                 OpcUa_Key*              pInitialVector);
 
-/** 
+/**
   @brief Calculates the total outputlength that is needed for encrypting a specific amount of data.
 
   @param uBufferLength          [in]  The length of the target buffer.
   @param pCryptoProvider        [in]  The cryptoprovider used for cryptographic operations on the stream.
-                                      If this pointer is NULL then an error will be returned.   
+                                      If this pointer is NULL then an error will be returned.
   @param pCryptoKey             [in]  Asymmetric public key or symmetric key.
-                                      If this pointer is NULL then an error will be returned.   
-  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric 
+                                      If this pointer is NULL then an error will be returned.
+  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric
                                       cryptographic algorithms to encrypt the outputstream.
-  @param pInitialVector         [in]  The initial vector that should be used in case of symmetric 
+  @param pInitialVector         [in]  The initial vector that should be used in case of symmetric
                                       encryption.
   @param pOutputLength          [out] The resulting total outputlength that is needed for the encrypted data.
                                       If bUseSymmetricAlgorithm is OpcUa_True then this pointer must not be NULL or an error will be returned.
@@ -338,7 +338,7 @@ OpcUa_StatusCode OpcUa_SecureStream_CalculateEncryptionOutputLength(    OpcUa_UI
                                                                         OpcUa_Key*              pInitialVector,
                                                                         OpcUa_UInt32*           pOutputLength);
 
-/** 
+/**
   @brief signs a given outputstream.
 
   @param pOstrm                 [bi]  The outputstream and after the function has been processed the signed outputstream.
@@ -346,7 +346,7 @@ OpcUa_StatusCode OpcUa_SecureStream_CalculateEncryptionOutputLength(    OpcUa_UI
   @param pCryptoProvider        [in]  The cryptoprovider used for cryptographic operations on the stream.
   @param pCryptoKey             [in]  Asymmetric private key or symmetric key.
                                       If this pointer is NULL then an error will be returned.
-  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric 
+  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric
                                       cryptographic algorithms to encrypt the outputstream.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_SignOutput(    OpcUa_OutputStream*     pOstrm,
@@ -354,15 +354,15 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_SignOutput(    OpcUa_OutputStre
                                                                 OpcUa_Key*              pCryptoKey,
                                                                 OpcUa_Boolean           bUseSymmetricAlgorithm);
 
-/** 
-  @brief Calculates the total outputlength that is needed when signing a specific amount of data. 
+/**
+  @brief Calculates the total outputlength that is needed when signing a specific amount of data.
 
   @param uBufferLength          [in]  The length of the target buffer.
   @param pCryptoProvider        [in]  The cryptoprovider used for cryptographic operations on the stream.
                                       If this pointer is NULL then an error will be returned.
   @param pCryptoKey             [in]  Asymmetric public key or symmetric key.
                                       If this pointer is NULL then an error will be returned.
-  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric 
+  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric
                                       cryptographic algorithms to encrypt the outputstream.
   @param pOutputLength          [out] The resulting total outputlength that is needed for the signing data.
                                       If this pointer is NULL then an error will be returned.
@@ -373,7 +373,7 @@ OpcUa_StatusCode OpcUa_SecureStream_CalculateSignatureOutputLength( OpcUa_UInt32
                                                                     OpcUa_Boolean           bUseSymmetricAlgorithm,
                                                                     OpcUa_UInt32*           pOutputLength);
 
-/** 
+/**
   @brief Decrypts a given inputstream.
 
   @param pIstrm                 [bi]  The encrypted inputstream and after the function has beed processed the decrypted inputstream ("plaintext").
@@ -391,7 +391,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_DecryptInput(  OpcUa_InputStrea
                                                                 OpcUa_Boolean           bUseSymmetricAlgorithm,
                                                                 OpcUa_Key*              pInitialVector);
 
-/** 
+/**
   @brief Verifies the signature of a given inputstream. If the validation fails, then a the statuscode OpcUa_BadSignatureInvalid is returned.
 
   @param pIstrm                 [in]  The signed inputstream.
@@ -399,7 +399,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_DecryptInput(  OpcUa_InputStrea
   @param pCryptoProvider        [in]  The cryptoprovider used for cryptographic operations on the stream.
   @param pCryptoKey             [in]  Asymmetric public key or symmetric key.
                                       If this pointer is NULL then an error will be returned.
-  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric 
+  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric
                                       cryptographic algorithms to decrypt the inputstream.
 */
 OpcUa_StatusCode OpcUa_SecureStream_VerifyInput(    OpcUa_InputStream*      pIstrm,

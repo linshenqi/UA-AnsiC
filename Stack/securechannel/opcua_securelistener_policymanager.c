@@ -52,7 +52,7 @@ OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_Create(
     OpcUa_SecureListener_PolicyManager* pPolicyMngr = OpcUa_Null;
 
 OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_Create");
-    
+
     OpcUa_ReturnErrorIfArgumentNull(a_ppPolicyManager);
 
     *a_ppPolicyManager = OpcUa_Null;
@@ -86,7 +86,7 @@ OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_Initialize(
     OpcUa_SecureListener_PolicyManager* a_pPolicyManager)
 {
 OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_Initialize");
-    
+
     if (a_pPolicyManager == OpcUa_Null)
     {
         uStatus = OpcUa_BadInvalidArgument;
@@ -152,11 +152,11 @@ OpcUa_Void OpcUa_SecureListener_PolicyManager_Delete(
 {
     /* OpcUa_UInt32    uModule = OpcUa_Module_SecureListener; */
     /* OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - PolicyManager_Delete\n"); */
-    
+
     if (a_ppPolicyManager != OpcUa_Null)
     {
         OpcUa_SecureListener_PolicyManager_ClearAll(*a_ppPolicyManager);
-        
+
         OpcUa_Free(*a_ppPolicyManager);
         *a_ppPolicyManager = OpcUa_Null;
     }
@@ -166,16 +166,16 @@ OpcUa_Void OpcUa_SecureListener_PolicyManager_Delete(
 /* OpcUa_SecureListener_PolicyManager_IsValidSecurityPolicy                     */
 /*==============================================================================*/
 OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_IsValidSecurityPolicy(
-    OpcUa_SecureListener_PolicyManager* a_pPolicyManager, 
+    OpcUa_SecureListener_PolicyManager* a_pPolicyManager,
     OpcUa_String*                       a_pSecurityPolicyUri)
 {
     OpcUa_SecureListener_SecurityPolicyConfiguration*   pTmpSecurityPolicyUri   = OpcUa_Null;
     OpcUa_Int32                                         cmpResult               = 1;
-    
+
 OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecurityPolicy");
 
     OpcUa_List_Enter(a_pPolicyManager->SecurityPolicies);
-    
+
     uStatus = OpcUa_List_ResetCurrent(a_pPolicyManager->SecurityPolicies);
     OpcUa_GotoErrorIfBad(uStatus);
 
@@ -184,7 +184,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecuri
     pTmpSecurityPolicyUri = (OpcUa_SecureListener_SecurityPolicyConfiguration*)OpcUa_List_GetCurrentElement(a_pPolicyManager->SecurityPolicies);
 
     while(pTmpSecurityPolicyUri)
-    {   
+    {
         cmpResult = OpcUa_String_StrnCmp(   &pTmpSecurityPolicyUri->sSecurityPolicy,
                                             a_pSecurityPolicyUri,
                                             OPCUA_STRING_LENDONTCARE,
@@ -195,18 +195,18 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecuri
             OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - PolicyManager_IsValidSecurityPolicy: Searched security policy found!\n");
             uStatus = OpcUa_Good;
             break;
-        }   
+        }
 
         pTmpSecurityPolicyUri = (OpcUa_SecureListener_SecurityPolicyConfiguration*)OpcUa_List_GetNextElement(a_pPolicyManager->SecurityPolicies);
     }
-    
+
     if(cmpResult != 0)
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "SecureListener - PolicyManager_IsValidSecurityPolicy: Searched security policy NOT found!\n");
     }
-    
+
     OpcUa_List_Leave(a_pPolicyManager->SecurityPolicies);
-        
+
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
     OpcUa_List_Leave(a_pPolicyManager->SecurityPolicies);
@@ -217,7 +217,7 @@ OpcUa_FinishErrorHandling;
 /* OpcUa_SecureListener_PolicyManager_IsValidSecurityPolicy                     */
 /*==============================================================================*/
 OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_IsValidSecurityPolicyConfiguration(
-    OpcUa_SecureListener_PolicyManager*                 a_pPolicyManager, 
+    OpcUa_SecureListener_PolicyManager*                 a_pPolicyManager,
     OpcUa_SecureListener_SecurityPolicyConfiguration*   a_pSecurityPolicyConfiguration)
 {
     OpcUa_SecureListener_SecurityPolicyConfiguration*   pCurrentSecConfig   = OpcUa_Null;
@@ -226,7 +226,7 @@ OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_IsValidSecurityPolicyConfigu
 OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecurityPolicyConfiguration");
 
     OpcUa_List_Enter(a_pPolicyManager->SecurityPolicies);
-    
+
     uStatus = OpcUa_List_ResetCurrent(a_pPolicyManager->SecurityPolicies);
     OpcUa_GotoErrorIfBad(uStatus);
 
@@ -234,7 +234,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecuri
 
     pCurrentSecConfig = (OpcUa_SecureListener_SecurityPolicyConfiguration*)OpcUa_List_GetCurrentElement(a_pPolicyManager->SecurityPolicies);
     while(pCurrentSecConfig != OpcUa_Null)
-    {   
+    {
         iCmpResult = OpcUa_String_StrnCmp(  &pCurrentSecConfig->sSecurityPolicy,
                                             &a_pSecurityPolicyConfiguration->sSecurityPolicy,
                                             OPCUA_STRING_LENDONTCARE,
@@ -258,9 +258,9 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "PolicyManager_IsValidSecuri
 
         pCurrentSecConfig = (OpcUa_SecureListener_SecurityPolicyConfiguration*)OpcUa_List_GetNextElement(a_pPolicyManager->SecurityPolicies);
     }
-   
+
     OpcUa_List_Leave(a_pPolicyManager->SecurityPolicies);
-        
+
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
@@ -281,7 +281,7 @@ OpcUa_StatusCode OpcUa_SecureListener_PolicyManager_AddSecurityPolicyConfigurati
     OpcUa_UInt32                                        uPolicyUriLength        = 0;
 
 OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "OpcUa_SecureListener_PolicyManager_AddSecurityPolicyConfiguration");
-    
+
     OpcUa_ReturnErrorIfArgumentNull(a_pPolicyManager);
     OpcUa_ReturnErrorIfArgumentNull(a_pPolicyManager->SecurityPolicies);
     OpcUa_ReturnErrorIfArgumentNull(a_pPolicyConfiguration);
@@ -304,12 +304,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "OpcUa_SecureListener_Policy
 
     pPolicyConfiguration->uMessageSecurityModes = a_pPolicyConfiguration->uMessageSecurityModes;
 
-    uStatus = OpcUa_List_AddElement(    a_pPolicyManager->SecurityPolicies, 
+    uStatus = OpcUa_List_AddElement(    a_pPolicyManager->SecurityPolicies,
                                         (OpcUa_Void*)pPolicyConfiguration);
     OpcUa_GotoErrorIfBad(uStatus);
 
     OpcUa_List_Leave(a_pPolicyManager->SecurityPolicies);
-    
+
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
