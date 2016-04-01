@@ -244,7 +244,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "Open");
     /* acquire lock until open is complete */
     OPCUA_P_MUTEX_LOCK(pSecureListener->Mutex);
 
-    if (pSecureListener->State != OpcUa_SecureListenerState_Closed)
+    if(pSecureListener->State != OpcUa_SecureListenerState_Closed)
     {
         uStatus = OpcUa_BadInvalidState;
         OpcUa_GotoErrorIfBad(uStatus);
@@ -377,8 +377,8 @@ OpcUa_BeginErrorHandling;
 
         if(pSecureChannel != OpcUa_Null)
         {
-            if ((OpcUa_SecureMessageType_SC != requestType) &&
-                (OpcUa_SecureMessageType_UN != requestType))
+            if((OpcUa_SecureMessageType_SC != requestType) &&
+               (OpcUa_SecureMessageType_UN != requestType))
             {
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SecureListener_ProcessRequest: Closing channel due error 0x%08X!\n", uStatus);
                 pSecureChannel->Close(pSecureChannel);
@@ -859,7 +859,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "OnNotify");
     OPCUA_P_MUTEX_LOCK(pSecureListener->Mutex);
 
     /* no longer open due to either an error or a close. */
-    if (OpcUa_IsBad(a_uOperationStatus))
+    if(OpcUa_IsBad(a_uOperationStatus))
     {
         pSecureListener->State = OpcUa_SecureListenerState_Closed;
     }
@@ -897,7 +897,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "Close");
     /* acquire lock until open is complete */
     OPCUA_P_MUTEX_LOCK(pSecureListener->Mutex);
 
-    if (pSecureListener->State != OpcUa_SecureListenerState_Open)
+    if(pSecureListener->State != OpcUa_SecureListenerState_Open)
     {
         uStatus = OpcUa_BadInvalidState;
         OpcUa_GotoErrorIfBad(uStatus);
@@ -1020,7 +1020,7 @@ OpcUa_BeginErrorHandling;
     OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SecureListener_BeginSendResponse: fail with 0x%08X", uStatus);
     OpcUa_Stream_Delete((OpcUa_Stream**)&pTransportOstrm);
 
-    if (pSecureInputStream->InnerStrm != OpcUa_Null)
+    if(pSecureInputStream->InnerStrm != OpcUa_Null)
     {
         pSecureInputStream->InnerStrm->Close(pSecureInputStream->InnerStrm);
         pSecureInputStream->InnerStrm->Delete(&pSecureInputStream->InnerStrm);
@@ -1282,7 +1282,7 @@ OpcUa_Void OpcUa_SecureListener_Delete(OpcUa_Listener** a_ppListener)
 {
     OpcUa_SecureListener*   pSecureListener = OpcUa_Null;
 
-    if (a_ppListener == OpcUa_Null || *a_ppListener == OpcUa_Null)
+    if(a_ppListener == OpcUa_Null || *a_ppListener == OpcUa_Null)
     {
         return;
     }
@@ -1498,7 +1498,7 @@ OpcUa_BeginErrorHandling;
     if(pSecureListener != OpcUa_Null)
     {
         OPCUA_P_MUTEX_DELETE(&(pSecureListener->Mutex));
-        if (pSecureListener->ServerPKIProvider != OpcUa_Null)
+        if(pSecureListener->ServerPKIProvider != OpcUa_Null)
         {
             OPCUA_P_PKIFACTORY_DELETEPKIPROVIDER(pSecureListener->ServerPKIProvider);
             OpcUa_Free(pSecureListener->ServerPKIProvider);
@@ -1559,7 +1559,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ReadRequest");
     uStatus = pDecoder->ReadMessage((struct _OpcUa_Decoder*)hDecodeContext, &pRequestType, a_ppRequest);
     OpcUa_GotoErrorIfBad(uStatus);
 
-    if (pRequestType->TypeId != a_expectedTypeId)
+    if(pRequestType->TypeId != a_expectedTypeId)
     {
         OpcUa_GotoErrorWithStatus(OpcUa_BadUnexpectedError);
     }
@@ -1651,7 +1651,7 @@ static OpcUa_StatusCode OpcUa_SecureListener_SendOpenSecureChannelResponse(
 
 OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "SendOpenSecureChannelResponse");
 
-    if (a_pClientCertificate->Length > 0)
+    if(a_pClientCertificate->Length > 0)
     {
         /*** get the client's certificate thumbprint for the OpenSecureChannelResponse header ***/
         uStatus = a_pCryptoProvider->GetCertificateThumbprint(  a_pCryptoProvider,
@@ -1679,7 +1679,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "SendOpenSecureChannelRespon
     /* must always sign and encrypt open secure channel requests. */
     eSecurityMode = pSecureChannel->MessageSecurityMode;
 
-    if (eSecurityMode != OpcUa_MessageSecurityMode_None)
+    if(eSecurityMode != OpcUa_MessageSecurityMode_None)
     {
         eSecurityMode = OpcUa_MessageSecurityMode_SignAndEncrypt;
     }
@@ -1931,6 +1931,14 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
         uStatus = OpcUa_SecureListener_ChannelManager_GetChannelByTransportConnection(  pSecureListener->ChannelManager,
                                                                                         a_hTransportConnection,
                                                                                         &pSecureChannel);
+        OpcUa_GotoErrorIfBad(uStatus);
+
+        if(pSecureChannel->SecureChannelId != OPCUA_SECURECHANNEL_ID_INVALID)
+        {
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ProcessOpenSecureChannelRequest: SecureChannel id already assigned!\n");
+            OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
+        }
+
         bRenewChannel = OpcUa_False;
     }
     else
@@ -1938,13 +1946,9 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
         uStatus = OpcUa_SecureListener_ChannelManager_GetChannelBySecureChannelID(  pSecureListener->ChannelManager,
                                                                                     uSecureChannelId,
                                                                                     &pSecureChannel);
+        OpcUa_GotoErrorIfBad(uStatus);
 
-        if(pSecureChannel == OpcUa_Null)
-        {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ProcessOpenSecureChannelRequest: No secure channel found for the given id!\n");
-            OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
-        }
-        else if(pSecureChannel->TransportConnection != a_hTransportConnection)
+        if(pSecureChannel->TransportConnection != a_hTransportConnection)
         {
             OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ProcessOpenSecureChannelRequest: SecureChannel id used by wrong transport connection!\n");
             OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
@@ -1952,8 +1956,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
 
         bRenewChannel = OpcUa_True;
     }
-
-    OpcUa_GotoErrorIfBad(uStatus);
 
     /* look if there is a pending stream */
     uStatus = OpcUa_SecureChannel_GetPendingInputStream(pSecureChannel,
@@ -1972,7 +1974,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
             /* check if a discovery only channel can be openned */
             OpcUa_Boolean discoveryOnly = OpcUa_False;
 
-            if (OpcUa_String_IsNull(&pSecureChannel->SecurityPolicyUri))
+            if(OpcUa_String_IsNull(&pSecureChannel->SecurityPolicyUri))
             {
                 OpcUa_StatusCode    uStatusTemp = OpcUa_Good;
                 OpcUa_String        sPolicyNone = OPCUA_STRING_STATICINITIALIZER;
@@ -1980,7 +1982,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
                 uStatusTemp = OpcUa_String_AttachReadOnly(&sPolicyNone, OpcUa_SecurityPolicy_None);
                 OpcUa_GotoErrorIfTrue(OpcUa_IsBad(uStatusTemp), uStatusTemp);
 
-                if((OpcUa_String_StrnCmp(&sPolicyNone, &sSecurityPolicyUri, OpcUa_String_StrLen(&sPolicyNone), OpcUa_False) == 0))
+                if((OpcUa_String_StrnCmp(&sPolicyNone, &sSecurityPolicyUri, OPCUA_STRING_LENDONTCARE, OpcUa_False) == 0))
                 {
                     discoveryOnly = OpcUa_True;
                 }
@@ -2002,37 +2004,30 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
             OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelRequest: Discovery Only Channel Created\n");
         }
 
-        if (bRenewChannel)
+        if(bRenewChannel)
         {
             /* check if the security policy is being changed. */
-            if (OpcUa_String_IsNull(&pSecureChannel->SecurityPolicyUri) && !OpcUa_String_IsNull(&sSecurityPolicyUri))
+            if((OpcUa_String_StrnCmp(&pSecureChannel->SecurityPolicyUri, &sSecurityPolicyUri, OPCUA_STRING_LENDONTCARE, OpcUa_False) != 0))
             {
                 OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityPolicyRejected);
             }
-            else
-            {
-                if ((OpcUa_String_StrnCmp(&pSecureChannel->SecurityPolicyUri, &sSecurityPolicyUri, OpcUa_String_StrLen(&sSecurityPolicyUri), OpcUa_False) != 0))
-                {
-                    OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityPolicyRejected);
-                }
-            }
 
             /* must check that the client certificate is not changed. */
-            if (pSecureChannel->ClientCertificate.Length > 0)
+            if(pSecureChannel->ClientCertificate.Length > 0)
             {
-                if (SenderCertificate.Length != pSecureChannel->ClientCertificate.Length)
+                if(SenderCertificate.Length != pSecureChannel->ClientCertificate.Length)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
 
-                if (OpcUa_MemCmp(SenderCertificate.Data, pSecureChannel->ClientCertificate.Data, SenderCertificate.Length) != 0)
+                if(OpcUa_MemCmp(SenderCertificate.Data, pSecureChannel->ClientCertificate.Data, SenderCertificate.Length) != 0)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
             }
             else
             {
-                if (SenderCertificate.Length  > 0)
+                if(SenderCertificate.Length > 0)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
@@ -2055,8 +2050,8 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
         uStatus = OPCUA_P_CRYPTOFACTORY_CREATECRYPTOPROVIDER(szPolicyUri, pCryptoProvider);
         OpcUa_GotoErrorIfBad(uStatus);
 
-        if( (eRequestedSecurityMode == OpcUa_MessageSecurityMode_SignAndEncrypt) ||
-            (eRequestedSecurityMode == OpcUa_MessageSecurityMode_Sign))
+        if((eRequestedSecurityMode == OpcUa_MessageSecurityMode_SignAndEncrypt) ||
+           (eRequestedSecurityMode == OpcUa_MessageSecurityMode_Sign))
         {
             /*** validate certificate ***/
             uStatus = OpcUa_SecureListener_ValidateCertificate( pSecureListener,
@@ -2184,36 +2179,45 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
         OpcUa_GotoErrorIfBad(uStatus);
 
         /* check that the message has been properly secured */
-        if (pRequest->SecurityMode != OpcUa_MessageSecurityMode_None)
+        if(pRequest->SecurityMode != OpcUa_MessageSecurityMode_None)
         {
-            if (secConfig.uMessageSecurityModes != OPCUA_SECURECHANNEL_MESSAGESECURITYMODE_SIGNANDENCRYPT)
+            if(secConfig.uMessageSecurityModes != OPCUA_SECURECHANNEL_MESSAGESECURITYMODE_SIGNANDENCRYPT)
             {
                 OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityChecksFailed);
             }
         }
 
         /* verify request type and security mode. */
-        if (bRenewChannel)
+        if(bRenewChannel)
         {
-            if (pRequest->RequestType != OpcUa_SecurityTokenRequestType_Renew)
+            if(pRequest->RequestType != OpcUa_SecurityTokenRequestType_Renew)
             {
                 OpcUa_GotoErrorWithStatus(OpcUa_BadRequestTypeInvalid);
             }
 
-            if (pRequest->SecurityMode != pSecureChannel->MessageSecurityMode)
+            if(pRequest->SecurityMode != pSecureChannel->MessageSecurityMode)
             {
                 OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityPolicyRejected);
             }
+
+            /* renew SecurityToken */
+            uStatus = pSecureChannel->RenewSecurityToken(   pSecureChannel,
+                                                            &pSecureChannel->CurrentChannelSecurityToken,
+                                                            pRequest->RequestedLifetime,
+                                                            &pSecurityToken);
+            OpcUa_GotoErrorIfBad(uStatus);
+
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelRequest: Renew: Revised Lifetime of channel %u from %u to %u ms!\n", pSecureChannel->SecureChannelId, pRequest->RequestedLifetime, pSecurityToken->RevisedLifetime);
         }
         else
         {
-            if (pRequest->RequestType != OpcUa_SecurityTokenRequestType_Issue)
+            if(pRequest->RequestType != OpcUa_SecurityTokenRequestType_Issue)
             {
                 OpcUa_GotoErrorWithStatus(OpcUa_BadRequestTypeInvalid);
             }
 
             /* update and validate the security mode. */
-            switch (pRequest->SecurityMode)
+            switch(pRequest->SecurityMode)
             {
                 default:
                 case OpcUa_MessageSecurityMode_None:
@@ -2245,6 +2249,27 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
             }
 
             pSecureChannel->MessageSecurityMode = pRequest->SecurityMode;
+
+            /*** new securechannel ***/
+            OpcUa_SecureListener_ChannelManager_SetSecureChannelID(pSecureListener->ChannelManager,
+                                                                   pSecureChannel,
+                                                                   pSecureListener->uNextSecureChannelId++);
+
+            /* skip 0 or duplicate channel ID */
+            while(OpcUa_IsBad(OpcUa_SecureListener_ChannelManager_IsValidChannelID(
+                                                                   pSecureListener->ChannelManager,
+                                                                   pSecureListener->uNextSecureChannelId)))
+            {
+                pSecureListener->uNextSecureChannelId++;
+            }
+
+            /* generate SecurityToken */
+            uStatus = pSecureChannel->GenerateSecurityToken(pSecureChannel,
+                                                            pRequest->RequestedLifetime,
+                                                            &pSecurityToken);
+            OpcUa_GotoErrorIfBad(uStatus);
+
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelRequest: Open: Revised Lifetime of Channel %u from %u to %u ms!\n", pSecureChannel->SecureChannelId, pRequest->RequestedLifetime, pSecurityToken->RevisedLifetime);
         }
 
         /*** derive channel keys ***/
@@ -2257,62 +2282,9 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
         OpcUa_GotoErrorIfBad(uStatus);
 
         /* check whether new or existing securechannel */
-        if((uSecureChannelId == OPCUA_SECURECHANNEL_ID_INVALID) && (pRequest->RequestType == OpcUa_SecurityTokenRequestType_Issue))
+        if(bRenewChannel)
         {
-            /*** new securechannel ***/
-            OpcUa_SecureListener_ChannelManager_SetSecureChannelID(pSecureListener->ChannelManager,
-                                                                   pSecureChannel,
-                                                                   pSecureListener->uNextSecureChannelId++);
-
-            /* skip 0 */
-            while(OpcUa_IsBad(OpcUa_SecureListener_ChannelManager_IsValidChannelID(
-                                                                   pSecureListener->ChannelManager,
-                                                                   pSecureListener->uNextSecureChannelId)))
-            {
-                pSecureListener->uNextSecureChannelId++;
-            }
-
-            /* AddChannel */
-
-            /* generate SecurityToken */
-            uStatus = pSecureChannel->GenerateSecurityToken(pSecureChannel,
-                                                            pRequest->RequestedLifetime,
-                                                            &pSecurityToken);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelRequest: Open: Revised Lifetime of Channel %u from %u to %u ms!\n", pSecureChannel->SecureChannelId, pRequest->RequestedLifetime, pSecurityToken->RevisedLifetime);
-
-            /* open SecureChannel */
-            uStatus = pSecureChannel->Open( pSecureChannel,
-                                            a_hTransportConnection,
-                                            *pSecurityToken,
-                                            pRequest->SecurityMode,
-                                            &SenderCertificate,
-                                            pSecureListener->pServerCertificate,
-                                            pReceivingKeyset, /* Client key set is used for receiving on this side. */
-                                            pSendingKeyset,   /* Server key set is used for receiving on this side. */
-                                            pCryptoProvider);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            eSecureChannelEvent = eOpcUa_SecureListener_SecureChannelOpen;
-        }
-        else if(pRequest->RequestType == OpcUa_SecurityTokenRequestType_Renew)
-        {
-            /*** renew SecureChannel ***/
-
-            if(pSecureChannel->SecureChannelId != uSecureChannelId || uSecureChannelId == 0)
-            {
-                OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "ProcessOpenSecureChannelRequest: The message header securechannel id (%u) does not match the id of the channel assigned to the transport handle (%u)!\n", uSecureChannelId, pSecureChannel->SecureChannelId);
-            }
-
-            uStatus = pSecureChannel->RenewSecurityToken(   pSecureChannel,
-                                                            &pSecureChannel->CurrentChannelSecurityToken,
-                                                            pRequest->RequestedLifetime,
-                                                            &pSecurityToken);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelRequest: Renew: Revised Lifetime of channel %u from %u to %u ms!\n", pSecureChannel->SecureChannelId, pRequest->RequestedLifetime, pSecurityToken->RevisedLifetime);
-
+            /* renew SecureChannel */
             uStatus = pSecureChannel->Renew(pSecureChannel,
                                             a_hTransportConnection,
                                             *pSecurityToken,
@@ -2328,8 +2300,19 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
         }
         else
         {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "ProcessOpenSecureChannelRequest: Invalid Operation!\n");
-            OpcUa_GotoErrorWithStatus(OpcUa_BadRequestTypeInvalid);
+            /* open SecureChannel */
+            uStatus = pSecureChannel->Open( pSecureChannel,
+                                            a_hTransportConnection,
+                                            *pSecurityToken,
+                                            pRequest->SecurityMode,
+                                            &SenderCertificate,
+                                            pSecureListener->pServerCertificate,
+                                            pReceivingKeyset, /* Client key set is used for receiving on this side. */
+                                            pSendingKeyset,   /* Server key set is used for receiving on this side. */
+                                            pCryptoProvider);
+            OpcUa_GotoErrorIfBad(uStatus);
+
+            eSecureChannelEvent = eOpcUa_SecureListener_SecureChannelOpen;
         }
 
         if(pSecureListener->SecureChannelCallback != OpcUa_Null)
@@ -2693,7 +2676,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ValidateDiscoveryChannel");
     uStatus = OpcUa_UInt32_BinaryDecode(&uTypeId, a_pStream);
     OpcUa_GotoErrorIfBad(uStatus);
 
-    if (uTypeId != OpcUa_MakeFourByteNodeId(OpcUaId_GetEndpointsRequest_Encoding_DefaultBinary) && uTypeId != OpcUa_MakeFourByteNodeId(OpcUaId_FindServersRequest_Encoding_DefaultBinary))
+    if(uTypeId != OpcUa_MakeFourByteNodeId(OpcUaId_GetEndpointsRequest_Encoding_DefaultBinary) && uTypeId != OpcUa_MakeFourByteNodeId(OpcUaId_FindServersRequest_Encoding_DefaultBinary))
     {
         OpcUa_GotoErrorWithStatus(OpcUa_BadServiceUnsupported);
     }
@@ -2980,7 +2963,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessSessionCallRequest")
             pSecureStream->nCurrentReadBuffer = 0;
 
             /* ensure that discovery only channels don't process non-discovery requests */
-            if (pSecureChannel->DiscoveryOnly)
+            if(pSecureChannel->DiscoveryOnly)
             {
                 uStatus = OpcUa_SecureListener_ValidateDiscoveryChannel(pSecureIStrm);
                 if(OpcUa_IsBad(uStatus))
