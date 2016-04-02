@@ -1814,16 +1814,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ValidateCertificate");
     /* mask valid errorcode */
     if(OpcUa_IsBad(uStatus))
     {
-        if(OpcUa_IsEqual(OpcUa_BadCertificateUntrusted))
-        {
-            /* return general status code instead of specific code (needed for CTT) */
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ValidateCertificate: untrusted certificate\n");
-            uStatus = OpcUa_BadSecurityChecksFailed;
-        }
-        else
-        {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ValidateCertificate: Validation failed with 0x%08X\n", uStatus);
-        }
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureListener_ValidateCertificate: Validation failed with 0x%08X\n", uStatus);
     }
     else
     {
@@ -2074,6 +2065,18 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
                                                             &sTempUri,
                                                             secConfig.uMessageSecurityModes,
                                                             pSecureListener->SecureChannelCallbackData);
+
+                    /* return general status code instead of specific code (needed for CTT) */
+                    switch(uStatus)
+                    {
+                        case OpcUa_BadCertificateUntrusted:
+                        case OpcUa_BadCertificateRevoked:
+                        case OpcUa_BadCertificateIssuerRevoked:
+                        case OpcUa_BadCertificateRevocationUnknown:
+                        case OpcUa_BadCertificateIssuerRevocationUnknown:
+                            uStatus = OpcUa_BadSecurityChecksFailed;
+                    }
+
                 }
 
                 OpcUa_GotoError;
