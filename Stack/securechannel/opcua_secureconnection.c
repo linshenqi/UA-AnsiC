@@ -596,7 +596,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "RenewTimerCallback");
     }
     else
     {
-        if(pSecureConnection->bRenewActive != OpcUa_False)
+        if(pSecureConnection->bRenewActive)
         {
             OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "OpcUa_SecureConnection_RenewTimerCallback: Renew secure channel token of channel %u already under way! (%u msec)!\n", pSecureConnection->pSecureChannel->SecureChannelId, a_msecElapsed);
         }
@@ -1415,6 +1415,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "AbortResponse");
     OpcUa_GotoErrorIfBad(uStatus);
 
     OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_SecureConnection_AbortResponse: SID %u, TID %u, Status 0x%08X\n", uSecureChannelId, uTokenId, a_uConnectionStatus);
+
+    /* check that the securechannel id has not changed */
+    if(pSecureChannel->SecureChannelId != uSecureChannelId)
+    {
+        OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
+    }
 
     /* look if there is a pending stream */
     uStatus = OpcUa_SecureChannel_GetPendingInputStream(    pSecureChannel,
@@ -2955,6 +2961,13 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
                                                                     &recvCertThumbprint);
         OpcUa_GotoErrorIfBad(uStatus);
 
+        OpcUa_Trace(    OPCUA_TRACE_LEVEL_DEBUG,
+                        "ProcessOpenSecureChannelResponse: SID %u, SURI \"%*.*s\"\n",
+                        uSecureChannelId,
+                        OpcUa_String_StrLen(&sSecurityPolicyUri),
+                        OpcUa_String_StrLen(&sSecurityPolicyUri),
+                        OpcUa_String_GetRawString(&sSecurityPolicyUri));
+
         /* must check that the server certificate is not changed. */
         if(pSecureConnection->MessageSecurityMode != OpcUa_MessageSecurityMode_None)
         {
@@ -2978,13 +2991,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
                 }
             }
         }
-
-        OpcUa_Trace(    OPCUA_TRACE_LEVEL_DEBUG,
-                        "ProcessOpenSecureChannelResponse: SID %u, SURI \"%*.*s\"\n",
-                        uSecureChannelId,
-                        OpcUa_String_StrLen(&sSecurityPolicyUri),
-                        OpcUa_String_StrLen(&sSecurityPolicyUri),
-                        OpcUa_String_GetRawString(&sSecurityPolicyUri));
 
         /* if security is turned on then the sender and receiver certificates must be specified. */
         if((SenderCertificate.Data != OpcUa_Null) && (recvCertThumbprint.Data != OpcUa_Null))
@@ -3010,6 +3016,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
             {
                 OpcUa_GotoErrorWithStatus(OpcUa_BadSecurityChecksFailed);
             }
+        }
+
+        /* check that the securechannel id has not changed */
+        if(pSecureConnection->bRenewActive && pSecureChannel->SecureChannelId != uSecureChannelId)
+        {
+            OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
         }
 
         /* check certificate in secure modes */
@@ -3188,7 +3200,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
             OpcUa_GotoErrorIfBad(uStatus);
 
             /*** renew or create securechannel ***/
-            if(pSecureConnection->bRenewActive != OpcUa_False)
+            if(pSecureConnection->bRenewActive)
             {
                 /* existing securechannel */
                 pSecureConnection->bRenewActive = OpcUa_False;
@@ -3413,6 +3425,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessSessionCallRespons
                     "ProcessSessionCallResponse: Received chunk with SID %u, TID %u\n",
                     uSecureChannelId,
                     uTokenId);
+
+    /* check that the securechannel id has not changed */
+    if(pSecureChannel->SecureChannelId != uSecureChannelId)
+    {
+        OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
+    }
 
     /* look if there is a pending stream */
     uStatus = OpcUa_SecureChannel_GetPendingInputStream(pSecureChannel,

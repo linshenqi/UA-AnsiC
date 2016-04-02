@@ -2643,12 +2643,10 @@ OpcUa_BeginErrorHandling;
         pRequest = OpcUa_Null;
     }
 
-#if 1
     if(a_ppTransportIstrm != OpcUa_Null && (*a_ppTransportIstrm) != OpcUa_Null)
     {
         (*a_ppTransportIstrm)->Delete((OpcUa_Stream**)a_ppTransportIstrm);
     }
-#endif
 
     if(pSecureIstrm != OpcUa_Null)
     {
@@ -2862,10 +2860,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessSessionCallRequest")
 
     if(pSecureChannel->TransportConnection != a_hConnection)
     {
-        OpcUa_SecureListener_ChannelManager_ReleaseChannel(
-                pSecureListener->ChannelManager,
-                &pSecureChannel);
-        OpcUa_ReturnErrorIfBad(OpcUa_BadSecureChannelIdInvalid);
+        OpcUa_GotoErrorWithStatus(OpcUa_BadSecureChannelIdInvalid);
     }
 
     /* look if there is a pending stream */
