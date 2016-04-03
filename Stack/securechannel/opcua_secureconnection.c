@@ -3300,7 +3300,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
                                         pSecureConnection->CallbackData,
                                         OpcUa_ConnectionEvent_Connect,
                                         OpcUa_Null,
-                                        OpcUa_BadConnectionClosed);
+                                        a_uResponseStatus);
         }
     }
 
