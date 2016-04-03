@@ -574,6 +574,11 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "ProcessResponse");
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_TcpConnection_ProcessResponse: Reason %*.*s\n", uReasonLength, uReasonLength, psReason);
                 OpcUa_String_Clear(&sReason);
 
+                if(OpcUa_IsGood(uReceivedStatusCode))
+                {
+                    uReceivedStatusCode = OpcUa_Bad;
+                }
+
                 /* The message is finished at this point.*/
                 if(pTcpConnection->NotifyCallback != OpcUa_Null)
                 {
