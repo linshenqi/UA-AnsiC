@@ -44,7 +44,7 @@ OPCUA_BEGIN_EXTERN_C
  */
 typedef OpcUa_Void* OpcUa_Channel;
 
-/** 
+/**
  * @brief Types of events that can occur at an channel and get reported to the application.
  */
 typedef enum eOpcUa_Channel_Event
@@ -57,7 +57,7 @@ typedef enum eOpcUa_Channel_Event
     eOpcUa_Channel_Event_Disconnected
 } OpcUa_Channel_Event;
 
-/** 
+/**
  * @brief Types of serializers supported by the enpoint.
  *
  * @see OpcUa_Channel_Create
@@ -70,39 +70,39 @@ enum _OpcUa_Channel_SerializerType
 };
 typedef enum _OpcUa_Channel_SerializerType OpcUa_Channel_SerializerType;
 
-/** 
- * @brief Called by the stack to report an asynchronous connection event. 
+/**
+ * @brief Called by the stack to report an asynchronous connection event.
  *
  * @param pChannel         [in] The channel used to send the request.
  * @param pCallbackData    [in] The callback data specifed when the request was sent.
  * @param eEvent           [in] The event that occured.
  * @param uStatus          [in] The status code, with which the operation completed.
  */
-typedef OpcUa_StatusCode (OpcUa_Channel_PfnConnectionStateChanged)(    
+typedef OpcUa_StatusCode (OpcUa_Channel_PfnConnectionStateChanged)(
     OpcUa_Channel       hChannel,
     OpcUa_Void*         pCallbackData,
     OpcUa_Channel_Event eEvent,
     OpcUa_StatusCode    uStatus);
 
-/** 
+/**
  * @brief Creates a new channel.
- * 
+ *
  * @param ppChannel    [out] The new channel.
  * @param eEncoderType [in]  The type of encoder to use for messages.
  */
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_Create( 
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_Create(
     OpcUa_Channel*               phChannel,
     OpcUa_Channel_SerializerType eSerializerType);
 
-/** 
+/**
  * @brief Deletes a channel.
  *
  * @param ppChannel [in/out] The channel to delete.
  */
-OPCUA_EXPORT OpcUa_Void OpcUa_Channel_Delete(   
+OPCUA_EXPORT OpcUa_Void OpcUa_Channel_Delete(
     OpcUa_Channel* phChannel);
 
-/** 
+/**
  * @brief Establishes a network connection with the server but does not create the session.
  *
  * @param pChannel                      [in] The channel to connect.
@@ -118,7 +118,7 @@ OPCUA_EXPORT OpcUa_Void OpcUa_Channel_Delete(
  * @param messageSecurityMode           [in] The message security mode requested for the communication.
  * @param nNetworkTimeout               [in] The network timeout. Also used for disconnect.
  */
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_Connect( 
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_Connect(
     OpcUa_Channel                               hChannel,
     OpcUa_StringA                               sUrl,
     OpcUa_Channel_PfnConnectionStateChanged*    pfCallback,
@@ -132,7 +132,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_Connect(
     OpcUa_MessageSecurityMode                   messageSecurityMode,
     OpcUa_UInt32                                nNetworkTimeout);
 
-/** 
+/**
  * @brief Establishes a network connection with the server including the secure conversation but does not create the session.
  *
  * @param pChannel                      [in] The channel to connect.
@@ -162,14 +162,14 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginConnect(
     OpcUa_Channel_PfnConnectionStateChanged*    pfCallback,
     OpcUa_Void*                                 pCallbackData);
 
-/** 
+/**
  * @brief Closes the network connection with the server.
  *
  * @param pChannel [in] The session to disconnect.
  */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_Disconnect(OpcUa_Channel pChannel);
 
-/** 
+/**
  * @brief Closes the network connection with the server asnchronously.
  *
  * @param pChannel      [in] The session to disconnect.
@@ -181,8 +181,8 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginDisconnect(
     OpcUa_Channel_PfnConnectionStateChanged*    pfCallback,
     OpcUa_Void*                                 pCallbackData);
 
-/** 
- * @brief Called by the stack to report an asynchronous request that completed. 
+/**
+ * @brief Called by the stack to report an asynchronous request that completed.
  *
  * @param pChannel         [in] The session used to send the request.
  * @param hAsyncState      [in] The async call state object.
@@ -195,7 +195,7 @@ typedef OpcUa_StatusCode (OpcUa_Channel_PfnRequestComplete)(
     OpcUa_Void*           pCallbackData,
     OpcUa_StatusCode      uStatus);
 
-/** 
+/**
  * @brief Invokes a service.
  *
  * @param pChannel       [in]  The session to use.
@@ -213,7 +213,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_InvokeService(
     OpcUa_Void**           ppResponse,
     OpcUa_EncodeableType** ppResponseType);
 
-/** 
+/**
  * @brief Invokes a service asynchronously.
  *
  * @param pChannel       [in]  The session to use.
@@ -232,7 +232,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginInvokeService(
     OpcUa_Void*                       pCallbackData);
 
 #ifdef OPCUA_SUPPORT_PREENCODED_MESSAGES
-/** 
+/**
  * @brief Sends a message to the server.
  *
  * @param hChannel      [in]  The channel to use.
@@ -241,7 +241,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginInvokeService(
  * @param pCallback     [in]  The callback to use when the response arrives.
  * @param pCallbackData [in]  The data to pass to the callback.
  */
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginSendEncodedRequest(  
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginSendEncodedRequest(
     OpcUa_Channel                   hChannel,
     OpcUa_ByteString*               pRequest,
     OpcUa_UInt32                    uTimeout,
@@ -249,7 +249,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginSendEncodedRequest(
     OpcUa_Void*                     pCallbackData);
 #endif
 
-/** 
+/**
  * @brief Returns the actually used https-server certificate.
  *
  * @param hChannel                 [in]   The channel to use.

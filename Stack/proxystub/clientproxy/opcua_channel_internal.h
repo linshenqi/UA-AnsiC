@@ -50,7 +50,7 @@ enum _OpcUa_Channel_State
 typedef enum _OpcUa_Channel_State OpcUa_Channel_State;
 #endif
 
-/** 
+/**
   @brief Manages the state of a client session with a server.
 */
 struct _OpcUa_InternalChannel
@@ -59,20 +59,20 @@ struct _OpcUa_InternalChannel
     OpcUa_String                                Url;
 
     /*! @brief The credentials that must be passed to the transport layer (e.g. SSL). */
-    OpcUa_ClientCredential*                     TransportCredential;    
+    OpcUa_ClientCredential*                     TransportCredential;
 
     /*! @brief The timeout, in milliseconds, for network operations. */
     OpcUa_UInt32                                NetworkTimeout;
 
     /*! @brief The client's application certificate. */
     OpcUa_X509Credential*                       ClientCertificate;
-    
+
     /*! @brief The server's application certificate (if known). */
     OpcUa_X509Credential*                       ServerCertificate;
-    
+
     /*! @brief The transport connection to the server. */
     OpcUa_Connection*                           TransportConnection;
-    
+
     /*! @brief The secure channel for the session. */
     OpcUa_Connection*                           SecureConnection;
 
@@ -81,10 +81,10 @@ struct _OpcUa_InternalChannel
 
     /*! @brief The decoder used for messages received via the channel */
     OpcUa_Decoder*                              Decoder;
-    
+
     /*! @brief The timeout for the session in milliseconds. */
     OpcUa_UInt32                                SessionTimeout;
-    
+
     /*! @brief A mutex used to synchronous access to the session. */
     OpcUa_Mutex                                 Mutex;
 
