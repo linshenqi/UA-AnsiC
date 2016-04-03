@@ -696,25 +696,13 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "OnNotify");
         {
             OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_OnNotify: Underlying connection raised connect event with status 0x%08X!\n", a_uOperationStatus);
 
-            if(OpcUa_IsGood(a_uOperationStatus))
-            {
-                if(OpcUa_IsEqual(OpcUa_BadNotSupported))
-                {
-                    /* mask OpcUa_BadNotSupported */
-                    uStatus = OpcUa_Good;
-                }
-            }
-            else
-            {
-                uStatus = a_uOperationStatus;
-            }
             if(pInternalChannel->pfCallback != OpcUa_Null)
             {
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_OnNotify: Notifying application!\n");
                 uStatus = pInternalChannel->pfCallback( pInternalChannel,
                                                         pInternalChannel->pvCallbackData,
                                                         eOpcUa_Channel_Event_Connected,
-                                                        uStatus);
+                                                        a_uOperationStatus);
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_OnNotify: Notifying application done!\n");
             }
             else
