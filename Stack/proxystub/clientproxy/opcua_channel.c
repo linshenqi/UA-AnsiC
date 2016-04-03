@@ -270,16 +270,16 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "ResponseAvailable");
     {
         OPCUA_P_MUTEX_LOCK(pAsyncState->WaitMutex);
 
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Operation Status 0x%X\n", a_uOperationStatus); 
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Operation Status 0x%X\n", a_uOperationStatus);
 
         if(OpcUa_IsGood(a_uOperationStatus))
         {
             /* if the caller does not give a stream, just do a notification */
             if(a_ppIstrm != OpcUa_Null && (*a_ppIstrm) != OpcUa_Null)
             {
-                uStatus = OpcUa_Channel_ReadResponse(   pAsyncState->Channel, 
-                                                        (*a_ppIstrm), 
-                                                        &pResponseType, 
+                uStatus = OpcUa_Channel_ReadResponse(   pAsyncState->Channel,
+                                                        (*a_ppIstrm),
+                                                        &pResponseType,
                                                         &pResponse);
                 if(OpcUa_IsGood(uStatus))
                 {
@@ -294,7 +294,6 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "ResponseAvailable");
                     else
                     {
                         OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_Channel_ResponseAvailable: Empty or unknown response! (0x%08X)\n", a_uOperationStatus);
-                        
                     }
                 }
                 else
@@ -312,13 +311,13 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "ResponseAvailable");
         /* signal the request issuer that a response is available */
         if(pAsyncState->Callback == OpcUa_Null)
         {
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Signalling Response!\n"); 
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Signalling Response!\n");
 
             /* this path is executed when the synchronous invoke is called. */
-            uStatus = OpcUa_AsyncCallState_SignalCompletion(pAsyncState, 
+            uStatus = OpcUa_AsyncCallState_SignalCompletion(pAsyncState,
                                                             a_uOperationStatus);
 
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Signalling Response Done!\n"); 
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Signalling Response Done!\n");
 
             OPCUA_P_MUTEX_UNLOCK(pAsyncState->WaitMutex);
             /* unlike below, the asyncstate object is destroyed be the waiting thread. */
@@ -327,18 +326,18 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "ResponseAvailable");
         {
             pAsyncState->Status = a_uOperationStatus;
 
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Calling Application Callback!\n"); 
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Calling Application Callback!\n");
 
             /* user supplied callback */
-            uStatus = pAsyncState->Callback(    pAsyncState->Channel, 
-                                                pAsyncState->ResponseData, 
-                                                pAsyncState->ResponseType, 
+            uStatus = pAsyncState->Callback(    pAsyncState->Channel,
+                                                pAsyncState->ResponseData,
+                                                pAsyncState->ResponseType,
                                                 pAsyncState->CallbackData,
                                                 pAsyncState->Status);
 
             /*pAsyncState->ResponseData = OpcUa_Null;*/
 
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Calling Application Callback Done!\n"); 
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Calling Application Callback Done!\n");
 
             OPCUA_P_MUTEX_UNLOCK(pAsyncState->WaitMutex);
             OpcUa_AsyncCallState_Delete(&pAsyncState);
@@ -348,7 +347,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "ResponseAvailable");
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
-    OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Leaving with Error %08X!\n", uStatus); 
+    OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_Channel_ResponseAvailable: Leaving with Error %08X!\n", uStatus);
 
     if(pAsyncState != OpcUa_Null)
     {
@@ -405,7 +404,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "OpcUa_Channel_BeginInvokeService")
 
     cContext.KnownTypes         = &OpcUa_ProxyStub_g_EncodeableTypes;
     cContext.NamespaceUris      = &OpcUa_ProxyStub_g_NamespaceUris;
-    cContext.AlwaysCheckLengths = OPCUA_SERIALIZER_CHECKLENGTHS; 
+    cContext.AlwaysCheckLengths = OPCUA_SERIALIZER_CHECKLENGTHS;
 
     /* retrieve the service call timeout */
     uTimeout = ((OpcUa_RequestHeader*)a_pRequest)->TimeoutHint;
@@ -502,7 +501,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "InvokeService");
     OpcUa_ReturnErrorIfArgumentNull(a_pRequestType);
     OpcUa_ReturnErrorIfArgumentNull(a_ppResponse);
     OpcUa_ReturnErrorIfArgumentNull(a_ppResponseType);
-    
+
     OpcUa_ReferenceParameter(a_sName);
 
     *a_ppResponse = OpcUa_Null;
@@ -518,11 +517,11 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "InvokeService");
     /* initialize context */
     cContext.KnownTypes         = &OpcUa_ProxyStub_g_EncodeableTypes;
     cContext.NamespaceUris      = &OpcUa_ProxyStub_g_NamespaceUris;
-    cContext.AlwaysCheckLengths = OPCUA_SERIALIZER_CHECKLENGTHS; 
-    
+    cContext.AlwaysCheckLengths = OPCUA_SERIALIZER_CHECKLENGTHS;
+
     /* retrieve the service call timeout */
     uTimeout = ((OpcUa_RequestHeader*)a_pRequest)->TimeoutHint;
-    
+
     /* create output stream through connection */
     uStatus = OpcUa_Connection_BeginSendRequest(pChannel->SecureConnection, &pOstrm);
     OpcUa_GotoErrorIfBad(uStatus);
@@ -555,7 +554,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "InvokeService");
     uStatus = OpcUa_Connection_EndSendRequest(  pChannel->SecureConnection,
                                                 &pOstrm,
                                                 uTimeout,
-                                                OpcUa_Channel_ResponseAvailable, 
+                                                OpcUa_Channel_ResponseAvailable,
                                                 (OpcUa_Void*)pAsyncState);
     OpcUa_GotoErrorIfBad(uStatus);
 
@@ -581,7 +580,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "InvokeService");
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
-    
+
     if(hEncodeContext != OpcUa_Null)
     {
         OpcUa_Encoder_Close(pEncoder, &hEncodeContext);
@@ -603,14 +602,14 @@ OpcUa_BeginErrorHandling;
         /* OPCUA_P_MUTEX_UNLOCK(pAsyncState->WaitMutex); */
         OpcUa_AsyncCallState_Delete(&pAsyncState);
     }
-    
+
 OpcUa_FinishErrorHandling;
 }
 
 /*============================================================================
  * OpcUa_Channel_BeginSendEncodedRequest
  *===========================================================================*/
-OpcUa_StatusCode OpcUa_Channel_BeginSendEncodedRequest(  
+OpcUa_StatusCode OpcUa_Channel_BeginSendEncodedRequest(
     OpcUa_Channel                   a_hChannel,
     OpcUa_ByteString*               a_pRequest,
     OpcUa_UInt32                    a_uTimeout,
@@ -632,7 +631,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginSendEncodedRequest");
     OPCUA_P_MUTEX_LOCK(pChannel->Mutex);
 
     OpcUa_GotoErrorIfTrue((pChannel->SecureConnection == OpcUa_Null), OpcUa_BadServerNotConnected);
-    
+
     /* create output stream */
     uStatus = OpcUa_Connection_BeginSendRequest(pChannel->SecureConnection, &pOstrm);
     OpcUa_GotoErrorIfBad(uStatus);
@@ -645,7 +644,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginSendEncodedRequest");
     uStatus = OpcUa_Connection_EndSendRequest(  pChannel->SecureConnection,
                                                 &pOstrm,
                                                 a_uTimeout,
-                                                a_pCallback, 
+                                                a_pCallback,
                                                 a_pCallbackData);
     OpcUa_GotoErrorIfBad(uStatus);
 
@@ -677,7 +676,7 @@ OpcUa_FinishErrorHandling;
 static OpcUa_StatusCode OpcUa_Channel_OnNotify( OpcUa_Connection*     a_pConnection,
                                                 OpcUa_Void*           a_pCallbackData,
                                                 OpcUa_ConnectionEvent a_eEvent,
-                                                OpcUa_InputStream**   a_ppInputStream,  
+                                                OpcUa_InputStream**   a_ppInputStream,
                                                 OpcUa_StatusCode      a_uOperationStatus)
 {
     OpcUa_InternalChannel* pInternalChannel = (OpcUa_InternalChannel*)a_pCallbackData;
@@ -702,7 +701,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "OnNotify");
                 if(OpcUa_IsEqual(OpcUa_BadNotSupported))
                 {
                     /* mask OpcUa_BadNotSupported */
-                    uStatus = OpcUa_Good; 
+                    uStatus = OpcUa_Good;
                 }
             }
             else
@@ -830,14 +829,14 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Channel_BeginDisconnect(OpcUa_Channel       
     OpcUa_InternalChannel*              pChannel            = OpcUa_Null;
 
 OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginDisconnect");
-    
+
     OpcUa_ReturnErrorIfArgumentNull(a_pChannel);
 
     pChannel = (OpcUa_InternalChannel*)a_pChannel;
 
     /* lock the session until the request is sent */
     OPCUA_P_MUTEX_LOCK(pChannel->Mutex);
-    
+
     pChannel->pfCallback        = a_pfCallback;
     pChannel->pvCallbackData    = a_pCallbackData;
 
@@ -846,7 +845,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginDisconnect");
     OPCUA_P_MUTEX_UNLOCK(pChannel->Mutex);
 
     /* disconnect to the server - notify on standard callback */
-    uStatus = OpcUa_Connection_Disconnect(  pChannel->SecureConnection, 
+    uStatus = OpcUa_Connection_Disconnect(  pChannel->SecureConnection,
                                             OpcUa_True);
 
 
@@ -927,7 +926,7 @@ static OpcUa_StatusCode OpcUa_Channel_InternalConnectComplete(  OpcUa_Channel   
 
     OpcUa_ReferenceParameter(a_hChannel);
 
-    if (a_eEvent == eOpcUa_Channel_Event_Disconnected)
+    if(a_eEvent == eOpcUa_Channel_Event_Disconnected && OpcUa_IsGood(a_uStatus))
     {
         a_uStatus = OpcUa_BadDisconnect;
     }
@@ -973,7 +972,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginConnect");
     if(     (a_messageSecurityMode != OpcUa_MessageSecurityMode_None)
         &&  ((a_pServerCertificate->Length <= 0) || (a_pClientCertificate->Length <= 0) || (a_pClientPrivateKey->Length <= 0)))
     {
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_Channel_BeginConnect: Cannot create secure channel without certificates!\n"); 
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_Channel_BeginConnect: Cannot create secure channel without certificates!\n");
         OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
     }
 
@@ -981,13 +980,13 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginConnect");
 #if OPCUA_USE_SYNCHRONISATION
     OPCUA_P_MUTEX_LOCK(pChannel->Mutex);
     bLocked = OpcUa_True;
-#endif 
+#endif
 
     /* save url */
     OpcUa_String_Clear(&pChannel->Url);
 
-    uStatus = OpcUa_String_StrnCpy( &pChannel->Url, 
-                                    OpcUa_String_FromCString(a_sUrl), 
+    uStatus = OpcUa_String_StrnCpy( &pChannel->Url,
+                                    OpcUa_String_FromCString(a_sUrl),
                                     OPCUA_STRING_LENDONTCARE);
 
     /* save session timeout */
@@ -1006,9 +1005,9 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginConnect");
     }
 
     /* select the protocol type based on the url scheme */
-    if(!OpcUa_String_StrnCmp(   &(pChannel->Url), 
-                                OpcUa_String_FromCString("opc.tcp:"), 
-                                8, 
+    if(!OpcUa_String_StrnCmp(   &(pChannel->Url),
+                                OpcUa_String_FromCString("opc.tcp:"),
+                                8,
                                 OpcUa_True))
     {
         uStatus = OpcUa_TcpConnection_Create(&pChannel->TransportConnection);
@@ -1023,9 +1022,9 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginConnect");
         OpcUa_GotoErrorIfBad(uStatus);
     }
 #ifdef OPCUA_HAVE_HTTPS
-    else if(!OpcUa_String_StrnCmp(  &(pChannel->Url), 
-                                    OpcUa_String_FromCString("https:"), 
-                                    6, 
+    else if(!OpcUa_String_StrnCmp(  &(pChannel->Url),
+                                    OpcUa_String_FromCString("https:"),
+                                    6,
                                     OpcUa_True))
     {
         uStatus = OpcUa_HttpsConnection_Create(&pChannel->SecureConnection);
@@ -1061,10 +1060,10 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginConnect");
 
     /* connect asynchronously to the server - the remaining stuff is done in the callback */
     uStatus = pChannel->SecureConnection->Connect(  pChannel->SecureConnection,
-                                                    &(pChannel->Url), 
-                                                    pClientCredentials, 
-                                                    pChannel->NetworkTimeout, 
-                                                    OpcUa_Channel_OnNotify, 
+                                                    &(pChannel->Url),
+                                                    pClientCredentials,
+                                                    pChannel->NetworkTimeout,
+                                                    OpcUa_Channel_OnNotify,
                                                     (OpcUa_Void*)pChannel);
 
     OpcUa_Free(pClientCredentials);
@@ -1115,7 +1114,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "Connect");
     OpcUa_ReturnErrorIfBad(uStatus);
 
     /* call the async connect */
-    uStatus = OpcUa_Channel_BeginConnect(   a_hChannel, 
+    uStatus = OpcUa_Channel_BeginConnect(   a_hChannel,
                                             a_sUrl,
                                             a_pClientCertificate,
                                             a_pClientPrivateKey,
@@ -1125,13 +1124,13 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "Connect");
                                             a_nRequestedLifetime,
                                             a_messageSecurityMode,
                                             a_nNetworkTimeout,
-                                            OpcUa_Channel_InternalConnectComplete, 
+                                            OpcUa_Channel_InternalConnectComplete,
                                             (OpcUa_Void*)pAsyncState);
     OpcUa_GotoErrorIfBad(uStatus);
 
     /* ************************ wait for completion ************************** */
 #if OPCUA_MULTITHREADED
-    uStatus = OpcUa_AsyncCallState_WaitForCompletion(   pAsyncState, 
+    uStatus = OpcUa_AsyncCallState_WaitForCompletion(   pAsyncState,
                                                         a_nNetworkTimeout);
 
     if(OpcUa_IsEqual(OpcUa_BadTimeout))
@@ -1145,12 +1144,12 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "Connect");
 #endif
 
     /* take care of possible race condition */
-    if (OpcUa_IsGood(uStatus))
+    if(OpcUa_IsGood(uStatus))
     {
         uStatus = pAsyncState->Status;
     }
 
-    if (OpcUa_IsGood(uStatus))
+    if(OpcUa_IsGood(uStatus))
     {
         pInternalChannel->pfCallback        = a_pfCallback;
         pInternalChannel->pvCallbackData    = a_pvCallbackData;
