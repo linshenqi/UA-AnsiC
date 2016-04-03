@@ -33,7 +33,7 @@
 
 OPCUA_BEGIN_EXTERN_C
 
-/** 
+/**
   @brief Manages the state of an asynchronous request.
 */
 struct _OpcUa_AsyncCallState
@@ -54,16 +54,16 @@ struct _OpcUa_AsyncCallState
 
     /*! @brief The response returned from the server. */
     OpcUa_Void* ResponseData;
-    
+
     /*! @brief The type of response returned from the server. */
     OpcUa_EncodeableType* ResponseType;
-    
+
     /*! @brief The status associated with the service call. */
     OpcUa_StatusCode Status;
 
     /*! @brief A mutex used to synchronous access to the call state. */
     OpcUa_Mutex WaitMutex;
-    
+
     /*! @brief A semaphore that is released when the call completes. */
     OpcUa_Semaphore WaitCondition;
 
@@ -76,7 +76,7 @@ struct _OpcUa_AsyncCallState
 
 typedef struct _OpcUa_AsyncCallState OpcUa_AsyncCallState;
 
-/** 
+/**
   @brief Creates a new asynchronous call state object.
 
   @param hChannel     [in]  Handle of the channel over which the request is sent.
@@ -90,17 +90,17 @@ OpcUa_StatusCode OpcUa_AsyncCallState_Create(
     OpcUa_EncodeableType*   pRequestType,
     OpcUa_AsyncCallState**  ppAsyncState);
 
-/** 
+/**
   @brief Deletes a asynchronous call state object.
 
   @param ppCallState [in/out] The  call state to delete.
 */
 OpcUa_Void OpcUa_AsyncCallState_Delete(OpcUa_AsyncCallState** ppCallState);
 
-/** 
+/**
   @brief Waits for an aynchronous call to complete.
 
-  If this call fails the caller must delete the async state object. 
+  If this call fails the caller must delete the async state object.
 
   @param pAsyncState [in] The asynchronous call to wait on.
   @param uTimeout    [in] The maximum wait time in milliseconds.
@@ -109,10 +109,10 @@ OpcUa_StatusCode OpcUa_AsyncCallState_WaitForCompletion(
     OpcUa_AsyncCallState* pAsyncState,
     OpcUa_UInt32          uTimeout);
 
-/** 
+/**
   @brief Signals that an asynchronous call is complete.
 
-  If this call fails the caller must delete the async state object. 
+  If this call fails the caller must delete the async state object.
 
   @param pAsyncState      [in] The asynchronous call to signal.
   @param uOperationStatus [in] The status of the operation.

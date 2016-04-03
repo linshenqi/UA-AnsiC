@@ -140,7 +140,7 @@ OpcUa_InitializeStatus(OpcUa_Module_AsyncCallState, "WaitForCompletion");
                 a_pAsyncState->Status = OpcUa_BadOperationAbandoned;
                 break;
             }
-                
+
             uActualTimeout = a_uTimeout - uElapsedTime;
         }
 
@@ -148,7 +148,7 @@ OpcUa_InitializeStatus(OpcUa_Module_AsyncCallState, "WaitForCompletion");
         if (uActualTimeout > 0 || (uActualTimeout == 0 && a_uTimeout == 0))
         {
             OPCUA_P_MUTEX_UNLOCK(a_pAsyncState->WaitMutex);
-            uStatus = OPCUA_P_SEMAPHORE_TIMEDWAIT(a_pAsyncState->WaitCondition, uActualTimeout); 
+            uStatus = OPCUA_P_SEMAPHORE_TIMEDWAIT(a_pAsyncState->WaitCondition, uActualTimeout);
             if(OpcUa_IsEqual(OpcUa_GoodNonCriticalTimeout))
             {
                 bTimeoutOccurred = OpcUa_True;
@@ -179,7 +179,7 @@ OpcUa_InitializeStatus(OpcUa_Module_AsyncCallState, "WaitForCompletion");
             uElapsedTime += (uEndCount - uStartCount);
         }
     }
-    
+
     if(OpcUa_IsBad(uStatus))
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_AsyncCallState_WaitForCompletion: OPCUA_P_SEMAPHORE_TIMEDWAIT returned error 0x%08X!\n", uStatus);
@@ -209,7 +209,7 @@ OpcUa_FinishErrorHandling;
 OpcUa_StatusCode OpcUa_AsyncCallState_SignalCompletion(
     OpcUa_AsyncCallState* a_pAsyncState,
     OpcUa_StatusCode      a_uOperationStatus)
-{   
+{
 OpcUa_InitializeStatus(OpcUa_Module_AsyncCallState, "SignalCompletion");
 
     OpcUa_ReturnErrorIfArgumentNull(a_pAsyncState);
@@ -223,7 +223,7 @@ OpcUa_InitializeStatus(OpcUa_Module_AsyncCallState, "SignalCompletion");
     /* signal that the request has completed */
     uStatus = OPCUA_P_SEMAPHORE_POST(a_pAsyncState->WaitCondition, 1);
     OpcUa_GotoErrorIfBad(uStatus);
-    
+
     /* release the wait mutex */
     OPCUA_P_MUTEX_UNLOCK(a_pAsyncState->WaitMutex);
 
