@@ -1754,16 +1754,26 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
             case OpcUa_SecureConnectionState_ReconnectingSecure:
             case OpcUa_SecureConnectionState_ConnectingSecure:
                 {
-                    /* inform the owner about the current status. */
-                    pSecureConnection->Callback(pSecureConnectionInterface,
-                                                pSecureConnection->CallbackData,
-                                                OpcUa_ConnectionEvent_UnexpectedError,
-                                                a_ppTransportInputStream,
-                                                a_uConnectionStatus);
+                    hTimerToDelete = pSecureConnection->hRenewTimer;
+                    pSecureConnection->hRenewTimer = OpcUa_Null;
+                    pSecureConnection->State = OpcUa_SecureConnectionState_Disconnected;
+
+                    OpcUa_SecureConnection_ProcessOpenSecureChannelResponse(    pSecureConnectionInterface,
+                                                                                OpcUa_Null,
+                                                                                a_uConnectionStatus,
+                                                                                OpcUa_True);
                     break;
                 }
             default:
                 {
+                    hTimerToDelete = pSecureConnection->hRenewTimer;
+                    pSecureConnection->hRenewTimer = OpcUa_Null;
+                    pSecureConnection->State = OpcUa_SecureConnectionState_Disconnected;
+
+                    /* cancel all open requests */
+                    OpcUa_SecureConnection_CancelOpenRequests(  pSecureConnectionInterface,
+                                                                a_uConnectionStatus);
+
                     if(pSecureConnection->Callback != OpcUa_Null)
                     {
                         /* notify upper layer about error condition */
