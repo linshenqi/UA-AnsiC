@@ -914,7 +914,7 @@ static OpcUa_StatusCode OpcUa_Channel_InternalConnectComplete(  OpcUa_Channel   
 
     OpcUa_ReferenceParameter(a_hChannel);
 
-    if(a_eEvent == eOpcUa_Channel_Event_Disconnected && OpcUa_IsGood(a_uStatus))
+    if(a_eEvent == eOpcUa_Channel_Event_Disconnected)
     {
         a_uStatus = OpcUa_BadDisconnect;
     }
