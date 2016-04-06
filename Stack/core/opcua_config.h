@@ -251,13 +251,11 @@
 #ifndef OPCUA_P_SOCKETMANAGER_NUMBEROFSOCKETS
 #define OPCUA_P_SOCKETMANAGER_NUMBEROFSOCKETS       110
 #endif
-/* test with 2000 connections #define OPCUA_P_SOCKETMANAGER_NUMBEROFSOCKETS       4010 */
 
 /** @brief The maximum number of socket managers in multithreading config, supported by the socket module. */
 #ifndef OPCUA_SOCKET_MAXMANAGERS
 #define OPCUA_SOCKET_MAXMANAGERS                    110
 #endif
-/* test with 2000 connections #define OPCUA_SOCKET_MAXMANAGERS                    4010 */
 
 /** @brief the time interval in msec at which the secureconnection checks for timeouts. */
 #define OPCUA_SECURECONNECTION_TIMEOUTINTERVAL      1000
@@ -269,75 +267,44 @@
  * HTTPS protocol
  *===========================================================================*/
 /** @brief Maximum number of receive buffers per message. */
-#ifndef OPCUA_HTTPS_MAX_RECV_BUFFER_COUNT
-# define OPCUA_HTTPS_MAX_RECV_BUFFER_COUNT          100
-#endif /* OPCUA_HTTPS_MAX_RECV_BUFFER_COUNT */
+#define OPCUA_HTTPS_MAX_RECV_BUFFER_COUNT           100
 
 /** @brief Maximum size of a receive buffer. */
-#ifndef OPCUA_HTTPS_MAX_RECV_BUFFER_LENGTH
-# define OPCUA_HTTPS_MAX_RECV_BUFFER_LENGTH         65536
-#endif /* OPCUA_HTTPS_MAX_RECV_BUFFER_LENGTH */
+#define OPCUA_HTTPS_MAX_RECV_BUFFER_LENGTH          65536
 
 /** @brief Calculated accepted (total) size limit of a received message. */
-#ifndef OPCUA_HTTPS_MAX_RECV_MESSAGE_LENGTH
-# define OPCUA_HTTPS_MAX_RECV_MESSAGE_LENGTH        (OPCUA_HTTPS_MAX_RECV_BUFFER_COUNT*OPCUA_HTTPS_MAX_RECV_BUFFER_LENGTH)
-#endif /* OPCUA_HTTPS_MAX_RECV_MESSAGE_LENGTH */
+#define OPCUA_HTTPS_MAX_RECV_MESSAGE_LENGTH         (OPCUA_HTTPS_MAX_RECV_BUFFER_COUNT*OPCUA_HTTPS_MAX_RECV_BUFFER_LENGTH)
 
 /** @brief Maximum length of a single HTTP header line. If a message exceeds this limit, 414 is returned. */
-#ifndef OPCUA_HTTPS_MAX_RECV_HEADER_LINE_LENGTH
-# define OPCUA_HTTPS_MAX_RECV_HEADER_LINE_LENGTH    1024
-#endif /* OPCUA_HTTPS_MAX_RECV_HEADER_LENGTH */
+#define OPCUA_HTTPS_MAX_RECV_HEADER_LINE_LENGTH     1024
 
 /** @brief Maximum accepted size of an HTTP header. If a message exceeds this limit, 414 is returned. */
-#ifndef OPCUA_HTTPS_MAX_RECV_HEADER_LENGTH
-# define OPCUA_HTTPS_MAX_RECV_HEADER_LENGTH         1024
-#endif /* OPCUA_HTTPS_MAX_RECV_HEADER_LENGTH */
-
-/** @brief Maximum accepted number of HTTP headers in a received message. If a message exceeds this limit, 414 is returned. */
-#ifndef OPCUA_HTTPS_MAX_RECV_HEADER_COUNT
-# define OPCUA_HTTPS_MAX_RECV_HEADER_COUNT          20
-#endif /* OPCUA_HTTPS_MAX_RECV_HEADER_COUNT */
+#define OPCUA_HTTPS_MAX_RECV_HEADER_LENGTH          1024
 
 
 /** @brief Maximum number of send buffers (result in HTTP chunks) per message. */
-#ifndef OPCUA_HTTPS_MAX_SEND_CHUNK_COUNT
-# define OPCUA_HTTPS_MAX_SEND_CHUNK_COUNT           50
-#endif /* OPCUA_HTTPS_MAX_SEND_CHUNK_COUNT */
+#define OPCUA_HTTPS_MAX_SEND_CHUNK_COUNT            50
 
 /** @brief Maximum size of a send chunk (equals HTTP chunk size). */
-#ifndef OPCUA_HTTPS_MAX_SEND_CHUNK_LENGTH
-# define OPCUA_HTTPS_MAX_SEND_CHUNK_LENGTH          262144
-#endif /* OPCUA_HTTPS_MAX_SEND_CHUNK_LENGTH */
+#define OPCUA_HTTPS_MAX_SEND_CHUNK_LENGTH           262144
 
 /** @brief Maximum size of outgoing HTTP header. (also includes chunk header) */
-#ifndef OPCUA_HTTPS_MAX_SEND_HEADER_LENGTH
-# define OPCUA_HTTPS_MAX_SEND_HEADER_LENGTH         350
-#endif /* OPCUA_HTTPS_MAX_SEND_HEADER_LENGTH */
+#define OPCUA_HTTPS_MAX_SEND_HEADER_LENGTH          350
 
 /** @brief Maximum size of outgoing HTTP footer. */
-#ifndef OPCUA_HTTPS_MAX_SEND_FOOTER_LENGTH
-# define OPCUA_HTTPS_MAX_SEND_FOOTER_LENGTH         3
-#endif /* OPCUA_HTTPS_MAX_SEND_FOOTER_LENGTH */
+#define OPCUA_HTTPS_MAX_SEND_FOOTER_LENGTH          3
 
 /** @brief Calculated size of a send buffer. */
-#ifndef OPCUA_HTTPS_MAX_SEND_BUFFER_LENGTH
-# define OPCUA_HTTPS_MAX_SEND_BUFFER_LENGTH         (OPCUA_HTTPS_MAX_SEND_HEADER_LENGTH + OPCUA_HTTPS_MAX_SEND_CHUNK_LENGTH + OPCUA_HTTPS_MAX_SEND_FOOTER_LENGTH)
-#endif /* OPCUA_HTTPS_MAX_SEND_BUFFER_LENGTH */
+#define OPCUA_HTTPS_MAX_SEND_BUFFER_LENGTH          (OPCUA_HTTPS_MAX_SEND_HEADER_LENGTH + OPCUA_HTTPS_MAX_SEND_CHUNK_LENGTH + OPCUA_HTTPS_MAX_SEND_FOOTER_LENGTH)
 
 /** @brief Calculated size of outgoing message. */
-#ifndef OPCUA_HTTPS_MAX_SEND_MESSAGE_LENGTH
-# define OPCUA_HTTPS_MAX_SEND_MESSAGE_LENGTH        (OPCUA_HTTPS_MAX_SEND_CHUNK_COUNT*OPCUA_HTTPS_MAX_SEND_BUFFER_LENGTH)
-#endif /* OPCUA_HTTPS_MAX_SEND_MESSAGE_LENGTH */
+#define OPCUA_HTTPS_MAX_SEND_MESSAGE_LENGTH         (OPCUA_HTTPS_MAX_SEND_CHUNK_COUNT*OPCUA_HTTPS_MAX_SEND_BUFFER_LENGTH)
 
 /** @brief the time interval in msec at which the https connection checks for timeouts. */
-#ifndef OPCUA_HTTPSCONNECTION_TIMEOUTINTERVAL
-# define OPCUA_HTTPSCONNECTION_TIMEOUTINTERVAL      1000
-#endif /* OPCUA_HTTPSCONNECTION_TIMEOUTINTERVAL */
+#define OPCUA_HTTPSCONNECTION_TIMEOUTINTERVAL       1000
 
 /** @brief the maximum idle time on a keep-alive https connection. */
-#ifndef OPCUA_HTTPSCONNECTION_KEEP_ALIVE_TIMEOUT
-# define OPCUA_HTTPSCONNECTION_KEEP_ALIVE_TIMEOUT   60000
-#endif /* OPCUA_HTTPSCONNECTION_KEEP_ALIVE_TIMEOUT */
+#define OPCUA_HTTPSCONNECTION_KEEP_ALIVE_TIMEOUT    60000
 
 /** @brief Defines the number of maximum pending requests/connection to a server. */
 #ifndef OPCUA_HTTPS_CONNECTION_MAXPENDINGREQUESTS
@@ -350,14 +317,10 @@
 #endif /* OPCUA_HTTPSLISTENER_MAXCONNECTIONS */
 
 /** @brief The standard port for the https protocol. */
-#ifndef OPCUA_HTTPS_DEFAULT_PORT
-# define OPCUA_HTTPS_DEFAULT_PORT                   443
-#endif /* OPCUA_HTTP_DEFAULT_PORT */
+#define OPCUA_HTTPS_DEFAULT_PORT                    443
 
 /** @brief if defined, the httpsstream expects the write call to block until all data is sent */
-#ifndef OPCUA_HTTPSSTREAM_BLOCKINGWRITE
-# define OPCUA_HTTPSSTREAM_BLOCKINGWRITE            OPCUA_CONFIG_NO
-#endif /* OPCUA_HTTPSSTREAM_BLOCKINGWRITE */
+#define OPCUA_HTTPSSTREAM_BLOCKINGWRITE             OPCUA_CONFIG_NO
 
 /*============================================================================
  * type support
