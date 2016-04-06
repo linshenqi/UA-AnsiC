@@ -39,14 +39,10 @@ OPCUA_BEGIN_EXTERN_C
 /*============================================================================
  * Defines
  *===========================================================================*/
-/** @brief The maximum time between processing timers. */
-#define OPCUA_P_TIMER_MAX_TIMER_WAIT 500
-
 /** @brief The number of timers available to the system. */
 #ifndef OPCUA_P_TIMER_NO_OF_TIMERS
 #define OPCUA_P_TIMER_NO_OF_TIMERS    200
 #endif
-/* test with 2000 connections #define OPCUA_P_TIMER_NO_OF_TIMERS 4000 */
 
 /*============================================================================
  * The Timer Type

@@ -16,18 +16,15 @@
 #ifndef _OpcUa_P_Timer_H_
 #define _OpcUa_P_Timer_H_ 1
 
-#include <sys/select.h>
-
 OPCUA_BEGIN_EXTERN_C
 
 /*============================================================================
  * Defines
  *===========================================================================*/
-/** @brief The maximum time between processing timers. */
-#define OPCUA_P_TIMER_MAX_TIMER_WAIT 500
-
 /** @brief The number of timers available to the system. */
+#ifndef OPCUA_P_TIMER_NO_OF_TIMERS
 #define OPCUA_P_TIMER_NO_OF_TIMERS   200
+#endif
 
 /*============================================================================
  * The Timer Type

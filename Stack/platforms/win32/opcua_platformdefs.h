@@ -51,9 +51,7 @@
 
 OPCUA_BEGIN_EXTERN_C
 
-#ifndef LITTLE_ENDIAN
 #define LITTLE_ENDIAN
-#endif
 
 /* marks functions that need to be exported via functiontable */
 #if defined(_UA_STACK_BUILD_DLL)

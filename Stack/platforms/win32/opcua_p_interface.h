@@ -79,8 +79,8 @@ typedef OpcUa_Void (OPCUA_DLLCALL *OpcUa_P_TraceHook)(OpcUa_CharA* sMessage);
 #define OPCUA_SOCKET_FREE_BUFFER_EVENT  0x0200 /* the socketmanager releases the temporary buffer */
 
 /** @brief Events which are set outside the event loop. (external events) */
-#define OPCUA_SOCKET_RENEWLOOP_EVENT 0x0300 /* restarts loop to reinterpret socket list */
-#define OPCUA_SOCKET_USER_EVENT      0x0400 /* user fired an event */
+#define OPCUA_SOCKET_RENEWLOOP_EVENT    0x0300 /* restarts loop to reinterpret socket list */
+#define OPCUA_SOCKET_USER_EVENT         0x0400 /* user fired an event */
 
 /** @brief SocketManager behaviour control. */
 #define OPCUA_SOCKET_NO_FLAG                    0   /* standard behaviour */
