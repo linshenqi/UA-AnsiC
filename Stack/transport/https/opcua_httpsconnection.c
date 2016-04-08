@@ -977,7 +977,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "GetUsedServerCertificate");
     pHttpsConnection = (OpcUa_HttpsConnection*)a_pConnection->Handle;
 
     OpcUa_ReturnErrorIfTrue(pHttpsConnection->bsUsedServerCertificate.Data == OpcUa_Null,
-                             OpcUa_BadInvalidState);
+                            OpcUa_BadInvalidState);
     *a_ppUsedServerCertificate = &pHttpsConnection->bsUsedServerCertificate;
     *a_pValidationResult       = pHttpsConnection->hValidationResult;
 
@@ -1010,6 +1010,13 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "SslEventHandler");
     pHttpsConnection   = (OpcUa_HttpsConnection*)pRequest->pConnection->Handle;
     pServerCertificate = pHttpsConnection->pServerCertificate;
 
+    if(a_uResult == OpcUa_BadNotSupported && pHttpsConnection->pPkiConfig != OpcUa_Null
+       && ((OpcUa_P_OpenSSL_CertificateStore_Config*)pHttpsConnection->pPkiConfig)->PkiType == OpcUa_NO_PKI)
+    {
+        /* ignore errors from PkiType OpcUa_NO_PKI */
+        uStatus = OpcUa_BadContinue;
+    }
+
     if(pServerCertificate != OpcUa_Null && pServerCertificate->Length > 0
        && pServerCertificate->Data != OpcUa_Null)
     {
@@ -1020,14 +1027,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "SslEventHandler");
             uStatus = OpcUa_BadCertificateInvalid;
         }
     }
-    else if(a_uResult == OpcUa_BadNotSupported && pHttpsConnection->pPkiConfig != OpcUa_Null
-           && ((OpcUa_P_OpenSSL_CertificateStore_Config*)pHttpsConnection->pPkiConfig)->PkiType == OpcUa_NO_PKI)
-    {
-        /* ignore errors from PkiType OpcUa_NO_PKI if no explicit server certificate is requested */
-        uStatus = OpcUa_BadContinue;
-    }
-
-    if(pHttpsConnection->bsUsedServerCertificate.Data != OpcUa_Null)
+    else if(pHttpsConnection->bsUsedServerCertificate.Data != OpcUa_Null)
     {
         if(a_pCertificate->Length != pHttpsConnection->bsUsedServerCertificate.Length
            || OpcUa_MemCmp(a_pCertificate->Data, pHttpsConnection->bsUsedServerCertificate.Data,
@@ -1039,14 +1039,12 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "SslEventHandler");
     else
     {
         pHttpsConnection->bsUsedServerCertificate.Data = OpcUa_Memory_Alloc(a_pCertificate->Length);
-        if(pHttpsConnection->bsUsedServerCertificate.Data != OpcUa_Null)
-        {
-            pHttpsConnection->bsUsedServerCertificate.Length = a_pCertificate->Length;
-            OpcUa_MemCpy(pHttpsConnection->bsUsedServerCertificate.Data,
-                         pHttpsConnection->bsUsedServerCertificate.Length,
-                         a_pCertificate->Data, a_pCertificate->Length);
-            pHttpsConnection->hValidationResult = a_uResult;
-        }
+        OpcUa_GotoErrorIfAllocFailed(pHttpsConnection->bsUsedServerCertificate.Data);
+        pHttpsConnection->bsUsedServerCertificate.Length = a_pCertificate->Length;
+        OpcUa_MemCpy(pHttpsConnection->bsUsedServerCertificate.Data,
+                     pHttpsConnection->bsUsedServerCertificate.Length,
+                     a_pCertificate->Data, a_pCertificate->Length);
+        pHttpsConnection->hValidationResult = a_uResult;
     }
 
 OpcUa_ReturnStatusCode;
