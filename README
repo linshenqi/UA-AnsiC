@@ -20,7 +20,7 @@ Build the source package:
 
 Windows: Open the Visual Studio Command Shell.
 Make sure that perl is in the path.  Any perl will do, even cygwin.
-Download and extract the latest openssl-1.0.1 source tar ball
+Download and extract the latest openssl-1.0.1/1.0.2 source tar ball
 to the root folder.
 Then cd to the root folder and execute build_win32.bat or
 build_win64.bat depending on your target architecture.
@@ -31,13 +31,12 @@ Dependencies are not supported, it will always be a full build.
 Linux: Open a terminal window.
 Make sure you have the libssl-dev package installed from your
 distribution.
-Then cd to the root folder and execute: make -f linux_gcc.mak
-This builds the BUILD_TARGET=release by default.
-You can add BUILD_TARGET=debug to build debug binaries.
+Then cd to the root folder and execute: ./build_linux.sh
+This builds both debug and release binaries.
 Dependencies and incremental builds are supported.
-To force a full build use: make -f linux_gcc.mak clean all
+To force a full build use: ./build_linux.sh clean all
 
-API changes from the 1.02.335 version:
+API changes from the 1.02.336 version:
 
 - OpcUa_ProxyStubConfiguration: The data type has been extended.
   bProxyStub_Trace_Enabled set to OpcUa_True to enable traces.
