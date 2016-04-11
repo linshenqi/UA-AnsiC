@@ -41,31 +41,41 @@ API changes from the 1.02.336 version:
 - OpcUa_ProxyStubConfiguration: The data type has been extended.
   bProxyStub_Trace_Enabled set to OpcUa_True to enable traces.
   iSerializer_MaxRecursionDepth if unsure, set to -1.
+  [Mantis#3393]
 - OpcUa_Xxx_CopyTo: This set of functions is not supported.
+  [Mantis#3394]
 - OpcUa_Guid_Copy: This function is deprecated now and should
   not be used any more, because the source and destination
   parameters were exchanged in the past, and thus it is not clear
   what this function can be expected to do.
+  [Mantis#3395]
 - OpcUa_EncodeabeTypeTable_AddTypes: The function signature has
   changed.
   noOfEncodeableType was removed.
   ppTypes is assumed to be null-terminated.
+  [Mantis#3396]
 - OpcUa_Endpoint_Open: The function signature has changed.
   sTransportProfileUri was removed because it is redundant.
   bListenOnAllInterfaces was added.  If unsure, use OpcUa_True.
   pPrivateKey->Key.Data must be non-zero, even if no security.
+  [Mantis#3397]
 - OpcUa_Endpoint_Callback: The function signature has changed.
   phRawRequestContext and uRequestedLifetime have been removed.
+  [Mantis#3398]
 - OpcUa_Endpoint_Event: Some enum values are not supported.
+  [Mantis#3399]
 - OpcUa_Channel_SecurityToken: This data type is not supported.
-  Use OpcUa_Channel_GetUsedServerCertificate instead.
+  [Mantis#3400]
 - OpcUa_Channel_Connect: The function signature has changed.
   sTransportProfileUri has been removed because it is redundant.
   ppSecurityToken is not supported and has been removed.
+  [Mantis#3401]
 - OpcUa_Channel_ConnetionStateChanged: The function singature
   has changed.
   pSecurityToken is not supported and has been removed.
+  [Mantis#3402]
 - OpcUa_Channel_Event: Some enum values are not supported.
+  [Mantis#3403]
 - OpcUa_CertificateStoreConfiguration: has to be replaced by
   OpcUa_P_OpenSSL_CertificateStore_Config.
   In the most simple configuation just set the following:
@@ -74,6 +84,7 @@ API changes from the 1.02.336 version:
     pki.Flags=0;
   Use OPCUA_P_PKI_OPENSSL_XXX flags for PKI type OpenSSL
   Use OPCUA_P_PKI_WIN32_XXX flags for PKI type Win32
+  [Mantis#3404]
 - OpcUa_Crypto_CreateCertificate: The function signature has
   changed.
   Instead of validFrom and validTo use validToInSec.
@@ -83,16 +94,23 @@ API changes from the 1.02.336 version:
   certificate are supported.
   pCertificate holds a OpcUa_ByteString with the generated
   certificate, instead of a raw X509 pointer.
+  [Mantis#3405]
 - OpcUa_Crypto_GenerateAsymmetricKeypair has been changed to
   allocate the memory for PublicKey and PrivateKey.
+  [Mantis#3406]
 - OpcUa_PKIProvider_SavePrivateKeyToFile is not supported.
+  [Mantis#3407]
 - OpcUa_P_OpenSSL_X509_SaveToFile was an internal function
   and has been removed.
+  [Mantis#3408]
 - OPCUA_USE_STATIC_PLATFORM_INTERFACE is not supported.
+  [Mantis#3409]
 - OPCUA_MULTITHREADED: CONFIG_NO is supported,
   but you must call OpcUa_SocketManager_Create(OpcUa_Null,0,0)
   before OpcUa_Endpoint_Open, and you must call
   OpcUa_SocketManager_Delete(OpcUa_Null) between
   OpcUa_Endpoint_Close and Opcua_Endpoint_Delete.
+  [Mantis#3410]
 - OpcUa_Endpoint_GetPeerInfoBySecureChannelId is not supported,
   use OpcUa_Endpoint_GetPeerInfo instead.
+  [Mantis#3411]
