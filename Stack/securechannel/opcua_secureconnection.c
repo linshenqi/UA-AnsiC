@@ -181,27 +181,19 @@
 typedef enum _OpcUa_SecureConnectionState
 {
     /** @brief Invalid state (never been set). */
-    OpcUa_SecureConnectionState_Invalid                 = 0,
+    OpcUa_SecureConnectionState_Invalid,
     /** @brief The secureconnection is currently for the transport connection to be established. */
-    OpcUa_SecureConnectionState_ConnectingTransport     = 1,
+    OpcUa_SecureConnectionState_ConnectingTransport,
     /** @brief The secureconnection is currently waiting for the secure conversation handshake to complete. */
-    OpcUa_SecureConnectionState_ConnectingSecure        = 2,
+    OpcUa_SecureConnectionState_ConnectingSecure,
     /** @brief The secureconnection is connected to a listener. */
-    OpcUa_SecureConnectionState_Connected               = 3,
-    /** @brief The secureconnection is currently waiting for the transport to be disconnected. */
-    OpcUa_SecureConnectionState_DisconnectingTransport  = 4,
+    OpcUa_SecureConnectionState_Connected,
     /** @brief The secureconnection is currently waiting for the secure channel to be closed. */
-    OpcUa_SecureConnectionState_DisconnectingSecure     = 5,
+    OpcUa_SecureConnectionState_DisconnectingSecure,
     /** @brief The secureconnection is currently not connected to a listener. */
-    OpcUa_SecureConnectionState_Disconnected            = 6,
-    /** @brief The secureconnection is currently waiting for the transport connection to be reestablished. */
-    OpcUa_SecureConnectionState_ReconnectingTransport   = 7,
-    /** @brief The secureconnection is currently waiting for the secure channel to be reestablished. */
-    OpcUa_SecureConnectionState_ReconnectingSecure      = 8,
-    /** @brief The secureconnection lost and could not reestablish the connection to a listener. */
-    OpcUa_SecureConnectionState_Abandoned               = 9,
+    OpcUa_SecureConnectionState_Disconnected,
     /** @brief The secureconnection has been newly created or an error occured and the current state is uncertain. */
-    OpcUa_SecureConnectionState_Unknown                 = 10
+    OpcUa_SecureConnectionState_Unknown
 }
 OpcUa_SecureConnectionState;
 
@@ -916,8 +908,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "BeginOpenSecureChannel");
         }
         case OpcUa_SecurityTokenRequestType_Renew:
         {
-            if(pSecureConnection->State != OpcUa_SecureConnectionState_Connected &&
-               pSecureConnection->State != OpcUa_SecureConnectionState_ReconnectingTransport)
+            if(pSecureConnection->State != OpcUa_SecureConnectionState_Connected)
             {
                 OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "BeginOpenSecureChannel: Invalid State!\n");
                 OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
@@ -1563,33 +1554,17 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
                 pSecureConnection->nMaxBuffersPerMessage = OpcUa_ProxyStub_g_Configuration.iSerializer_MaxMessageSize/uReceiveBufferSize + 1;
 
                 /* set state to connected if connected successfully. */
-                if(a_eEvent == OpcUa_ConnectionEvent_Connect)
+                if(pSecureConnection->State == OpcUa_SecureConnectionState_ConnectingTransport)
                 {
-                    if(pSecureConnection->State == OpcUa_SecureConnectionState_ConnectingTransport)
+                    /* we are connecting and have to issue an opensecurechannel request */
+                    OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_SecureConnection_OnNotify: Connect event: Trying to open secure channel.\n");
+                    OPCUA_SECURECONNECTION_UNLOCK_RESPONSE(pSecureConnection);
+                    uStatus = OpcUa_SecureConnection_BeginOpenSecureChannel(pSecureConnectionInterface,
+                                                                            OpcUa_SecurityTokenRequestType_Issue);
+                    OPCUA_SECURECONNECTION_LOCK_RESPONSE(pSecureConnection);
+                    if(OpcUa_IsBad(uStatus))
                     {
-                        /* we are connecting and have to issue an opensecurechannel request */
-                        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_SecureConnection_OnNotify: Connect event: Trying to open secure channel.\n");
-                        OPCUA_SECURECONNECTION_UNLOCK_RESPONSE(pSecureConnection);
-                        uStatus = OpcUa_SecureConnection_BeginOpenSecureChannel(pSecureConnectionInterface,
-                                                                                OpcUa_SecurityTokenRequestType_Issue);
-                        OPCUA_SECURECONNECTION_LOCK_RESPONSE(pSecureConnection);
-                        if(OpcUa_IsBad(uStatus))
-                        {
-                            OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SecureConnection_OnNotify: Could not send Open Secure Channel Request! 0x%08X\n", uStatus);
-                        }
-                    }
-                    else if(pSecureConnection->State == OpcUa_SecureConnectionState_ReconnectingTransport)
-                    {
-                        /* we are connecting and have to issue an opensecurechannel request */
-                        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_SecureConnection_OnNotify: Connect event: Trying to reopen secure channel.\n");
-                        OPCUA_SECURECONNECTION_UNLOCK_RESPONSE(pSecureConnection);
-                        uStatus = OpcUa_SecureConnection_BeginOpenSecureChannel(pSecureConnectionInterface,
-                                                                                OpcUa_SecurityTokenRequestType_Renew);
-                        OPCUA_SECURECONNECTION_LOCK_RESPONSE(pSecureConnection);
-                        if(OpcUa_IsBad(uStatus))
-                        {
-                            OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SecureConnection_OnNotify: Could not send Open Secure Channel Request (renew)! 0x%08X\n", uStatus);
-                        }
+                        OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SecureConnection_OnNotify: Could not send Open Secure Channel Request! 0x%08X\n", uStatus);
                     }
                 }
             }
@@ -1637,7 +1612,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
                     break;
                 }
             case OpcUa_SecureConnectionState_ConnectingSecure:
-            case OpcUa_SecureConnectionState_ReconnectingSecure:
                 {
                     pSecureConnection->State = OpcUa_SecureConnectionState_Disconnected;
                     hTimerToDelete = pSecureConnection->hRenewTimer;
@@ -1751,7 +1725,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "OnNotify");
         {
             switch(pSecureConnection->State)
             {
-            case OpcUa_SecureConnectionState_ReconnectingSecure:
             case OpcUa_SecureConnectionState_ConnectingSecure:
                 {
                     hTimerToDelete = pSecureConnection->hRenewTimer;
@@ -2149,8 +2122,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Disconnect");
         }
     case OpcUa_SecureConnectionState_ConnectingTransport:
     case OpcUa_SecureConnectionState_ConnectingSecure:
-    case OpcUa_SecureConnectionState_ReconnectingTransport:
-    case OpcUa_SecureConnectionState_ReconnectingSecure:
         /* just close transport */
         {
             pSecureConnection->State = OpcUa_SecureConnectionState_Disconnected;
