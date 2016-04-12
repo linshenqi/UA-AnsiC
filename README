@@ -36,6 +36,25 @@ This builds both debug and release binaries.
 Dependencies and incremental builds are supported.
 To force a full build use: ./build_linux.sh clean all
 
+Fixed Mantis issues with this version:
+
+- [Mantis#2459]  Windows Store Intergration
+- [Mantis#3036]  Deadlock in OpcUa_SecureListener
+- [Mantis#3047]  Protocol comparison should be case insensitive
+- [Mantis#3130]  Faked certificate chain
+- [Mantis#3256]  SequenceNumbers not checked
+- [Mantis#3268]  SHA1 used for explicit trust check
+- [Mantis#3305]  possible bug within OpcUa_Socket_HandleAcceptEvent
+- [Mantis#3355]  BSI: Server does not check Receive/SendBufferSize correctly
+- [Mantis#3356]  BSI: For securityMode None the nonce should be NULL
+- [Mantis#3357]  BSI: OpenSecureChannel protocol version not checked
+- [Mantis#3361]  BSI: Possible memory leak with serialized NodeIDs
+- [Mantis#3362]  BSI: Possible memory fault with invalid certificate chain
+- [Mantis#3363]  BSI: Possible memory fault with ExtensionObject
+- [Mantis#3364]  BSI: OpcUa_String_Clear called with uninitialized value
+- [Mantis#3385]  Bleichenbacher's attack vulnerability
+- [Mantis#3412]  OpenSecureChannel Renew Response with wrong Secure ChannelID
+
 API changes from the 1.02.336 version:
 
 - OpcUa_ProxyStubConfiguration: The data type has been extended.
