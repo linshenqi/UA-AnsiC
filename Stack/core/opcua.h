@@ -71,7 +71,7 @@ do { \
     \
     for (ii = 0; ii < xLength; ii++) \
     { \
-        Initialize_##xType(&((xArray)[ii])); \
+        OpcUa_##xType##_Initialize(&((xArray)[ii])); \
     } \
 } while(0)
 
@@ -84,7 +84,7 @@ do { \
     \
     for (ii = 0; ii < xLength; ii++) \
     { \
-        Clear_##xType(&((xArray)[ii])); \
+        OpcUa_##xType##_Clear(&((xArray)[ii])); \
     } \
 } while(0)
 

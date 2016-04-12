@@ -485,9 +485,9 @@ OPCUA_EXPORT OpcUa_Void OpcUa_Variant_Initialize(OpcUa_Variant* value);
 
 OPCUA_EXPORT OpcUa_Void OpcUa_Variant_Clear(OpcUa_Variant* value);
 
-#define OpcUa_Variant_InitializeArray(xValue, xLength) OpcUa_MemSet(xValue, 0, (xLength)*sizeof(OpcUa_Variant))
+#define OpcUa_Variant_InitializeArray(xValue, xLength) OpcUa_InitializeArray(xValue, xLength, Variant)
 
-#define OpcUa_Variant_ClearArray(xValue, xLength) OpcUa_ClearArray(xValue, xLength, OpcUa_Variant)
+#define OpcUa_Variant_ClearArray(xValue, xLength) OpcUa_ClearArray(xValue, xLength, Variant)
 
 /*============================================================================
  * The DataValue type
@@ -507,9 +507,9 @@ OPCUA_EXPORT OpcUa_Void OpcUa_DataValue_Initialize(OpcUa_DataValue* value);
 
 OPCUA_EXPORT OpcUa_Void OpcUa_DataValue_Clear(OpcUa_DataValue* value);
 
-#define OpcUa_DataValue_InitializeArray(xValue, xLength) OpcUa_MemSet(xValue, 0, (xLength)*sizeof(OpcUa_DataValue))
+#define OpcUa_DataValue_InitializeArray(xValue, xLength) OpcUa_InitializeArray(xValue, xLength, DataValue)
 
-#define OpcUa_DataValue_ClearArray(xValue, xLength) OpcUa_ClearArray(xValue, xLength, OpcUa_DataValue)
+#define OpcUa_DataValue_ClearArray(xValue, xLength) OpcUa_ClearArray(xValue, xLength, DataValue)
 
 /*============================================================================
  * OpcUa_Field_Initialize
