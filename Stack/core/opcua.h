@@ -63,32 +63,6 @@ extern OpcUa_Port_CallTable*            OpcUa_ProxyStub_g_PlatformLayerCalltable
 extern OpcUa_ProxyStubConfiguration     OpcUa_ProxyStub_g_Configuration;
 
 /*============================================================================
- * OpcUa_InitializeArray
- *===========================================================================*/
-#define OpcUa_InitializeArray(xArray, xLength, xType) \
-do { \
-    int ii; \
-    \
-    for (ii = 0; ii < xLength; ii++) \
-    { \
-        OpcUa_##xType##_Initialize(&((xArray)[ii])); \
-    } \
-} while(0)
-
-/*============================================================================
- * OpcUa_ClearArray
- *===========================================================================*/
-#define OpcUa_ClearArray(xArray, xLength, xType) \
-do { \
-    int ii; \
-    \
-    for (ii = 0; ii < xLength; ii++) \
-    { \
-        OpcUa_##xType##_Clear(&((xArray)[ii])); \
-    } \
-} while(0)
-
-/*============================================================================
  * OpcUa_ProxyStub_RegisterChannel
  *===========================================================================*/
 OpcUa_Void OpcUa_ProxyStub_RegisterChannel();

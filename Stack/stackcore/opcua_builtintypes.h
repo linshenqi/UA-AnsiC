@@ -33,6 +33,32 @@
 OPCUA_BEGIN_EXTERN_C
 
 /*============================================================================
+ * OpcUa_InitializeArray
+ *===========================================================================*/
+#define OpcUa_InitializeArray(xArray, xLength, xType) \
+do { \
+    int ii; \
+    \
+    for (ii = 0; ii < xLength; ii++) \
+    { \
+        OpcUa_##xType##_Initialize(&((xArray)[ii])); \
+    } \
+} while(0)
+
+/*============================================================================
+ * OpcUa_ClearArray
+ *===========================================================================*/
+#define OpcUa_ClearArray(xArray, xLength, xType) \
+do { \
+    int ii; \
+    \
+    for (ii = 0; ii < xLength; ii++) \
+    { \
+        OpcUa_##xType##_Clear(&((xArray)[ii])); \
+    } \
+} while(0)
+
+/*============================================================================
  * The OpcUa_BuiltInType enumeration
  *===========================================================================*/
 typedef enum _OpcUa_BuiltInType
