@@ -134,7 +134,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "RSA_LoadPrivateKeyFromFile");
     OpcUa_ReferenceParameter(a_password);
 
     /* open file */
-    pPrivateKeyFile = BIO_new_file((const char*)a_privateKeyFile, "rb");
+    pPrivateKeyFile = BIO_new_file((const char*)a_privateKeyFile, "r");
     OpcUa_ReturnErrorIfArgumentNull(pPrivateKeyFile);
 
     /* read and convert file */

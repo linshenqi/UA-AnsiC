@@ -472,7 +472,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_LoadFromFile");
     }
 
     /* import certificate from file by the given encoding type */
-    pCertFile = BIO_new_file((const char*)a_fileName, "r");
+    pCertFile = BIO_new_file((const char*)a_fileName, "rb");
     OpcUa_ReturnErrorIfArgumentNull(pCertFile);
 
     switch(a_fileFormat)
@@ -717,7 +717,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_GetPrivateKey");
     OpcUa_ReturnErrorIfArgumentNull(a_pPrivateKey);
 
     /* import certificate from file by the given encoding type */
-    pCertFile = BIO_new_file((const char*)a_certificateFileName, "r");
+    pCertFile = BIO_new_file((const char*)a_certificateFileName, "rb");
     OpcUa_ReturnErrorIfArgumentNull(pCertFile);
 
     /* convert certificate file handle to PKCS12 structure */

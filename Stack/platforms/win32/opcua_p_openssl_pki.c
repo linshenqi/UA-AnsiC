@@ -649,7 +649,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "PKI_ValidateCertificate");
                 OpcUa_GotoErrorIfBad(uStatus);
 
                 /* read DER certificates */
-                pCertificateFile = BIO_new_file(CertFile, "r");
+                pCertificateFile = BIO_new_file(CertFile, "rb");
                 if(pCertificateFile == OpcUa_Null)
                 {
                     continue; /* ignore access errors */
@@ -751,7 +751,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_SaveCertificate(
     OpcUa_ReturnErrorIfArgumentNull(a_pSaveHandle);
 
     /* save DER certificate */
-    pCertificateFile = BIO_new_file((const char*)a_pSaveHandle, "w");
+    pCertificateFile = BIO_new_file((const char*)a_pSaveHandle, "wb");
     OpcUa_GotoErrorIfArgumentNull(pCertificateFile);
 
     /* convert openssl X509 certificate to DER encoded bytestring certificate */
@@ -823,7 +823,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_LoadCertificate(
     OpcUa_ReturnErrorIfArgumentNull(a_pCertificate);
 
     /* read DER certificates */
-    pCertificateFile = BIO_new_file((const char*)a_pLoadHandle, "r");
+    pCertificateFile = BIO_new_file((const char*)a_pLoadHandle, "rb");
     OpcUa_GotoErrorIfArgumentNull(pCertificateFile);
 
     if(!(pTmpCert = d2i_X509_bio(pCertificateFile, (X509**)OpcUa_Null)))
