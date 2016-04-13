@@ -1117,9 +1117,10 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "ProcessHelloMessage");
 
     if(uConnections >= OPCUA_TCPLISTENER_MAXCONNECTIONS)
     {
-        uStatus = OpcUa_TcpListener_CloseConnection(pTcpListener->ConnectionManager,
+        uStatus = OpcUa_TcpListener_CloseConnection(a_pListener,
                                                     pConnection,
                                                     OpcUa_BadMaxConnectionsReached);
+        OpcUa_ReturnStatusCode;
     }
 #endif /* OPCUA_TCPLISTENER_USEEXTRAMAXCONNSOCKET */
 
