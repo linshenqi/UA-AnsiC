@@ -39,6 +39,7 @@ To force a full build use: ./build_linux.sh clean all
 Fixed Mantis issues with this version:
 
 - [Mantis#2459]  Windows Store Intergration
+- [Mantis#2548]  Send ERRF if all available connections are used up
 - [Mantis#3036]  Deadlock in OpcUa_SecureListener
 - [Mantis#3047]  Protocol comparison should be case insensitive
 - [Mantis#3130]  Faked certificate chain
