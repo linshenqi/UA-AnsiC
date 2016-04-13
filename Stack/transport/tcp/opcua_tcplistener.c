@@ -973,6 +973,9 @@ OpcUa_StatusCode OpcUa_TcpListener_ProcessHelloMessage(
     OpcUa_TcpListener*              pTcpListener    = OpcUa_Null;
     OpcUa_TcpInputStream*           pTcpInputStream = OpcUa_Null;
     OpcUa_TcpListener_Connection*   pConnection     = OpcUa_Null;
+#if OPCUA_TCPLISTENER_USEEXTRAMAXCONNSOCKET
+    OpcUa_UInt32                    uConnections    = 0;
+#endif
 
 OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "ProcessHelloMessage");
 
@@ -982,17 +985,6 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "ProcessHelloMessage");
     OpcUa_ReturnErrorIfArgumentNull(a_istrm);
     pTcpInputStream = (OpcUa_TcpInputStream*)a_istrm->Handle;
     OpcUa_ReturnErrorIfArgumentNull(pTcpInputStream);
-
-#if OPCUA_TCPLISTENER_USEEXTRAMAXCONNSOCKET
-    {
-        OpcUa_UInt32 uConnections = 0;
-
-        uStatus = OpcUa_TcpListener_ConnectionManager_GetConnectionCount(pTcpListener->ConnectionManager,
-                                                                         &uConnections);
-
-        OpcUa_GotoErrorIfTrue(uConnections >= OPCUA_TCPLISTENER_MAXCONNECTIONS, OpcUa_BadMaxConnectionsReached);
-    }
-#endif /* OPCUA_TCPLISTENER_USEEXTRAMAXCONNSOCKET */
 
     /* check, if there is already a connection with this object */
     OpcUa_TcpListener_ConnectionManager_GetConnectionBySocket(  pTcpListener->ConnectionManager,
@@ -1118,6 +1110,18 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "ProcessHelloMessage");
         pConnection->MaxChunkCount);
 
     pConnection->bConnected = OpcUa_True;
+
+#if OPCUA_TCPLISTENER_USEEXTRAMAXCONNSOCKET
+    OpcUa_TcpListener_ConnectionManager_GetConnectionCount(pTcpListener->ConnectionManager,
+                                                           &uConnections);
+
+    if(uConnections >= OPCUA_TCPLISTENER_MAXCONNECTIONS)
+    {
+        uStatus = OpcUa_TcpListener_CloseConnection(pTcpListener->ConnectionManager,
+                                                    pConnection,
+                                                    OpcUa_BadMaxConnectionsReached);
+    }
+#endif /* OPCUA_TCPLISTENER_USEEXTRAMAXCONNSOCKET */
 
     /* the request is verified and an acknowledge can be sent to the new client */
     OpcUa_TcpListener_SendAcknowledgeMessage(a_pListener, pConnection);
