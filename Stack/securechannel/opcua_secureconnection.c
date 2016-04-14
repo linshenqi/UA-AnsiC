@@ -55,8 +55,6 @@
 /* header */
 #include <opcua_secureconnection.h>
 
-#define ACTIVATE_RECONNECT OPCUA_CONFIG_NO /* not allowed yet */
-
 /*============================================================================
  * GLOBALS
  *===========================================================================*/
@@ -2615,14 +2613,6 @@ OpcUa_Void OpcUa_SecureConnection_Delete(OpcUa_Connection** a_ppConnection)
             OpcUa_Timer_Delete(&(pSecureConnection->hWatchdogTimer));
         }
 
-#if ACTIVATE_RECONNECT
-        /* delete the reconnect timer if required */
-        if(pSecureConnection->hReconnectTimer != OpcUa_Null)
-        {
-            OpcUa_Timer_Delete(&(pSecureConnection->hReconnectTimer));
-        }
-#endif
-
         /* delete the reconnect timer if required */
         if(pSecureConnection->hRenewTimer != OpcUa_Null)
         {
@@ -2693,9 +2683,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Create");
     pSecureConnection->NamespaceUris        = a_pNamespaceUris;
     pSecureConnection->KnownTypes           = a_pKnownTypes;
     pSecureConnection->uRequestId           = 1; /* we start with 1 since zero is error prone */
-#if ACTIVATE_RECONNECT
-    pSecureConnection->uReconnectInterval   = 0;
-#endif
 
     /* initialize connection object */
     pConnection->Handle           = pSecureConnection;
