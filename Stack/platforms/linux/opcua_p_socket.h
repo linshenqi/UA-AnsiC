@@ -1,25 +1,18 @@
-/** 
- * @file opcua_p_socket.h
- * @brief Mapping between platform and low level api for network/socket related functionality.
- *
- * This file houses the platform layer implementation of the socket/network interface.
- * Low level functions working with the system socket, as well as utility functions related
- * to network are defined here.
- * The higher level functions for the select driven socket and event system are also
- * defined and described in this header file.
- * Some of the functions defined here interact with the timer module.
- *  
- * (c) Copyright 2005-2008 The OPC Foundation
- * ALL RIGHTS RESERVED.
- * 
- * DISCLAIMER:
- * This code is provided by the OPC Foundation solely to assist in 
- * understanding and use of the appropriate OPC Specification(s) and may be 
- * used as set forth in the License Grant section of the OPC Specification.
- * This code is provided as-is and without warranty or support of any sort
- * and is subject to the Warranty and Liability Disclaimers which appear
- * in the printed OPC Specification.
- */
+/* Copyright (c) 1996-2016, OPC Foundation. All rights reserved.
+
+   The source code in this file is covered under a dual-license scenario:
+     - RCL: for OPC Foundation members in good-standing
+     - GPL V2: everybody else
+
+   RCL license terms accompanied with this source code. See http://opcfoundation.org/License/RCL/1.00/
+
+   GNU General Public License as published by the Free Software Foundation;
+   version 2 of the License are accompanied with this source code. See http://opcfoundation.org/License/GPLv2
+
+   This source code is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
 
 #ifndef _OpcUa_P_Socket_H_
 #define _OpcUa_P_Socket_H_
