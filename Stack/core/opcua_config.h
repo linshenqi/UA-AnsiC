@@ -21,7 +21,7 @@
  * build information
  *===========================================================================*/
 /** @brief The version number of the official OPC Foundation SDK this build is based on. */
-#define OPCUA_BUILDINFO_VERSION                    "1.02.337.0"
+#define OPCUA_BUILDINFO_VERSION                    "1.03.340.0"
 
 /*============================================================================
  * source configuration switches
