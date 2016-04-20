@@ -36,7 +36,7 @@
 #include <opcua_memory.h>
 #include <opcua_core.h>
 
-#include "adressraum.h"
+#include "addressspace.h"
 #include "general_header.h"
 
 OpcUa_StatusCode initialize_value_attribute_of_variablenodes_variabletypenodes(OpcUa_Void)

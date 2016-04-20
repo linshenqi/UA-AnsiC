@@ -66,7 +66,7 @@
 
 
     /* my headers*/
-#include "adressraum.h"
+#include "addressspace.h"
 #include "browseservice.h"
 #include "mytrace.h"
 #include "readservice.h"

@@ -30,7 +30,7 @@
 #ifndef addressspace_init_
 #define addressspace_init_
 
-#include "adressraum.h"
+#include "addressspace.h"
 
 #define ARRAY_SIZE_ArrayAdresse(x)					sizeof(x)/sizeof(x[0]),x
 

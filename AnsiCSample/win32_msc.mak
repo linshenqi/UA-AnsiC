@@ -45,8 +45,8 @@ LIBS = $(ROOT)\lib\$(ODIR)\uastack.lib $(OPENSSLDIR)\lib\ssleay32.lib $(OPENSSLD
 OBJECTS = \
 	$(ODIR)\ansicservermain.obj \
 	$(ODIR)\browsenext.obj \
-	$(ODIR)\browseservice_.obj \
-	$(ODIR)\init_valriables_of_addressspace.obj \
+	$(ODIR)\browseservice.obj \
+	$(ODIR)\init_variables_of_addressspace.obj \
 	$(ODIR)\readservice.obj \
 
 all: $(TARGET)
