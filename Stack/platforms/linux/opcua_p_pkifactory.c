@@ -127,6 +127,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_PKIFactory_CreatePKIProvider(OpcUa_Void* 
             {
                 a_pPkiProvider->ExtractCertificateData = pOverride->ExtractCertificateData;
             }
+            break;
         }
 #endif /* OPCUA_SUPPORT_PKI_OVERRIDE */
 #if OPCUA_SUPPORT_PKI_OPENSSL

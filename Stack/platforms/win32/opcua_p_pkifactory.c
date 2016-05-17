@@ -127,6 +127,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_PKIFactory, "CreatePKIProvider");
             {
                 a_pPkiProvider->ExtractCertificateData = pOverride->ExtractCertificateData;
             }
+            break;
         }
 #endif /* OPCUA_SUPPORT_PKI_OVERRIDE */
 #if OPCUA_SUPPORT_PKI_OPENSSL
