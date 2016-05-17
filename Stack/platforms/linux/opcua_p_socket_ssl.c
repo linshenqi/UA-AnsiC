@@ -899,7 +899,6 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketManager_CreateSslServer(  OpcUa_Soc
 
 OpcUa_InitializeStatus(OpcUa_Module_Socket, "CreateSslServer");
 
-    OpcUa_GotoErrorIfArgumentNull(a_pSocketManager);
     OpcUa_GotoErrorIfArgumentNull(a_pServerCertificate);
     OpcUa_GotoErrorIfArgumentNull(a_pServerPrivateKey);
     OpcUa_GotoErrorIfArgumentNull(a_pfnSocketCallBack);
@@ -1006,7 +1005,6 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketManager_CreateSslClient(  OpcUa_Soc
 
 OpcUa_InitializeStatus(OpcUa_Module_Socket, "CreateSslClient");
 
-    OpcUa_GotoErrorIfArgumentNull(a_pSocketManager);
     OpcUa_GotoErrorIfArgumentNull(a_pClientCertificate);
     OpcUa_GotoErrorIfArgumentNull(a_pClientPrivateKey);
     OpcUa_GotoErrorIfArgumentNull(a_pfnSocketCallBack);
