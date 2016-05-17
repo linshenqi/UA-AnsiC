@@ -141,8 +141,6 @@ struct _OpcUa_TcpListener
     OpcUa_Void*                 CallbackData;
     /** @brief The default message chunk size for communicating with this listener. */
     OpcUa_UInt32                DefaultChunkSize;
-    /** @brief This Listener should shut down. */
-    OpcUa_Boolean               bShutdown;
     /** @brief This list contains all pending requests, which are not fully received
      *  yet. Once a request is completely received, it gets dispatched to the
      *  upper layer. */
@@ -1837,9 +1835,6 @@ OpcUa_StatusCode OpcUa_TcpListener_Close(OpcUa_Listener* a_pListener)
     /* lock connection and close the socket. */
     OPCUA_P_MUTEX_LOCK(pTcpListener->Mutex);
 
-    /* mark listener as being in shutdown mode; certain calls are no longer accepted. */
-    pTcpListener->bShutdown = OpcUa_True;
-
     /* check if already stopped */
     if(pTcpListener->Socket != OpcUa_Null)
     {
@@ -1922,8 +1917,6 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpListener, "Open");
     {
         uSocketManagerFlags |= OPCUA_SOCKET_SPAWN_THREAD_ON_ACCEPT | OPCUA_SOCKET_REJECT_ON_NO_THREAD;
     }
-
-    pTcpListener->bShutdown = OpcUa_False;
 
     /********************************************************************/
 
