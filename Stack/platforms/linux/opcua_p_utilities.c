@@ -238,6 +238,3 @@ OpcUa_BeginErrorHandling;
 
 OpcUa_FinishErrorHandling;
 }
-
-
-
