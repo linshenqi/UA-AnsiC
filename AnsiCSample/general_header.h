@@ -51,7 +51,7 @@ OpcUa_Void				username_free													(OpcUa_Void);
 OpcUa_StatusCode		vergleiche_username												(const OpcUa_ExtensionObject*);
 OpcUa_StatusCode		check_password													(const OpcUa_ExtensionObject* );
 OpcUa_StatusCode		response_header_ausfuellen										(OpcUa_ResponseHeader*  ,const OpcUa_RequestHeader*, OpcUa_StatusCode);
-OpcUa_StatusCode		OpcUa_P_GetDateTimeDiffInSeconds32								( OpcUa_DateTime  ,OpcUa_DateTime  , OpcUa_UInt32*  );
+OpcUa_StatusCode		my_GetDateTimeDiffInSeconds32								( OpcUa_DateTime  ,OpcUa_DateTime  , OpcUa_UInt32*  );
 OpcUa_StatusCode		getEndpoints													(OpcUa_Int32*  ,OpcUa_EndpointDescription** );
 OpcUa_StatusCode		initialize_value_attribute_of_variablenodes_variabletypenodes	(OpcUa_Void);
 OpcUa_StatusCode		fill_server_variable											(OpcUa_ApplicationDescription* );

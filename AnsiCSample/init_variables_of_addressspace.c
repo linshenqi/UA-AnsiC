@@ -159,7 +159,6 @@ OpcUa_StatusCode initialize_value_attribute_of_variablenodes_variabletypenodes(O
 //-------------------------
 	
 	OpcUa_ReturnStatusCode;
-    OpcUa_BeginErrorHandling;
 
 	OpcUa_FinishErrorHandling;
 }

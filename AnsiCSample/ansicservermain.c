@@ -1259,7 +1259,6 @@ OpcUa_StatusCode check_useridentitytoken(const OpcUa_ExtensionObject* p_UserIden
 
 	
 	return uStatus;
-	OpcUa_BeginErrorHandling;
     
     
 	OpcUa_FinishErrorHandling;
@@ -1359,7 +1358,7 @@ OpcUa_StatusCode response_header_ausfuellen(OpcUa_ResponseHeader*  a_pResponseHe
 	OpcUa_ResponseHeader_Initialize(a_pResponseHeader);
 	a_pResponseHeader->RequestHandle=a_pRequestHeader->RequestHandle;
 
-	uStatus=OpcUa_P_GetDateTimeDiffInSeconds32( (a_pRequestHeader->Timestamp),(OpcUa_DateTime_UtcNow()), &diff);
+	uStatus=my_GetDateTimeDiffInSeconds32( (a_pRequestHeader->Timestamp),(OpcUa_DateTime_UtcNow()), &diff);
 	if(OpcUa_IsGood(uStatus))
 	{
 		
@@ -1401,7 +1400,7 @@ OpcUa_StatusCode response_header_ausfuellen(OpcUa_ResponseHeader*  a_pResponseHe
 /*============================================================================
  * Calculate DateTime Difference In Seconds (Rounded)
  *===========================================================================*/
-OpcUa_StatusCode  OpcUa_P_GetDateTimeDiffInSeconds32(	OpcUa_DateTime  a_Value1,
+OpcUa_StatusCode  my_GetDateTimeDiffInSeconds32(	OpcUa_DateTime  a_Value1,
 														OpcUa_DateTime  a_Value2,
 														OpcUa_UInt32*   a_puResult)
 {
