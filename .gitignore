@@ -17,6 +17,9 @@
 
 */linux/*
 */win32/*
+*/VS2013/*
+*/Debug/*
+*/Release/*
 openssl*/*
 *.o
 *.a
