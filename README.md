@@ -35,7 +35,7 @@ This will automatically build openssl, the OPC UA Stack and the sample server.
 Dependencies are not supported, it will always be a full build.
 
 Visual studio 2013 projects for the stack and example server are available as well. 
-Note: the OpenSSL libraries must be compuled using the above mentioned steps before building the project using visual studio.
+Note: the OpenSSL libraries must be compiled using the above mentioned steps before building the project using Visual Studio.
 
 ### Linux
 
@@ -49,8 +49,8 @@ To force a full build use: ./build_linux.sh clean all
 
 ## Examples
 
-The stck is accompanied by an OPC UA nano embedded server example implementation.
-Note: there is a sample AnsiCServer but it is included as-is and not fully supported.
+An OPC UA Nano Embedded server example implementation is provided by the stack.
+Note: there is a sample AnsiCServer but it is included as-is and not fully supported, the community is welcome to extend this example application.
 
 ## Notes for developers
 
@@ -77,24 +77,24 @@ All settings are described within the source code.
 
 The following tree shows the directory layout as required by the included project:
 
-/-- UA-AnsiC
- |  |- Stack                   
- |     |- core                      Configuration and utilities
- |     |- platforms
- |        |- linux                  Platform adaption to OpenSSL and linux API
- |        |- win32                  Platform adaption to OpenSSL and Win32 API
- |     |- proxystub
- |        |- clientproxy            Client side top level API (optional)
- |        |- serverstub             Server side top level API (optional)
- |     |- securechannel             OPC UA secure conversation
- |     |- stackcore                 Base types and interfaces
- |     |- transport
- |        |- https                  HTTPS transport (optional)
- |        |- tcp                    OPC TCP Binary transport
- |- AnsiCSample						Simple example of an OPC UA nano embedded server
- |- openssl-1.0.1t                  Required third-party libraries
+- /-- UA-AnsiC
+- |  |- Stack                   
+- |     |- core                      Configuration and utilities
+- |     |- platforms
+- |        |- linux                  Platform adaption to OpenSSL and linux API
+- |        |- win32                  Platform adaption to OpenSSL and Win32 API
+- |     |- proxystub
+- |        |- clientproxy            Client side top level API (optional)
+- |        |- serverstub             Server side top level API (optional)
+- |     |- securechannel             OPC UA secure conversation
+- |     |- stackcore                 Base types and interfaces
+- |     |- transport
+- |        |- https                  HTTPS transport (optional)
+- |        |- tcp                    OPC TCP Binary transport
+- |- AnsiCSample						Simple example of an OPC UA nano embedded server
+- |- openssl-1.0.1t                  Required third-party libraries
 
-Windows and linux build scripts, as well as Visual Studio 2013 solution can be found in the toot folder.
+Windows and linux build scripts, as well as Visual Studio 2013 solution can be found in the root folder.
 
 ## Known issues
 
