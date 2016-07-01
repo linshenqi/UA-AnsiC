@@ -5,10 +5,10 @@ Version 1.03.340
 	
 	Highlights: 
 		- OPC UA 1.03 compatible.
-		- all BSI reported securuty issues addresse.
+		- all BSI reported security issues addressed.
 		- linux platform added.
 		- windows and linux layers work with 32 and 64 bit O/S.
-		- optimised aync sockets handling implemented.
+		- optimised async sockets handling implemented.
 		- linux implements full IPv6 support, windows only on server side.
 		- pki store implementation reworked to be more flexible.
 		- conformant with strict aliasing rules.
