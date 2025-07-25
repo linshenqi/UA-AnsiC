@@ -25,27 +25,7 @@ Please consult the OpenSSL documentation for help building the library.
 
 ## Building the Stack
 
-### Windows
-
-Open the Visual Studio Command Shell .
-Make sure that perl installed on the build machine and the path executable is available in the path.  Any perl will do, even cygwin.
-Download and extract the latest openssl-1.0.1/1.0.2 source tar ball to the besides the stack root folder.
-Then cd to the root folder and execute build_win32.bat or build_win64.bat depending on your target architecture.
-This will automatically build openssl, the OPC UA Stack and the sample server.
-Dependencies are not supported, it will always be a full build.
-
-Visual studio 2013 projects for the stack and example server are available as well. 
-Note: the OpenSSL libraries must be compiled using the above mentioned steps before building the project using Visual Studio.
-
-### Linux
-
-Open a terminal window.
-Make sure you have the libssl-dev package installed from your distribution.
-Then cd to the root folder and execute: ./build_linux.sh
-This builds both debug and release binaries.
-Dependencies and incremental builds are supported.
-To force a full build use: ./build_linux.sh clean all
- 
+This project provides a CMake build system that should be used in conjunction with the Conan package manager, which provides the necessary OpenSSL 1.0.x dependency.
 
 ## Examples
 
@@ -92,9 +72,8 @@ The following tree shows the directory layout as required by the included projec
 - |        |- https                  HTTPS transport (optional)
 - |        |- tcp                    OPC TCP Binary transport
 - |- AnsiCSample						Simple example of an OPC UA nano embedded server
-- |- openssl-1.0.1t                  Required third-party libraries
 
-Windows and linux build scripts, as well as Visual Studio 2013 solution can be found in the root folder.
+A CMake buildsystem can be found in the root folder.
 
 ## Known issues
 

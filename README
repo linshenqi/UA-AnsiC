@@ -20,23 +20,7 @@ and not fully supported.
 
 Build the source package:
 
-Windows: Open the Visual Studio Command Shell.
-Make sure that perl is in the path.  Any perl will do, even cygwin.
-Download and extract the latest openssl-1.0.1/1.0.2 source tar ball
-to the root folder.
-Then cd to the root folder and execute build_win32.bat or
-build_win64.bat depending on your target architecture.
-This will automatically build openssl, the OPC UA Stack and the
-sample server.
-Dependencies are not supported, it will always be a full build.
-
-Linux: Open a terminal window.
-Make sure you have the libssl-dev package installed from your
-distribution.
-Then cd to the root folder and execute: ./build_linux.sh
-This builds both debug and release binaries.
-Dependencies and incremental builds are supported.
-To force a full build use: ./build_linux.sh clean all
+This project provides a CMake build system that should be used in conjunction with the Conan package manager, which provides the necessary OpenSSL 1.0.x dependency.
 
 Fixed Mantis issues with this version:
 
